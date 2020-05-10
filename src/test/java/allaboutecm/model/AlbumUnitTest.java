@@ -24,6 +24,7 @@ class AlbumUnitTest {
         album = new Album(1975, "ECM 1064/65", "The Köln Concert");
     }
 
+    
     @Test
     @DisplayName("Album name cannot be null")
     public void albumNameCannotBeNull() {
@@ -33,7 +34,7 @@ class AlbumUnitTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "    \t"})
     @DisplayName("Album name cannot be empty or blank")
-    public void albumNameConnotBeEmptyOrBlank(String arg) {
+    public void albumNameCnnotBeEmptyOrBlank(String arg) {
         assertThrows(IllegalArgumentException.class, () -> album.setAlbumName(arg));
     }
 
