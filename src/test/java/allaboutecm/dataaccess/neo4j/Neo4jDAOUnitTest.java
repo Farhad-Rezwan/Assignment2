@@ -113,4 +113,17 @@ class Neo4jDAOUnitTest {
         assertEquals(musician.getMusicianUrl(), loadedMusician.getMusicianUrl());
         assertEquals(musician.getAlbums(), loadedMusician.getAlbums());
     }
+
+//-        successful creation and loading of musical instrument
+//-        successful creation and loading of album
+//-        successful deletion of album only(musician related to album will stay in db)
+//-        successful deletion of musician from musician and album
+//-        successful deletion of musical instrument from musical instrument class and all other classes
+//-        successful updation of musician details in musician class and album class
+//-        successful updation of album for a musician in musician class when album class is updated
+
+
+
+
+
 }

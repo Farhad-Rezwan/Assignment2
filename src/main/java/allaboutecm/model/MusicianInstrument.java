@@ -36,6 +36,13 @@ public class MusicianInstrument extends Entity {
     }
 
     public MusicianInstrument(Musician musician, Set<MusicalInstrument> musicalInstrument) {
+        if (musician == null){
+            throw new NullPointerException("Musician can not be null");
+        }
+
+        if (musicalInstrument == null){
+            throw new NullPointerException("MusicalInstrument can not be null");
+        }
         notNull(musician);
         notNull(musicalInstrument);
         notEmpty(musicalInstrument);
@@ -50,6 +57,11 @@ public class MusicianInstrument extends Entity {
     }
 
     public void setMusician(Musician musician) {
+        if (musician == null){
+            throw new NullPointerException("Musician can not be null");
+        }
+
+
         notNull(musician);
         this.musician = musician;
     }
@@ -59,6 +71,11 @@ public class MusicianInstrument extends Entity {
     }
 
     public void setMusicalInstruments(Set<MusicalInstrument> musicalInstruments) {
+        if (musicalInstruments == null){
+            throw new NullPointerException("MusicalInstrument can not be null");
+        }
+        notNull(musicalInstruments);
+        notEmpty(musicalInstruments);
         this.musicalInstruments = musicalInstruments;
     }
 

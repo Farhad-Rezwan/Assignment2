@@ -73,6 +73,12 @@ public class Musician extends Entity {
     }
 
     public void setAlbums(Set<Album> albums) {
+        if (null == albums){
+            throw new NullPointerException("Album list cannot be null");
+        }
+        this.albums = albums;
+
+
         this.albums = albums;
     }
 

@@ -9,9 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MusicianUnitTest {
     private Musician mus;
@@ -33,6 +31,13 @@ public class MusicianUnitTest {
     @DisplayName("Musician name cannot be empty or blank")
     public void MusicianNameCannotBeEmptyOrBlank(String arg) {
         assertThrows(IllegalArgumentException.class, () -> mus.setName(arg));
+    }
+
+    @DisplayName("Should throw NullPointerException when albums are null")
+    @Test
+    public void shouldThrowExceptionWhenAlbumsAreNull() {
+        NullPointerException e = assertThrows(NullPointerException.class, () -> mus.setAlbums(null));
+        assertEquals("Album list cannot be null", e.getMessage());
     }
 
     @DisplayName("Should accept proper Musician name")
