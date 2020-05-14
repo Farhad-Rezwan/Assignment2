@@ -2,6 +2,7 @@ package allaboutecm.dataaccess.neo4j;
 
 import allaboutecm.dataaccess.DAO;
 import allaboutecm.model.Album;
+import allaboutecm.model.MusicalInstrument;
 import allaboutecm.model.Musician;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.AfterAll;
@@ -114,13 +115,84 @@ class Neo4jDAOUnitTest {
         assertEquals(musician.getAlbums(), loadedMusician.getAlbums());
     }
 
-//-        successful creation and loading of musical instrument
+//        successful creation and loading of musical instrument
+    @Test
+        public void successfulCreationAndLoadingOfMusicalInstrument() throws IOException{
+            MusicalInstrument musIn = new MusicalInstrument("Flute");
+            dao.createOrUpdate(musIn);
+            Collection<MusicalInstrument> musIns = dao.loadAll(MusicalInstrument.class);
+            assertEquals(1, musIns.size());
+            MusicalInstrument loadedMusicalInstrument = musIns.iterator().next();
+            assertEquals(musIn, loadedMusicalInstrument);
+            assertEquals(musIn.getName(), loadedMusicalInstrument.getName());
+
+        }
+
+
 //-        successful creation and loading of album
+
+    @Test
+    public void successfulCreationAndLoadingOfAlbum() throws IOException{
+        Album album = new Album(1975, "ECM 1064/66", "Tln Concert");
+        dao.createOrUpdate(album);
+        Collection<Album> albums = dao.loadAll(Album.class);
+        assertEquals(1, albums.size());
+        Album loadedAlbum = albums.iterator().next();
+        assertEquals(album, loadedAlbum);
+        assertEquals(album.getAlbumName(), loadedAlbum.getAlbumName());
+        assertEquals(album.getReleaseYear(),loadedAlbum.getReleaseYear());
+        assertEquals(album.getRecordNumber(), loadedAlbum.getRecordNumber());
+
+
+    }
+
 //-        successful deletion of album only(musician related to album will stay in db)
+    @Test
+    public void successfulDeleteOfAlbumOnly() throws IOException{
+        Album album = new Album(1975, "ECM 1064/66", "Tln Concert");
+        dao.createOrUpdate(album);
+        Collection<Album> albums = dao.loadAll(Album.class);
+        assertEquals(1, albums.size());
+        Album loadedAlbum = albums.iterator().next();
+        assertEquals(album, loadedAlbum);
+        assertEquals(album.getAlbumName(), loadedAlbum.getAlbumName());
+        assertEquals(album.getReleaseYear(),loadedAlbum.getReleaseYear());
+        assertEquals(album.getRecordNumber(), loadedAlbum.getRecordNumber());
+        dao.delete(album);
+
+    }
+
+
 //-        successful deletion of musician from musician and album
+            @Test
+        public void successfulDeleteOfMusicianOnly() throws Exception{
+                Musician musician = new Musician("Keith Jarrett");
+                musician.setMusicianUrl(new URL("https://www.keithjarrett.org/"));
+
+                dao.createOrUpdate(musician);
+                Musician loadedMusician = dao.load(Musician.class, musician.getId());
+
+                assertNotNull(loadedMusician.getId());
+                assertEquals(musician, loadedMusician);
+                assertEquals(musician.getMusicianUrl(), loadedMusician.getMusicianUrl());
+
+                assertEquals(1, dao.loadAll(Musician.class).size());
+                dao.delete(musician);
+
+            }
+ // - successfully delete musician completely from the database
+
+
+ // successfully delete musical instrument from only musical instrument class
+
+
 //-        successful deletion of musical instrument from musical instrument class and all other classes
-//-        successful updation of musician details in musician class and album class
-//-        successful updation of album for a musician in musician class when album class is updated
+
+
+
+//-        XXXXXXXXXsuccessful updation of musician details in musician class and album class
+//-        XXXXXXXXXXXXXsuccessful updation of album for a musician in musician class when album class is updated
+//        creating and updating new musical instrument to an existing musician
 
 
 

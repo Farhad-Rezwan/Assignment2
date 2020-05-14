@@ -16,7 +16,7 @@ import java.util.Collection;
 
 import static org.neo4j.ogm.cypher.ComparisonOperator.EQUALS;
 
-public class Neo4jDAO implements DAO {
+public class  Neo4jDAO implements DAO {
     private static final int DEPTH_LIST = 0;
     private static final int DEPTH_ENTITY = 1;
 
