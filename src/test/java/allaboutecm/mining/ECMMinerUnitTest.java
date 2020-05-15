@@ -113,7 +113,9 @@ class ECMMinerUnitTest {
         MusicianInstrument musicianInstrument7 = new MusicianInstrument(new Musician("Pat Metheny"),
                 Sets.newHashSet(new MusicalInstrument("Synthesizer"), new MusicalInstrument("Guitar"), new MusicalInstrument("Bass")));
 
-        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(musicianInstrument1, musicianInstrument2, musicianInstrument3, musicianInstrument4, musicianInstrument5, musicianInstrument6, musicianInstrument7));
+        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(musicianInstrument1,
+                musicianInstrument2, musicianInstrument3, musicianInstrument4, musicianInstrument5,
+                musicianInstrument6, musicianInstrument7));
 
     }
 
