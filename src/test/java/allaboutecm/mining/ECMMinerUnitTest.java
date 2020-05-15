@@ -118,7 +118,6 @@ class ECMMinerUnitTest {
                 musicianInstrument6, musicianInstrument7));
 
     }
-    asdfasdfasdfasdf
 
 
 //    - provide 2-3 musician input and check who has played more number of musical instruments(should return only one value)
