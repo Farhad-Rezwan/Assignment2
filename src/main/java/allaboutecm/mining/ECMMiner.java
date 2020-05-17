@@ -395,7 +395,69 @@ public class ECMMiner {
      */
 
     public List<Musician> mostSocialMusicians(int k) {
-        return Lists.newArrayList();
+
+        Collection<Album> albumCollection = dao.loadAll(Album.class);
+
+        Map<String, Musician> nameMap = Maps.newHashMap();
+        for (Album m : albumCollection) {
+            for (int i = 0; i < m.getFeaturedMusicians().size(); i ++) {
+                nameMap.put(m.getFeaturedMusicians().get(i).getName(), m.getFeaturedMusicians().get(i));
+            }
+        }
+
+//      to insert number of colaborated musician and musicianObject
+        ListMultimap<Integer, Musician> countMap = MultimapBuilder.treeKeys().arrayListValues().build();
+
+//get the number of overlap musicians by size()
+        for (String singleMusician : nameMap.keySet()) {
+            Set<Musician> takeUniqueMusicians = new HashSet<>();
+            for (Album singleAlbum : albumCollection) {
+                List<Musician> albumMusicians = singleAlbum.getFeaturedMusicians();
+                if (albumMusicians.contains(nameMap.get(singleMusician))) {
+                    List<Musician> albumOtherMusicians = albumMusicians;
+                    albumOtherMusicians.remove(nameMap.get(singleMusician));
+                    for (Musician m :
+                            albumOtherMusicians) {
+                        takeUniqueMusicians.add(m);
+                    }
+                }
+            }
+            countMap.put(takeUniqueMusicians.size(), nameMap.get(singleMusician));
+        }
+
+
+
+        List<Musician> result = Lists.newArrayList();
+        List<Integer> sortedKeys = Lists.newArrayList(countMap.keySet());
+
+        sortedKeys.sort(Ordering.natural().reverse());
+
+        for (Integer count : sortedKeys) {
+            // use current count to get a musician
+            List<Musician> list = countMap.get(count);
+            //if current number of albums already bigger than we need, break loop
+            if (list.size() >= k) {
+                int newAddition = k - result.size();
+                for (int i = 0; i < newAddition; i++) {
+                    result.add(list.get(i));
+                }
+                break;
+            }
+            //if last number of albums + current number of albums >= we need, add Album into result until it is full
+            if (result.size() + list.size() >= k) {
+                int newAddition = k - result.size();
+                for (int i = 0; i < newAddition; i++) {
+                    result.add(list.get(i));
+                }
+            } else {
+                result.addAll(list);
+            }
+        }
+
+        return result;
+
+
+
     }
 
     /**

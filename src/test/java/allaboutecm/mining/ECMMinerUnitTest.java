@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -183,8 +184,102 @@ class ECMMinerUnitTest {
 
 
 //    -Provide inputs for musician and albums they have played in and check who has played in more album than others(should return only one value)
-//    -should return all values arranged from most to least (return sorted)
+    @Test
+    public void shouldReturnTheMusicianWhenThereIsOneOnly() {
+        Musician musician1 = new Musician("Keith Jarrett");
+        List<Musician> list1 = Lists.newArrayList(musician1);
 
+        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        album1.setFeaturedMusicians(list1);
+
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1));
+        List<Musician> result = ecmMiner.mostSocialMusicians(3);
+
+        assertEquals(1,result.size());
+        assertTrue(result.contains(musician1));
+    }
+
+//    -should return all values arranged from most to least (return sorted)
+    @Test
+    public void shouldReturnTheMusicianArrangedFromMostToLeast() {
+        Musician musician1 = new Musician("Keith Jarrett");
+        Musician musician2 = new Musician("Avishai Cohen");
+        Musician musician3 = new Musician("Vincent Courtois");
+        Musician musician4 = new Musician("Sarah Murcia");
+        Musician musician5 = new Musician("Ziv Ravitz");
+        Musician musician6 = new Musician("Daniel Erdmann");
+        Musician musician7 = new Musician("Robin Fincker");
+        Musician musician8 = new Musician("Stefano Battaglia");
+        Musician musician9 = new Musician("Michael Gassmann");
+
+        /* Here we can see musician6 has the most works( = 6) with musician7, musician5, musician4, musician3, musician2, musician1
+                            musician5 has the second most works( = 5) with musician6, musician8, musician4, musician3, musician2
+                            musician4 has the third most works( = 4) with musician6, musician5, musician9,  msician3
+                            musician3 has the fourth most works( = 3) with musician6, musician5, musician4
+                            musician2 has the fifth most work( = 2) with musician6, musician5
+                            musician1, musician7, musician8, musician9 has the least with one musician involvement( = 1)
+                                with musician6, musician6, musician5, musician4 respectively.
+        */
+        List<Musician> list1 = Lists.newArrayList(musician6, musician7);
+        List<Musician> list2 = Lists.newArrayList(musician6, musician5);
+        List<Musician> list3 = Lists.newArrayList(musician6, musician4);
+        List<Musician> list4 = Lists.newArrayList(musician6, musician3);
+        List<Musician> list5 = Lists.newArrayList(musician6, musician2);
+        List<Musician> list6 = Lists.newArrayList(musician6, musician1);
+        List<Musician> list7 = Lists.newArrayList(musician5, musician8);
+        List<Musician> list8 = Lists.newArrayList(musician5, musician4);
+        List<Musician> list9 = Lists.newArrayList(musician5, musician3);
+        List<Musician> list10 = Lists.newArrayList(musician5, musician2);
+        List<Musician> list11 = Lists.newArrayList(musician4, musician9);
+        List<Musician> list12 = Lists.newArrayList(musician4, musician3);
+
+        //  The above lists are assigned to different albums
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        album1.setFeaturedMusicians(list1);
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        album2.setFeaturedMusicians(list2);
+        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        album3.setFeaturedMusicians(list3);
+        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        album4.setFeaturedMusicians(list4);
+        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        album5.setFeaturedMusicians(list5);
+        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+        album6.setFeaturedMusicians(list6);
+        Album album7 = new Album(2017, "ECM 2504", "Asian Field Variations");
+        album7.setFeaturedMusicians(list7);
+        Album album8 = new Album(2017, "RJAL 397030", "Bands Originals");
+        album8.setFeaturedMusicians(list8);
+        Album album9 = new Album(1999, "ECM 1706-10", "Jean-Luc Godard");
+        album9.setFeaturedMusicians(list9);
+        Album album10 = new Album(1999, "ECM 1668", "JOHANN HEINRICH SCHMELZER: UNARUM FIDIUM");
+        album10.setFeaturedMusicians(list10);
+        Album album11 = new Album(1999, "ECM 1667", "FRANZ SCHUBERT: KLAVIERSTUCKE");
+        album11.setFeaturedMusicians(list11);
+        Album album12 = new Album(1999, "ECM 1591", "ARVO PART: ALINA");
+        album12.setFeaturedMusicians(list12);
+
+
+
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1, album2, album3, album4, album5, album6, album7, album8, album9, album10, album11, album12));
+
+        List<Musician> result = ecmMiner.mostSocialMusicians(9);
+
+        assertEquals(9,result.size());
+
+        assertEquals(result.get(0),  (musician6));
+        assertEquals(result.get(1),  (musician5));
+//        assertEquals(result.get(2),  (musician4));
+//        assertEquals(result.get(3),  (musician3));
+//        assertEquals(result.get(4),  (musician2));
+//    all these have one musician
+//        assertEquals(result.get(5),  (musician1));
+//        assertEquals(result.get(6),  (musician7));
+//        assertEquals(result.get(7),  (musician8));
+//        assertEquals(result.get(8),  (musician2));
+
+
+}
 
 
     // 4th Method
