@@ -56,22 +56,7 @@ public class ECMMiner {
                 }
             }
         }
-
-/*
-        musician1, musician1's album1
-        musician1, musician1's album2
-        musician2, musician2's album1
-        musician2, musician2's album2
-*/
-
-
         Map<String, Collection<Album>> albumMultimap = multimap.asMap();
-
-/*
-        musician1, musician1's album1, musician1's album2
-        musician2, musician2's album1, musician2's album2
-*/
-
 
         for (String name : albumMultimap.keySet()) {
             Collection<Album> albums = albumMultimap.get(name);
@@ -79,28 +64,14 @@ public class ECMMiner {
             countMap.put(size, nameMap.get(name));
         }
 
-
-/*
-        (6, musician1)
-        (9, musician2)
-        (13, musician3)
-        (13, musician4)
-*/
-
         List<Musician> result = Lists.newArrayList();
         List<Integer> sortedKeys = Lists.newArrayList(countMap.keySet());
         sortedKeys.sort(Ordering.natural().reverse());
 
-/*
-        (13, musician4)
-        (13, musician3)
-        (9, musician2)
-        (6, musician1)
-*/
 
+        // this for loop is used frequently in this class, this makes sure with parameter K, is returning proper value
         for (Integer count : sortedKeys) {
             List<Musician> list = countMap.get(count);
-//                  2           1, if the param k is one, than
             if (list.size() >= k) {
                 int newAddition = k - result.size();
                 for (int i = 0; i < newAddition; i++) {
@@ -128,14 +99,19 @@ public class ECMMiner {
      */
     public List<Musician> mostTalentedMusicians(int k) {
 
+
+        // Loading all the all the MusicianInstruments objects in Collection.
         Collection<MusicianInstrument> musicianInstrumentsCollection = dao.loadAll(MusicianInstrument.class);
 
-
+        // nameMusical = stores musicalInstrument name and MusicalInstrument's object as multimap.
         ListMultimap<String, MusicalInstrument> nameMusical = MultimapBuilder.treeKeys().arrayListValues().build();
+        // stores musician's number of instrument played and musician object as multimap.
         ListMultimap<Integer, Musician> countMap = MultimapBuilder.treeKeys().arrayListValues().build();
 
         Map<String, Musician> musicianNameMap = Maps.newHashMap();
 
+
+        // loops through all the musicianInstruments and fills musicianName map and nameMusical multimap.
         for (MusicianInstrument m : musicianInstrumentsCollection) {
             musicianNameMap.put(m.getMusician().getName(), m.getMusician());
             for(MusicalInstrument mi : m.getMusicalInstruments())
@@ -143,9 +119,16 @@ public class ECMMiner {
                 nameMusical.put(m.getMusician().getName(),mi);
             }
         }
-        //{musicianName,singleInstrument}
+
+        /*
+        converts multimap to map nameMusicalInstrument, keeping the musicianName and collection of single instruments
+        like this {musicianName, collection(singleInstrument1, singleInstrument2}
+         */
         Map<String, Collection<MusicalInstrument>> nameMusicalInstrument = nameMusical.asMap();
 
+
+        // loops through all the nameMusicalInstruments by key, which is name of the musician, to get counts of his number of
+        // instruments involvement.
         for (String name : nameMusicalInstrument.keySet()) {
             Collection<MusicalInstrument> musicalInstruments = nameMusicalInstrument.get(name);
             int count = musicalInstruments.size();
@@ -155,9 +138,10 @@ public class ECMMiner {
         List<Musician> result = Lists.newArrayList();
         List<Integer> sortedKeys = Lists.newArrayList(countMap.keySet());
         sortedKeys.sort(Ordering.natural().reverse());
+
+        // this for loop is used frequently in this class, this makes sure parameter K is returning proper value
         for (Integer count : sortedKeys) {
             List<Musician> list = countMap.get(count);
-//                  2           1, if the param k is one, than
             if (list.size() >= k) {
                 int newAddition = k - result.size();
                 for (int i = 0; i < newAddition; i++) {
@@ -177,252 +161,55 @@ public class ECMMiner {
         return result;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    public List<Musician> mostTalentedMusicians(int k) {
-//
-//
-//
-//
-//        Collection<MusicianInstrument> musicianInstrumentsCollection = dao.loadAll(MusicianInstrument.class);
-//
-//        ListMultimap<String, MusicianInstrument> nameMap = MultimapBuilder.treeKeys().arrayListValues().build();
-//        ListMultimap<Integer, Musician> countMap = MultimapBuilder.treeKeys().arrayListValues().build();
-//
-//        for (MusicianInstrument m : musicianInstrumentsCollection) {
-//            nameMap.put(m.getMusician().getName(), m);
-//        }
-//
-//
-////        musician1, (musician1 musical instrument a, b)
-////        musician1, (musician1 musical instrument a, b, c)
-//
-//
-//        Map<String, Collection<MusicianInstrument>> mIMultimap = nameMap.asMap();
-//
-////        musician1,{(musician1 musical instrument a, b) , (musician1 musical instrument a, b, c)}
-//        List<String> instrumentsAll = Lists.newArrayList();
-//        List<String> instrumentsUnique = Lists.newArrayList();
-//
-//
-//        for (String name : mIMultimap.keySet()) {
-//            Collection<MusicianInstrument> musicianInstruments = mIMultimap.get(name);
-//
-//            Iterator<MusicianInstrument> itr = musicianInstruments.iterator();
-//            while(itr.hasNext()) {
-////              set {(musician1 musical instrument a, b)
-//                Set<MusicalInstrument> mI;
-//
-//                mI = (itr.next().getMusicalInstruments());
-//
-//
-//
-//                for (Iterator<MusicalInstrument> it = mI.iterator(); it.hasNext(); ) {
-//                    MusicalInstrument mIns = it.next();
-//                    instrumentsAll.add(mIns.getName());
-//                }
-//
-//                Set<String> s = new HashSet<String>();
-//
-//                for(String instrument : instrumentsAll) {
-//                    if(s.add(instrument) == true){
-//                        instrumentsUnique.add(instrument);
-//                        s.add(instrument);
-//                    }
-//                }
-//                int size = instrumentsUnique.size();
-//                countMap.put(size, name);
-//            }
-//        }
-///*
-//        (6, musician1)
-//        (9, musician2)
-//        (13, musician3)
-//        (13, musician4)
-//
-//*/
-//        for(Integer i : countMap.keySet()){
-//            String name = countMap.get(i);
-//        }
-//
-//        List<Musician> result = Lists.newArrayList();
-//        List<Integer> sortedKeys = Lists.newArrayList(countMap.keySet());
-//        sortedKeys.sort(Ordering.natural().reverse());
-//
-///*
-//        (13, musician4)
-//        (13, musician3)
-//        (9, musician2)
-//        (6, musician1)
-//
-//*/
-//
-//        for (Integer count : sortedKeys) {
-//            List<Musician> list = countMap.get(count);
-////                  2           1, if the param k is one, than
-//            if (list.size() >= k) {
-//                int newAddition = k - result.size();
-//                for (int i = 0; i < newAddition; i++) {
-//                    result.add(list.get(i));
-//                }
-//                break;
-//            }
-//            if (result.size() + list.size() >= k) {
-//                int newAddition = k - result.size();
-//                for (int i = 0; i < newAddition; i++) {
-//                    result.add(list.get(i));
-//                }
-//            } else {
-//                result.addAll(list);
-//            }
-//        }
-//
-//        return result;
-//
-//    }
-
-
-
-//    public List<Musician> mostTalentedMusicians(int k) {
-//
-//        Collection<MusicianInstrument> musicianInstrumentsCollection = dao.loadAll(MusicianInstrument.class);
-//
-//        ListMultimap<String, MusicianInstrument> nameMap = MultimapBuilder.treeKeys().arrayListValues().build();
-//        ListMultimap<Integer, Musician> countMap = MultimapBuilder.treeKeys().arrayListValues().build();
-//
-//        Map<String, Musician> musicianNameMap = Maps.newHashMap();
-//
-//        for (MusicianInstrument m : musicianInstrumentsCollection) {
-//            nameMap.put(m.getMusician().getName(), m);
-//            musicianNameMap.put(m.getMusician().getName(), m.getMusician());
-//        }
-//
-//
-////        musician1, (musician1 musical instrument a)
-////        musician1, (musician1 musical instrument b)
-//
-//
-//        Map<String, Collection<MusicianInstrument>> mIMultimap = nameMap.asMap();
-//
-////        musician1,{(musician1 musical instrument a, b) , (musician1 musical instrument a, b, c)}
-//        //   musician2,{(musician1 musical instrument a, b)
-//
-//        for (String name : mIMultimap.keySet()) {
-//            Collection<MusicianInstrument> musicianInstruments = mIMultimap.get(name);
-//
-//            ArrayList<Integer> newHashArray = new ArrayList<>();
-//
-//            Iterator<MusicianInstrument> itr = musicianInstruments.iterator();
-//            while(itr.hasNext()) {
-////              set {(musician1 musical instrument a, b)
-//                Set<MusicalInstrument> mI;
-//
-//                mI = (itr.next().getMusicalInstruments());
-//
-//                ArrayList<String> instrumentsAll = new ArrayList<>();
-//
-//                ArrayList<String> instrumentsUnique = new ArrayList<>();
-//
-//                for (Iterator<MusicalInstrument> it = mI.iterator(); it.hasNext(); ) {
-//                    MusicalInstrument mIns = it.next();
-//                    instrumentsAll.add(mIns.getName());
-//                }
-//                //AllIns = m1 a, b
-//                Set<String> s = new HashSet<>();
-//                for(String instrument : instrumentsAll) {
-//                    if(s.add(instrument) == true){
-//                        instrumentsUnique.add(instrument);
-//                    }
-//                }
-//                int size = instrumentsUnique.size();
-//                if (!(itr.next().getMusician().hashCode() == 1)){
-//                    countMap.put(size, musicianNameMap.get(name));
-//                }
-//
-//                //{4,muscian4} {1,musician4}
-//            }
-//        }
-//
-////        Map<Integer, Musician> trueCountMap = countMap.asMap();
-//        List<Musician> result = Lists.newArrayList();
-//        List<Integer> sortedKeys = Lists.newArrayList(countMap.keySet());
-//        sortedKeys.sort(Ordering.natural().reverse());
-//        for (Integer count : sortedKeys) {
-//            List<Musician> list = countMap.get(count);
-////                  2           1, if the param k is one, than
-//            if (list.size() >= k) {
-//                int newAddition = k - result.size();
-//                for (int i = 0; i < newAddition; i++) {
-//                    result.add(list.get(i));
-//                }
-//                break;
-//            }
-//            if (result.size() + list.size() >= k) {
-//                int newAddition = k - result.size();
-//                for (int i = 0; i < newAddition; i++) {
-//                    result.add(list.get(i));
-//                }
-//            } else {
-//                result.addAll(list);
-//            }
-//        }
-//        return result;
-//    }
-
-
-
-
-
-
-
     /**
      * Musicians that collaborate the most widely, by the number of other musicians they work with on albums.
      *
      * @Param k the number of musicians to be returned.
      */
-
     public List<Musician> mostSocialMusicians(int k) {
 
         Collection<Album> albumCollection = dao.loadAll(Album.class);
-
         Map<String, Musician> nameMap = Maps.newHashMap();
+
         for (Album m : albumCollection) {
-            for (int i = 0; i < m.getFeaturedMusicians().size(); i ++) {
-                nameMap.put(m.getFeaturedMusicians().get(i).getName(), m.getFeaturedMusicians().get(i));
+            for (Musician musician : m.getFeaturedMusicians()) {
+                nameMap.put(musician.getName(), musician);
             }
         }
 
-//      to insert number of colaborated musician and musicianObject
         ListMultimap<Integer, Musician> countMap = MultimapBuilder.treeKeys().arrayListValues().build();
 
-//get the number of overlap musicians by size()
-        for (String singleMusician : nameMap.keySet()) {
-            Set<Musician> takeUniqueMusicians = new HashSet<>();
+
+        /* to loop through all the individual musicians, and fills countMap, a MultiMap which stores number of other
+                  musicians they worked with and the Musician Object.
+        */
+        for (String singleMusicianName : nameMap.keySet()) {
+            Set<Musician> teamMateMusicians = new HashSet<>();
+
+            // loops through all the albums, gets each album's musicians
             for (Album singleAlbum : albumCollection) {
-                List<Musician> albumMusicians = singleAlbum.getFeaturedMusicians();
-                if (albumMusicians.contains(nameMap.get(singleMusician))) {
-                    List<Musician> albumOtherMusicians = albumMusicians;
-                    albumOtherMusicians.remove(nameMap.get(singleMusician));
-                    for (Musician m :
-                            albumOtherMusicians) {
-                        takeUniqueMusicians.add(m);
+                List<Musician> CurrentAlbumMusicians = singleAlbum.getFeaturedMusicians();
+                if (CurrentAlbumMusicians.contains(nameMap.get(singleMusicianName))) {
+                    List<Musician> albumOtherMusicians = Lists.newArrayList();
+                    for(Musician a : CurrentAlbumMusicians){
+
+                        /* inserts other musicians into the list, make sure current musician(for whom we are counting the
+                        *     number of musician they worked with) is not inserted
+                        * */
+                        if(a != nameMap.get(singleMusicianName)){
+                            albumOtherMusicians.add(a);
+                        }
+                    }
+
+                    for (Musician m : albumOtherMusicians) {
+                        if(!teamMateMusicians.contains(m))
+                        {
+                            teamMateMusicians.add(m);
+                        }
                     }
                 }
             }
-            countMap.put(takeUniqueMusicians.size(), nameMap.get(singleMusician));
+            countMap.put(teamMateMusicians.size(), nameMap.get(singleMusicianName));
         }
 
 
@@ -455,9 +242,6 @@ public class ECMMiner {
         }
 
         return result;
-
-
-
     }
 
     /**

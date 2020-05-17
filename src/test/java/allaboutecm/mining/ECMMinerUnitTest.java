@@ -213,12 +213,12 @@ class ECMMinerUnitTest {
         Musician musician9 = new Musician("Michael Gassmann");
 
         /* Here we can see musician6 has the most works( = 6) with musician7, musician5, musician4, musician3, musician2, musician1
-                            musician5 has the second most works( = 5) with musician6, musician8, musician4, musician3, musician2
-                            musician4 has the third most works( = 4) with musician6, musician5, musician9,  msician3
-                            musician3 has the fourth most works( = 3) with musician6, musician5, musician4
-                            musician2 has the fifth most work( = 2) with musician6, musician5
-                            musician1, musician7, musician8, musician9 has the least with one musician involvement( = 1)
-                                with musician6, musician6, musician5, musician4 respectively.
+                     musician5 has the second most works( = 5) with musician6, musician8, musician4, musician3, musician2
+                     musician4 has the third most works( = 4) with musician6, musician5, musician9,  msician3
+                     musician3 has the fourth most works( = 3) with musician6, musician5, musician4
+                     musician2 has the fifth most work( = 2) with musician6, musician5
+                     musician1, musician7, musician8, musician9 has the least with one musician involvement( = 1)
+                             with musician6, musician6, musician5, musician4 respectively.
         */
         List<Musician> list1 = Lists.newArrayList(musician6, musician7);
         List<Musician> list2 = Lists.newArrayList(musician6, musician5);
@@ -267,16 +267,25 @@ class ECMMinerUnitTest {
 
         assertEquals(9,result.size());
 
-        assertEquals(result.get(0),  (musician6));
-        assertEquals(result.get(1),  (musician5));
-//        assertEquals(result.get(2),  (musician4));
-//        assertEquals(result.get(3),  (musician3));
-//        assertEquals(result.get(4),  (musician2));
-//    all these have one musician
-//        assertEquals(result.get(5),  (musician1));
-//        assertEquals(result.get(6),  (musician7));
-//        assertEquals(result.get(7),  (musician8));
-//        assertEquals(result.get(8),  (musician2));
+
+
+
+        /* results sorted from highest to lowest....musician6 with 6, musician5 with 5, musician4 with 4 musician3 with 3
+        and musician2 with2
+         */
+        assertEquals(result.get(0), (musician6));
+        assertEquals(result.get(1), (musician5));
+        assertEquals(result.get(2), (musician4));
+        assertEquals(result.get(3), (musician3));
+        assertEquals(result.get(4), (musician2));
+
+        //all these musicians(musician1, musician7, musician8 and musician2) has worked with one contributor.
+        List<Musician> sameResult = Lists.newArrayList(musician1, musician7, musician8, musician9);
+
+        assertTrue(sameResult.contains(result.get(5)));
+        assertTrue(sameResult.contains(result.get(6)));
+        assertTrue(sameResult.contains(result.get(7)));
+        assertTrue(sameResult.contains(result.get(8)));
 
 
 }
