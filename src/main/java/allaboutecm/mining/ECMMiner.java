@@ -106,7 +106,9 @@ public class ECMMiner {
      * @Param k the number of musicians to be returned.
      */
     public List<Musician> mostTalentedMusicians(int k) {
-
+        if (k <= 0){
+            throw new IllegalArgumentException("number of most talented musician to return should be more than 0");
+        }
 
         // Loading all the all the MusicianInstruments objects in Collection.
         Collection<MusicianInstrument> musicianInstrumentsCollection = dao.loadAll(MusicianInstrument.class);
@@ -138,9 +140,20 @@ public class ECMMiner {
         // loops through all the nameMusicalInstruments by key, which is name of the musician, to get counts of his number of
         // instruments involvement.
         for (String name : nameMusicalInstrument.keySet()) {
+
+            Set<MusicalInstrument> allUniqueInstruments = new HashSet<>();
+
             Collection<MusicalInstrument> musicalInstruments = nameMusicalInstrument.get(name);
-            int count = musicalInstruments.size();
-            countMap.put(count, musicianNameMap.get(name));
+
+            // to make sure that all unique musical instruments are counted, not duplicates
+            for (MusicalInstrument m : musicalInstruments) {
+                if(!allUniqueInstruments.contains(m))
+                {
+                    allUniqueInstruments.add(m);
+                }
+            }
+
+            countMap.put(allUniqueInstruments.size(), musicianNameMap.get(name));
         }
 
         List<Musician> result = Lists.newArrayList();

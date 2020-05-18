@@ -37,6 +37,7 @@ class ECMMinerUnitTest {
 
 
     // 1st Method
+    @DisplayName("Should return the musician when there is only one")
     @Test
     public void shouldReturnTheMusicianWhenThereIsOnlyOne() {
         Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
@@ -52,6 +53,7 @@ class ECMMinerUnitTest {
 
 
 
+    @DisplayName("Should return two for most prolific musicians when parameter is two")
     @Test
     public void shouldReturnTwoForMostProlificMusicians() {
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
@@ -96,16 +98,20 @@ class ECMMinerUnitTest {
         Musician musician1 = new Musician("Keith Jarrett");
         musician1.setAlbums(Sets.newHashSet(album1));
 
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1));
+
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(arr, 1999,2020));
         assertEquals("number of most prolific musician to return should be more than 0", e.getMessage());
     }
 
     @Test
-    @DisplayName("Years for most prolific muisician to get should be a valid year")
+    @DisplayName("Years for most prolific musician to get should be a valid year")
     public void yearsForMostProlificMusicianToGetShouldBeValidYear() {
         Album album1 = new Album(1975, "ECM 1064/61", "The Köln Concert");
         Musician musician1 = new Musician("Keith Jarrett");
         musician1.setAlbums(Sets.newHashSet(album1));
+
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1));
 
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, -100,-200));
         assertEquals("Years should be greater than 1970, not future, and valid year", e.getMessage());
@@ -120,7 +126,7 @@ class ECMMinerUnitTest {
         assertEquals("Years should be greater than 1970, not future, and valid year", h.getMessage());
     }
 
-
+    @DisplayName("mostProlificMusician method output should return in order form most to least prolific")
     @Test
     public void shouldReturnMostProlificMusicianInOrderFromMostToLeastProlific() {
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
@@ -147,16 +153,63 @@ class ECMMinerUnitTest {
 
         // checking whether the most prolific musician is first in the array
         assertEquals(result.get(0), musician2);
-        // Checking whether the second most prolific musician is second in the arrya
+        // Checking whether the second most prolific musician is second in the array
         assertEquals(result.get(1), musician1);
     }
 
+    @DisplayName("mostProlificMusician method output should return in order form most to least prolific")
+    @Test
+    public void shouldReturnInAnyOrderWhenTwoMusiciansAreSameProlific() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+
+        Musician musician1 = new Musician("Keith Jarrett");
+        Musician musician2 = new Musician("Avishai Cohen");
+
+        // Here all the musician has same number of album involvement
+        musician1.setAlbums(Sets.newHashSet(album1));
+        musician2.setAlbums(Sets.newHashSet(album2));
+
+
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2));
+
+        List<Musician> result = ecmMiner.mostProlificMusicians(2, 1971, 2019);
 
 
 
+        // creating testResult array to compare with the result which is returned from mostProlificMusician method
+        List<Musician> sameResult = Lists.newArrayList();
+        sameResult.add(musician2);
+        sameResult.add(musician1);
+
+        // mostProlificMusician method should return array size of two or two musicians.
+        assertEquals(2, result.size());
+
+        // result can come in any order as the musicians are similar prolific in regards to number of album count.
+        assertTrue(sameResult.contains(result.get(0)));
+        assertTrue(sameResult.contains(result.get(1)));
+
+    }
 
 //    2nd Method
 
+    @ParameterizedTest
+    @ValueSource(ints = {-5, 0})
+    @DisplayName("number to return for most talented musician should be bigger than 0")
+    public void talentedMusicianNumberAsParameterHasToBeMoreThanZero(int arr) {
+        Musician musician1 = new Musician("Keith Jarrett");
+        MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
+        MusicalInstrument mi2 = new MusicalInstrument("Accordion");
+        MusicianInstrument mnI1 = new MusicianInstrument(musician1, Sets.newHashSet(mi1,mi2));
+
+        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mnI1));
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostTalentedMusicians(arr));
+        assertEquals("number of most talented musician to return should be more than 0", e.getMessage());
+    }
+
+
+    @DisplayName("mostTallentedMusicians method should return one when there is only one musician in data")
     @Test
     public void shouldReturnTheMusicianWhenThereIsOnlyOneForTalentInInstrument() {
         Musician musician1 = new Musician("Keith Jarrett");
@@ -168,11 +221,17 @@ class ECMMinerUnitTest {
 
         List<Musician> musicians = ecmMiner.mostTalentedMusicians(10);
 
-        assertEquals(1, musicians.size());
         assertTrue(musicians.contains(musician1));
+
+        /*
+         checking whether the mostTalentedMusicians method returns array size of 1 or not
+         or,
+         checking whether the mostTalentedMusicians method returning only One musician or not.
+        */
+        assertEquals(1, musicians.size());
     }
 
-
+    @DisplayName("Should return most talented musician if he knows most number of instruments")
     @Test
     public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill() {
         Musician musician1 = new Musician("Keith Jarrett");
@@ -183,23 +242,28 @@ class ECMMinerUnitTest {
         MusicalInstrument mi2 = new MusicalInstrument("Drums");
         MusicalInstrument mi3 = new MusicalInstrument("Accordion");
 
+        /* these data shows that musician1 is the most talented, musician2 is the second most talented and musician3 is least
+        talented musician with number of musical Instruments they know is 3, 2 and 1 respectively.
+         */
         MusicianInstrument mnI1 = new MusicianInstrument(musician1, Sets.newHashSet(mi1,mi2));
         MusicianInstrument mnI2 = new MusicianInstrument(musician2, Sets.newHashSet(mi2,mi3));
         MusicianInstrument mnI3 = new MusicianInstrument(musician3, Sets.newHashSet(mi1));
         MusicianInstrument mnI4 = new MusicianInstrument(musician1, Sets.newHashSet(mi1,mi3));
-        MusicianInstrument mnI5 = new MusicianInstrument(musician1, Sets.newHashSet(mi1,mi3));
 
-        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mnI1,mnI2,mnI3, mnI4, mnI5));
+        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mnI1,mnI2,mnI3, mnI4));
 
         List<Musician> musicians = ecmMiner.mostTalentedMusicians(2);
-
         assertEquals(2, musicians.size());
+
+        // as parameter for mostTalentedMusician is 2, should return the top 2 most talented musician which are musician1, and musician2
         assertTrue(musicians.contains(musician1));
         assertTrue(musicians.contains(musician2));
 
 
     }
-    //  2nd Method
+
+
+    @DisplayName("method mostTalentedMusicians should return the number of musician, in respect to the method parameter given k")
     @Test
     public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill2() {
         Musician musician1 = new Musician("Keith Jarrett");
@@ -213,15 +277,23 @@ class ECMMinerUnitTest {
         MusicalInstrument mi4 = new MusicalInstrument("dion");
         MusicalInstrument mi5 = new MusicalInstrument("dionsdfsd");
 
+        /*
+            if k = 1, musician4 will be return as he has most number(5) of known instrument
+            if k = 2, musician 4, and musician3 will be returned (4)
+            if k = 10, musician4, musician3, musician2(2 known instrument), musician1 (2 known instrument); all of them
+                    will be returned
+         */
+
         MusicianInstrument mnI1 = new MusicianInstrument(musician1, Sets.newHashSet(mi1,mi2));
         MusicianInstrument mnI2 = new MusicianInstrument(musician2, Sets.newHashSet(mi2,mi3));
         MusicianInstrument mnI3 = new MusicianInstrument(musician3, Sets.newHashSet(mi1,mi2,mi3,mi4));
-        MusicianInstrument mnI4 = new MusicianInstrument(musician4, Sets.newHashSet(mi1,mi2,mi3,mi4));
-        MusicianInstrument mnI5 = new MusicianInstrument(musician4, Sets.newHashSet(mi1,mi2,mi5));
+        MusicianInstrument mnI4 = new MusicianInstrument(musician4, Sets.newHashSet(mi1,mi2,mi3,mi4,mi5));
 
         when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mnI1,mnI2,mnI3,mnI4));
-        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mnI1,mnI2,mnI3,mnI4,mnI5));
 
+
+
+        // checking the result with different number for parameter k, and respective talented musician returned or not
         List<Musician> musicians = ecmMiner.mostTalentedMusicians(1);
         assertEquals(1, musicians.size());
         assertTrue(musicians.contains(musician4));
@@ -239,20 +311,77 @@ class ECMMinerUnitTest {
         assertTrue(musicians.contains(musician4));
     }
 
+    @DisplayName("method mostTalentedMusicians should return an arrayList of musicians in proper order from the most talented to the least")
+    @Test
+    public void shouldReturnMostTalentedMusicianInOrderFromMostTalentedToLeast() {
+        Musician musician1 = new Musician("Keith Jarrett");
+        Musician musician2 = new Musician("Avishai Cohen");
+        Musician musician3 = new Musician("Vincent Courtois");
+        Musician musician4 = new Musician("Jack DeJohnette");
 
-//    - provide 2-3 musician input and check who has played more number of musical instruments(should return only one value)
-//    -should return all values from most talented to less talented
-//    - duplicates ?
-//    - k(parameter) value entered is right or not
-//    - sort at the end
+        MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
+        MusicalInstrument mi2 = new MusicalInstrument("Drums");
+        MusicalInstrument mi3 = new MusicalInstrument("Accordion");
+        MusicalInstrument mi4 = new MusicalInstrument("Piano");
+        MusicalInstrument mi5 = new MusicalInstrument("Double Bass");
 
+        /*
+        from below data, here we can see that musician4 is the most talented, musician3 is second most, musician2 is
+            third most and musician1 is least talented.
+         so the order of return should be musician4 as first element in the arrayList musician3 as the second element of
+            the arrayList and so on.
+         */
+        MusicianInstrument mnI1 = new MusicianInstrument(musician1, Sets.newHashSet(mi1));
+        MusicianInstrument mnI2 = new MusicianInstrument(musician2, Sets.newHashSet(mi2,mi3));
+        MusicianInstrument mnI3 = new MusicianInstrument(musician3, Sets.newHashSet(mi1,mi2,mi3,mi4));
+        MusicianInstrument mnI4 = new MusicianInstrument(musician4, Sets.newHashSet(mi1,mi2,mi3,mi4, mi5));
+
+        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mnI1,mnI2,mnI3,mnI4));
+
+
+        // checking results wheter it is returning in proper order or not
+        List<Musician> musicians = ecmMiner.mostTalentedMusicians(4);
+        assertEquals(musicians.get(0), musician4);
+        assertEquals(musicians.get(1), musician3);
+        assertEquals(musicians.get(2), musician2);
+        assertEquals(musicians.get(3), musician1);
+
+    }
+
+    @DisplayName("Musician Instrument count has to be based on unique instruments not duplicates even though" +
+            "same instrument can appear in different MusicianInstrument object for one musician")
+    @Test
+    public void sameMusicalInstrumentInDifferentMusicianInstrumentForSameMusicianShouldNotImpactResult() {
+        Musician musician1 = new Musician("Keith Jarrett");
+        Musician musician2 = new Musician("Avishai Cohen");
+
+        MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
+        MusicalInstrument mi2 = new MusicalInstrument("Drums");
+        MusicalInstrument mi3 = new MusicalInstrument("Accordion");
+
+        /*
+        from the below data we can see musician1, involved with multiple MusicianInstrument objects(here 3), and those objects has
+        overlapping musical instruments. So the mostTalentedMusician method should return musician2 as most talented, as
+        he owns 3 unique instruments skill.
+         */
+        MusicianInstrument mnI1 = new MusicianInstrument(musician1, Sets.newHashSet(mi1));
+        MusicianInstrument mnI2 = new MusicianInstrument(musician1, Sets.newHashSet(mi1,mi2));
+        MusicianInstrument mnI3 = new MusicianInstrument(musician1, Sets.newHashSet(mi2));
+        MusicianInstrument mnI4 = new MusicianInstrument(musician2, Sets.newHashSet(mi1, mi2, mi3));
+
+        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mnI1, mnI2, mnI3, mnI4));
+
+
+        // checking results wheter it is returning in proper order or not
+        List<Musician> musicians = ecmMiner.mostTalentedMusicians(2);
+        assertEquals(musicians.get(0), musician2);
+        assertEquals(musicians.get(1), musician1);
+
+    }
 
 
 
 // 3rd Method
-
-
-
 
 //    -Provide inputs for musician and albums they have played in and check who has played in more album than others(should return only one value)
     @Test
