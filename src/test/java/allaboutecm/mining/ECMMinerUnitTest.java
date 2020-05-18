@@ -127,6 +127,8 @@ class ECMMinerUnitTest {
         assertEquals("Years should be greater than 1970, not future, and valid year", h.getMessage());
     }
 
+
+
     @DisplayName("mostProlificMusician method output should return in order form most to least prolific")
     @Test
     public void shouldReturnMostProlificMusicianInOrderFromMostToLeastProlific() {
@@ -699,6 +701,7 @@ class ECMMinerUnitTest {
         testResult.add(1978);
         assertEquals(3,result.size());
         assertEquals(result,testResult);
+
     }
 
 
@@ -742,7 +745,7 @@ class ECMMinerUnitTest {
         album4.setFeaturedMusicians(Lists.newArrayList(musician3));
         album5.setFeaturedMusicians(Lists.newArrayList(musician4));
         album6.setFeaturedMusicians(Lists.newArrayList(musician5));
-//      when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2,musician3,musician4,musician5));
+
         when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4,album5,album6));
         List<Album> result = ecmMiner.mostSimilarAlbums(3, album1);
 
@@ -771,7 +774,7 @@ class ECMMinerUnitTest {
         album4.setFeaturedMusicians(Lists.newArrayList(musician4));
         album5.setFeaturedMusicians(Lists.newArrayList(musician5));
 
-//      when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2,musician3,musician4,musician5));
+
         when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4,album5,album6));
         List<Album> result = ecmMiner.mostSimilarAlbums(3, album1);
         assertEquals(0,result.size());

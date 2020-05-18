@@ -8,10 +8,7 @@ import allaboutecm.model.MusicianInstrument;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.checkerframework.checker.units.qual.K;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
@@ -86,6 +83,7 @@ class Neo4jDAOUnitTest {
 
 
     // CRUD operation tests for Musician Class
+    @DisplayName("successful Creation And Loading Of Musician")
     @Test
     public void successfulCreationAndLoadingOfMusician() throws IOException {
         assertEquals(0, dao.loadAll(Musician.class).size());
@@ -106,8 +104,10 @@ class Neo4jDAOUnitTest {
 //        assertEquals(0, dao.loadAll(Musician.class).size());
     }
 
-    //**
-    //-        successful deletion of musician from musician and album
+
+    //successful deletion of musician from musician and album
+
+    @DisplayName("successful Delete Of Musician")
     @Test
     public void successfulDeleteOfMusician() throws Exception{
         Musician musician = new Musician("Keith Jarrett");
@@ -128,6 +128,8 @@ class Neo4jDAOUnitTest {
 
     //**
     //successful loading and return of musician from musician class
+
+    @DisplayName("successful Finding Of Musician Name")
     @Test
     public void successfulFindingOfMusicianName() throws Exception{
 
@@ -151,6 +153,8 @@ class Neo4jDAOUnitTest {
 
     //successful updation of musician details in musician and album
     //name of the musician changes so we need an update in the system*******
+
+    @DisplayName("successful Updation Of Musician  details")
     @Test
     public void successfulUpdationOfMusician() throws Exception{
 
@@ -173,6 +177,7 @@ class Neo4jDAOUnitTest {
     }
 
 
+    @DisplayName("successful Creation Of Musician And Album")
     @Test
     public void successfulCreationOfMusicianAndAlbum() throws IOException {
         Musician musician = new Musician("Keith Jarrett");
@@ -196,6 +201,8 @@ class Neo4jDAOUnitTest {
     //CRUD operation testing on Musical Instrument
 
     //successful creation and loading of musical instrument
+
+    @DisplayName("successful Creation And Loading Of MusicalInstrument")
     @Test
         public void successfulCreationAndLoadingOfMusicalInstrument() throws IOException{
             MusicalInstrument musIn = new MusicalInstrument("Flute");
@@ -210,6 +217,8 @@ class Neo4jDAOUnitTest {
 
     // successfully delete musical instrument from only musical instrument class
 
+
+    @DisplayName("successful Delete Of MusicalInstrument")
     @Test
     public void successfulDeleteOfMusicalInstrument() throws Exception{
 
@@ -230,6 +239,8 @@ class Neo4jDAOUnitTest {
 
     //creating and loading Musician Instrument in database
 
+
+        @DisplayName("successful Creation And Loading MusicianInstrument")
         @Test
         public void successfulCreationAndLoadingMusicianInstrument() throws Exception{
 
@@ -250,6 +261,8 @@ class Neo4jDAOUnitTest {
 
     // updating musical Instrument for Musician Instrument ***************
 
+
+        @DisplayName("successful Updation Of Musical Instrument For Musician")
         @Test
         public void successfulUpdationOfMusicalInstrumentForMusician() throws Exception{
 
@@ -267,11 +280,14 @@ class Neo4jDAOUnitTest {
 
         loadedMusicianInstrument.setMusicalInstruments(Sets.newHashSet(mi1));
 
-        //assertEquals(loadedMusicianInstrument.getMusicalInstruments(),mi1.getName());
+        assertEquals(loadedMusicianInstrument.getMusicalInstruments().iterator().next().getName(),mi1.getName());
+
 
         }
 
         // deleting Musician Instrument object
+
+        @DisplayName("successful Deleting Of Musical Instrument For Musician")
         @Test
         public void successfulDeletionOfMusicianInstrument() throws Exception{
 
@@ -298,6 +314,8 @@ class Neo4jDAOUnitTest {
 
     //successful creation and loading of album
 
+
+    @DisplayName("successful Creation And Loading Of Album")
     @Test
     public void successfulCreationAndLoadingOfAlbum() throws IOException{
         Album album = new Album(1975, "ECM 1064/66", "Tln Concert");
@@ -314,6 +332,8 @@ class Neo4jDAOUnitTest {
     }
 
 //-        successful deletion of album only(musician related to album will stay in db)
+
+    @DisplayName("successful Delete Of Album")
     @Test
     public void successfulDeleteOfAlbum() throws IOException{
         Album album = new Album(1975, "ECM 1064/66", "Tln Concert");
@@ -332,6 +352,7 @@ class Neo4jDAOUnitTest {
 
     //successful updation of Album
 
+    @DisplayName("Successful Updation Of Album")
     @Test
     public void successfulUpdationOfAlbum() throws Exception{
 
@@ -354,7 +375,6 @@ class Neo4jDAOUnitTest {
         assertEquals(loadedMusician.getMusicianUrl(),mus1.getMusicianUrl());
 
     }
-
 
 
 

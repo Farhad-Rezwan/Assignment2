@@ -100,7 +100,6 @@ public class  Neo4jDAO implements DAO {
         Entity existingEntity = null;
         if (!collection.isEmpty()) {
             existingEntity = collection.iterator().next();
-        }
-        return (T) existingEntity;
+        }        return (T) existingEntity;
     }
 }
