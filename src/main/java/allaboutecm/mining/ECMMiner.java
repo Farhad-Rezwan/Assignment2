@@ -39,8 +39,13 @@ public class ECMMiner {
             throw new IllegalArgumentException("number of most prolific musician to return should be more than 0");
         }
         int year = Calendar.getInstance().get(Calendar.YEAR);
-        if(!((startYear>1970) && startYear<= year) || !((endYear>1970) && endYear<= year))
-            throw new IllegalArgumentException("Years should be greater than 1970, not future, and valid year");
+
+        // if start year is negetive then it is ignored
+        if (!(startYear < 0 || endYear < 0)){
+            if(!((startYear>1970) && startYear<= year) || !((endYear>1970) && endYear<= year))
+                throw new IllegalArgumentException("Years should be greater than 1970, not future, and valid year");
+        }
+
 
 
         Collection<Musician> musicians = dao.loadAll(Musician.class);

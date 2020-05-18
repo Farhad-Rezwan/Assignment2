@@ -113,10 +113,10 @@ class ECMMinerUnitTest {
 
         when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1));
 
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, -100,-200));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, 100,1122200));
         assertEquals("Years should be greater than 1970, not future, and valid year", e.getMessage());
 
-        IllegalArgumentException f = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, 1990,-200));
+        IllegalArgumentException f = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, 1990,200));
         assertEquals("Years should be greater than 1970, not future, and valid year", f.getMessage());
 
         IllegalArgumentException g = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, 2030,1990));
@@ -173,7 +173,7 @@ class ECMMinerUnitTest {
 
         when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2));
 
-        List<Musician> result = ecmMiner.mostProlificMusicians(2, 1971, 2019);
+        List<Musician> result = ecmMiner.mostProlificMusicians(2, 1971, 2020);
 
 
 
