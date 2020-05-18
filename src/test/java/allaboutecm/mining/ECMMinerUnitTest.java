@@ -54,18 +54,18 @@ class ECMMinerUnitTest {
 
     @Test
     public void shouldReturnTwoForMostProlificMusicians() {
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
-        Album album2 = new Album(1976, "ECM 1064/62", "Bill");
-        Album album3 = new Album(1976, "ECM 1064/63", "White");
-        Album album4 = new Album(1977, "ECM 1064/64", "TED");
-        Album album5 = new Album(1977, "ECM 1064/65", "Broken");
-        Album album6 = new Album(1977, "ECM 1064/66", "House");
-        Album album7 = new Album(1977, "ECM 1064/67", "Horse");
-        Album album8 = new Album(1978, "ECM 1064/68", "LOL");
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+        Album album7 = new Album(2017, "ECM 2504", "Asian Field Variations");
+        Album album8 = new Album(2017, "RJAL 397030", "Bands Originals");
 
-        Musician musician1 = new Musician("Keith");
-        Musician musician2 = new Musician("Wong");
-        Musician musician3 = new Musician("Warrick");
+        Musician musician1 = new Musician("Keith Jarrett");
+        Musician musician2 = new Musician("Avishai Cohen");
+        Musician musician3 = new Musician("Vincent Courtois");
 
         musician1.setAlbums(Sets.newHashSet(album1,album2));
         musician2.setAlbums(Sets.newHashSet(album3,album4,album5,album6,album7));
@@ -75,11 +75,80 @@ class ECMMinerUnitTest {
         when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2,musician3));
 
         List<Musician> result = ecmMiner.mostProlificMusicians(2, -1, -1);
+
+        //creating testResult array to compare with the result which is returned from mostProlificMusician method
         List<Musician> testResult = Lists.newArrayList();
         testResult.add(musician2);
         testResult.add(musician1);
+
+        // checking whether it is returning the adequate number of K
         assertEquals(2,result.size());
+
+        // comparing whether it is returning the valid result
         assertEquals(result,testResult);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-5, 0})
+    @DisplayName("number to return for most prolific musician should be bigger than 0")
+    public void prolificMusicianNumberAsParameterHasToBeMoreThanZero(int arr) {
+        Album album1 = new Album(1975, "ECM 1064/61", "The Köln Concert");
+        Musician musician1 = new Musician("Keith Jarrett");
+        musician1.setAlbums(Sets.newHashSet(album1));
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(arr, 1999,2020));
+        assertEquals("number of most prolific musician to return should be more than 0", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Years for most prolific muisician to get should be a valid year")
+    public void yearsForMostProlificMusicianToGetShouldBeValidYear() {
+        Album album1 = new Album(1975, "ECM 1064/61", "The Köln Concert");
+        Musician musician1 = new Musician("Keith Jarrett");
+        musician1.setAlbums(Sets.newHashSet(album1));
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, -100,-200));
+        assertEquals("Years should be greater than 1970, not future, and valid year", e.getMessage());
+
+        IllegalArgumentException f = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, 1990,-200));
+        assertEquals("Years should be greater than 1970, not future, and valid year", f.getMessage());
+
+        IllegalArgumentException g = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, 2030,1990));
+        assertEquals("Years should be greater than 1970, not future, and valid year", g.getMessage());
+
+        IllegalArgumentException h = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, 2030,1990));
+        assertEquals("Years should be greater than 1970, not future, and valid year", h.getMessage());
+    }
+
+
+    @Test
+    public void shouldReturnMostProlificMusicianInOrderFromMostToLeastProlific() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+        Album album7 = new Album(2017, "ECM 2504", "Asian Field Variations");
+        Album album8 = new Album(2017, "RJAL 397030", "Bands Originals");
+
+        Musician musician1 = new Musician("Keith Jarrett");
+        Musician musician2 = new Musician("Avishai Cohen");
+        Musician musician3 = new Musician("Vincent Courtois");
+
+        musician1.setAlbums(Sets.newHashSet(album1,album2));
+        musician2.setAlbums(Sets.newHashSet(album3,album4,album5,album6,album7));
+        musician3.setAlbums(Sets.newHashSet(album8));
+
+
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2,musician3));
+
+        List<Musician> result = ecmMiner.mostProlificMusicians(2, 1971, 2019);
+
+        // checking whether the most prolific musician is first in the array
+        assertEquals(result.get(0), musician2);
+        // Checking whether the second most prolific musician is second in the arrya
+        assertEquals(result.get(1), musician1);
     }
 
 
@@ -88,18 +157,20 @@ class ECMMinerUnitTest {
 
 //    2nd Method
 
-//    @Test
-//    public void shouldReturnTheMusicianWhenThereIsOnlyOneForTalentInInstrument() {
-//        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
-//        Musician musician = new Musician ("Keith Jarrett");
-//        musician.setAlbums(Sets.newHashSet(album));
-//        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician));
-//
-//        List<Musician> musicians = ecmMiner.mostTalentedMusicians(10);
-//
-//        assertEquals(1, musicians.size());
-//        assertTrue(musicians.contains(musician));
-//    }
+    @Test
+    public void shouldReturnTheMusicianWhenThereIsOnlyOneForTalentInInstrument() {
+        Musician musician1 = new Musician("Keith Jarrett");
+        MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
+        MusicalInstrument mi2 = new MusicalInstrument("Accordion");
+        MusicianInstrument mnI1 = new MusicianInstrument(musician1, Sets.newHashSet(mi1,mi2));
+
+        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mnI1));
+
+        List<Musician> musicians = ecmMiner.mostTalentedMusicians(10);
+
+        assertEquals(1, musicians.size());
+        assertTrue(musicians.contains(musician1));
+    }
 
 
     @Test

@@ -35,6 +35,14 @@ public class ECMMiner {
      * When startYear/endYear is negative, that means startYear/endYear is ignored.
      */
     public List<Musician> mostProlificMusicians(int k, int startYear, int endYear) {
+        if (k <= 0){
+            throw new IllegalArgumentException("number of most prolific musician to return should be more than 0");
+        }
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        if(!((startYear>1970) && startYear<= year) || !((endYear>1970) && endYear<= year))
+            throw new IllegalArgumentException("Years should be greater than 1970, not future, and valid year");
+
+
         Collection<Musician> musicians = dao.loadAll(Musician.class);
         Map<String, Musician> nameMap = Maps.newHashMap();
         for (Musician m : musicians) {
