@@ -193,6 +193,9 @@ public class ECMMiner {
      * @Param k the number of musicians to be returned.
      */
     public List<Musician> mostSocialMusicians(int k) {
+        if (k <= 0){
+            throw new IllegalArgumentException("number of most social musician to return should be more than 0");
+        }
 
         Collection<Album> albumCollection = dao.loadAll(Album.class);
         Map<String, Musician> nameMap = Maps.newHashMap();

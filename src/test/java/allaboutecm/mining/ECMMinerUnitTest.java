@@ -35,9 +35,10 @@ class ECMMinerUnitTest {
         ecmMiner = new ECMMiner(dao);
     }
 
-
-    // 1st Method
-    @DisplayName("Should return the musician when there is only one")
+    /*
+           ---------     Method 1 (mostProlificMusicians)  ----------
+     */
+    @DisplayName("Should return the musician when there is only one for the most prolific musician")
     @Test
     public void shouldReturnTheMusicianWhenThereIsOnlyOne() {
         Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
@@ -191,8 +192,9 @@ class ECMMinerUnitTest {
 
     }
 
-//    2nd Method
-
+    /*
+               ---------     Method 2 (mostTalentedMusicians)  ----------
+    */
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("number to return for most talented musician should be bigger than 0")
@@ -209,7 +211,7 @@ class ECMMinerUnitTest {
     }
 
 
-    @DisplayName("mostTallentedMusicians method should return one when there is only one musician in data")
+    @DisplayName("mostTalentedMusicians method should return one when there is only one musician in data")
     @Test
     public void shouldReturnTheMusicianWhenThereIsOnlyOneForTalentInInstrument() {
         Musician musician1 = new Musician("Keith Jarrett");
@@ -379,11 +381,52 @@ class ECMMinerUnitTest {
 
     }
 
+    @DisplayName("for mostTalentedMusicians method whenever multiple musician has same number of instrument skill " +
+            "should return those musician in any order")
+    @Test
+    public void shouldReturnMusicianInAnyOrderWhenMusiciansHasSameNumberOfInstrumentSkill() {
+        Musician musician1 = new Musician("Keith Jarrett");
+        Musician musician2 = new Musician("Avishai Cohen");
+        Musician musician3 = new Musician("Vincent Courtois");
+        Musician musician4 = new Musician("VCourtois");
+
+        MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
+        MusicalInstrument mi2 = new MusicalInstrument("Drums");
+        MusicalInstrument mi3 = new MusicalInstrument("Accordion");
+        MusicalInstrument mi4 = new MusicalInstrument("dion");
+        MusicalInstrument mi5 = new MusicalInstrument("dionsdfsd");
+
+        /*
+           here we can see form the below data, musician1 and musician2 has same number of instrument skills.
+         */
+
+        MusicianInstrument mnI1 = new MusicianInstrument(musician1, Sets.newHashSet(mi1,mi2));
+        MusicianInstrument mnI2 = new MusicianInstrument(musician2, Sets.newHashSet(mi2,mi3));
+        MusicianInstrument mnI3 = new MusicianInstrument(musician3, Sets.newHashSet(mi1,mi2,mi3,mi4));
+        MusicianInstrument mnI4 = new MusicianInstrument(musician4, Sets.newHashSet(mi1,mi2,mi3,mi4,mi5));
+
+        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mnI1,mnI2,mnI3,mnI4));
 
 
-// 3rd Method
 
-//    -Provide inputs for musician and albums they have played in and check who has played in more album than others(should return only one value)
+        // checking the result with different number for parameter k, and respective talented musician returned or not
+        List<Musician> musicians = ecmMiner.mostTalentedMusicians(4);
+        List<Musician> musiciansWithSameNumberInstrumentSkill = new ArrayList<>();
+        musiciansWithSameNumberInstrumentSkill.add(musician1);
+        musiciansWithSameNumberInstrumentSkill.add(musician2);
+
+        assertEquals(musicians.get(0), musician4);
+        assertEquals(musicians.get(1), musician3);
+
+        assertTrue(musiciansWithSameNumberInstrumentSkill.contains(musicians.get(2)));
+        assertTrue(musiciansWithSameNumberInstrumentSkill.contains(musicians.get(3)));
+    }
+
+    /*
+               ---------     Method 3 (mostSocialMusicians)  ----------
+    */
+
+    @DisplayName("mostSocialMusicians method should return one when there is only one musician in data")
     @Test
     public void shouldReturnTheMusicianWhenThereIsOneOnly() {
         Musician musician1 = new Musician("Keith Jarrett");
@@ -399,9 +442,27 @@ class ECMMinerUnitTest {
         assertTrue(result.contains(musician1));
     }
 
-//    -should return all values arranged from most to least (return sorted)
+    @ParameterizedTest
+    @ValueSource(ints = {-5, 0})
+    @DisplayName("number to return for most talented musician should be bigger than 0")
+    public void socialMusicianNumberToGetAsParameterHasToBeMoreThanZero(int arr) {
+        Musician musician1 = new Musician("Keith Jarrett");
+        List<Musician> list1 = Lists.newArrayList(musician1);
+
+        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        album1.setFeaturedMusicians(list1);
+
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1));
+
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSocialMusicians(arr));
+        assertEquals("number of most social musician to return should be more than 0", e.getMessage());
+    }
+
+
+    @DisplayName("Should return the most social musician in ordered manner in arrayList")
     @Test
-    public void shouldReturnTheMusicianArrangedFromMostToLeast() {
+    public void shouldReturnTheMusicianArrangedFromMostToLeastSocial() {
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -417,8 +478,84 @@ class ECMMinerUnitTest {
                      musician4 has the third most works( = 4) with musician6, musician5, musician9,  msician3
                      musician3 has the fourth most works( = 3) with musician6, musician5, musician4
                      musician2 has the fifth most work( = 2) with musician6, musician5
-                     musician1, musician7, musician8, musician9 has the least with one musician involvement( = 1)
-                             with musician6, musician6, musician5, musician4 respectively.
+        */
+        List<Musician> list1 = Lists.newArrayList(musician6, musician7);
+        List<Musician> list2 = Lists.newArrayList(musician6, musician5);
+        List<Musician> list3 = Lists.newArrayList(musician6, musician4);
+        List<Musician> list4 = Lists.newArrayList(musician6, musician3);
+        List<Musician> list5 = Lists.newArrayList(musician6, musician2);
+        List<Musician> list6 = Lists.newArrayList(musician6, musician1);
+        List<Musician> list7 = Lists.newArrayList(musician5, musician8);
+        List<Musician> list8 = Lists.newArrayList(musician5, musician4);
+        List<Musician> list9 = Lists.newArrayList(musician5, musician3);
+        List<Musician> list10 = Lists.newArrayList(musician5, musician2);
+        List<Musician> list11 = Lists.newArrayList(musician4, musician9);
+        List<Musician> list12 = Lists.newArrayList(musician4, musician3);
+
+        //  The above lists are assigned to different albums
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        album1.setFeaturedMusicians(list1);
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        album2.setFeaturedMusicians(list2);
+        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        album3.setFeaturedMusicians(list3);
+        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        album4.setFeaturedMusicians(list4);
+        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        album5.setFeaturedMusicians(list5);
+        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+        album6.setFeaturedMusicians(list6);
+        Album album7 = new Album(2017, "ECM 2504", "Asian Field Variations");
+        album7.setFeaturedMusicians(list7);
+        Album album8 = new Album(2017, "RJAL 397030", "Bands Originals");
+        album8.setFeaturedMusicians(list8);
+        Album album9 = new Album(1999, "ECM 1706-10", "Jean-Luc Godard");
+        album9.setFeaturedMusicians(list9);
+        Album album10 = new Album(1999, "ECM 1668", "JOHANN HEINRICH SCHMELZER: UNARUM FIDIUM");
+        album10.setFeaturedMusicians(list10);
+        Album album11 = new Album(1999, "ECM 1667", "FRANZ SCHUBERT: KLAVIERSTUCKE");
+        album11.setFeaturedMusicians(list11);
+        Album album12 = new Album(1999, "ECM 1591", "ARVO PART: ALINA");
+        album12.setFeaturedMusicians(list12);
+
+
+
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1, album2, album3, album4, album5, album6, album7, album8, album9, album10, album11, album12));
+
+        List<Musician> result = ecmMiner.mostSocialMusicians(5);
+
+        assertEquals(5,result.size());
+
+
+
+
+        /* results sorted from highest to lowest....musician6 with 6, musician5 with 5, musician4 with 4 musician3 with 3
+        and musician2 with2
+         */
+        assertEquals(result.get(0), (musician6));
+        assertEquals(result.get(1), (musician5));
+        assertEquals(result.get(2), (musician4));
+        assertEquals(result.get(3), (musician3));
+        assertEquals(result.get(4), (musician2));
+}
+
+    @DisplayName("Those musician who have same number of other musicians they worked in albums" +
+            "should be returned in any order")
+    @Test
+    public void shouldReturnTheMusicianInAnyOrderForThoseWhoHasWorkedInSameNumberOfDifferentMusicians() {
+        Musician musician1 = new Musician("Keith Jarrett");
+        Musician musician2 = new Musician("Avishai Cohen");
+        Musician musician3 = new Musician("Vincent Courtois");
+        Musician musician4 = new Musician("Sarah Murcia");
+        Musician musician5 = new Musician("Ziv Ravitz");
+        Musician musician6 = new Musician("Daniel Erdmann");
+        Musician musician7 = new Musician("Robin Fincker");
+        Musician musician8 = new Musician("Stefano Battaglia");
+        Musician musician9 = new Musician("Michael Gassmann");
+
+        /*
+           From below data we can see musician1, musician7, musician8, musician9 has the same number of other musicians( = 1) they worked.
+                here musician1, musician7, musician8 and musician9 has worked with musician6, musician6, musician5, musician4 respectively.
         */
         List<Musician> list1 = Lists.newArrayList(musician6, musician7);
         List<Musician> list2 = Lists.newArrayList(musician6, musician5);
@@ -479,7 +616,7 @@ class ECMMinerUnitTest {
         assertEquals(result.get(3), (musician3));
         assertEquals(result.get(4), (musician2));
 
-        //all these musicians(musician1, musician7, musician8 and musician2) has worked with one contributor.
+        //all these musicians(musician1, musician7, musician8 and musician2) has worked with one contributor, they are assigned in any order.
         List<Musician> sameResult = Lists.newArrayList(musician1, musician7, musician8, musician9);
 
         assertTrue(sameResult.contains(result.get(5)));
@@ -488,10 +625,12 @@ class ECMMinerUnitTest {
         assertTrue(sameResult.contains(result.get(8)));
 
 
-}
+    }
 
+    /*
+               ---------     Method 4 (busiestYears)  ----------
+    */
 
-    // 4th Method
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("Busiest Years You Want should bigger than 0")
@@ -540,7 +679,7 @@ class ECMMinerUnitTest {
         assertTrue(result.contains(1977));
     }
 
-    //      should return all values in descending order
+
     @Test
     public void shouldReturnAllValuesInDescendingBusyOrder() {
         Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
@@ -563,25 +702,9 @@ class ECMMinerUnitTest {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //    Last Method 5th
+    /*
+               ---------     Method 5 (mostSimilarAlbums)  ----------
+    */
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("Similar Albums Number You Want should bigger than 0")
