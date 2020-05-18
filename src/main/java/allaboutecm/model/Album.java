@@ -55,6 +55,15 @@ public class Album extends Entity {
     @Property(name="tracks")
     private List<String> tracks;
 
+
+
+
+    @Property(name="rating")
+    private Double rating;
+
+    @Property(name="price")
+    private Double price;
+
     public Album() {
     }
 
@@ -195,6 +204,61 @@ public class Album extends Entity {
 
         this.albumName = albumName;
     }
+
+
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        if (null == price) {
+            throw new NullPointerException("price value should not be null");
+        }
+        if (price < 0) {
+            throw new IllegalArgumentException("price should hold valid range");
+        }
+        this.price = price;
+    }
+
+    public void setPrice(int price) {
+        if (price < 0) {
+            throw new IllegalArgumentException("price should hold valid range");
+        }
+
+        this.price = Double.valueOf((price));
+    }
+
+
+
+
+    public Double getRating() {
+        return rating;
+    }
+
+
+
+    public void setRating(Double rating) {
+        if (null == rating) {
+            throw new NullPointerException("Rating value should not be null");
+        }
+        if (rating < 0 || rating > 5) {
+            throw new IllegalArgumentException("Rating should hold valid range");
+        }
+        this.rating = rating;
+    }
+
+    public void setRating(int rating) {
+        if (rating < 0 || rating > 5) {
+            throw new IllegalArgumentException("Rating should hold valid range");
+        }
+
+        this.rating = Double.valueOf((rating));
+    }
+
+
+
+
 
     @Override
     public boolean equals(Object o) {

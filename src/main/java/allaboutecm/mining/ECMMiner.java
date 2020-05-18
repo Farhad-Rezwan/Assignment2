@@ -424,4 +424,69 @@ public class ECMMiner {
         return result;
 
     }
+
+//    method for rating
+
+
+
+
+
+//    method for price
+//public List<Integer> busiestYears(int k) {
+//    if (k <= 0){
+//        throw new IllegalArgumentException("Busiest Years You Want should bigger than 0");
+//    }
+//    notNull(k);
+//    //get all albums from database
+//    Collection<Album> albums = dao.loadAll(Album.class);
+//    //Map(year,album)
+//    ListMultimap<Integer, Album> multimap = MultimapBuilder.treeKeys().arrayListValues().build();
+//    //Get each year to reflect each album
+//    for (Album a : albums) {
+//        multimap.put(a.getReleaseYear(), a);
+//    }
+//    //transfer ListMultimap(Year,Album) to Map(Year, List<Album>)
+//    Map<Integer, Collection<Album>> yearAlbum = multimap.asMap();
+//    //build a ListMultimap(Count, Year) which can use as.Map() to transfer to Map(Count,list<Year>)
+//    ListMultimap<Integer, Integer> countMap = MultimapBuilder.treeKeys().arrayListValues().build();
+//    //Use for loop to divide different year and use size() to count how many album in each year
+//    for (Integer year : yearAlbum.keySet()) {
+//        Collection<Album> albums1 = yearAlbum.get(year);
+//        int count = albums1.size();
+//        countMap.put(count, year);
+//    }
+//    //build a empty arrayList to prepare to store result
+//    List<Integer> result = Lists.newArrayList();
+//    //Get all count number from countMap.count and sort them
+//    List<Integer> sortedKeys = Lists.newArrayList(countMap.keySet());
+//    //*****Sort it From big to small
+//    sortedKeys.sort(Ordering.natural().reverse());
+//    // From big count number to small, to add value in result
+//    for (Integer count : sortedKeys) {
+//        //Use current count of albums to get Year
+//        List<Integer> list = countMap.get(count);
+//        //if current number of year already bigger than we need, put Current Year to result and break loop
+//        if (list.size() >= k) {
+//            int newAddition = k - result.size();
+//            for (int i = 0; i < newAddition; i++) {
+//                result.add(list.get(i));
+//            }
+//            break;
+//        }
+//        //if last number of year + current number of Year >= we need, put Current Year into result until it is full
+//        if (result.size() + list.size() >= k) {
+//            int newAddition = k - result.size();
+//            for (int i = 0; i < newAddition; i++) {
+//                result.add(list.get(i));
+//            }
+//        } else {
+//            result.addAll(list);
+//        }
+//    }
+//
+//
+//    return result;
+//}
+
+
 }

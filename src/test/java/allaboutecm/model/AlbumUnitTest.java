@@ -283,6 +283,62 @@ public void recordNumberShouldReturnProperValueAddingAndUpdating() {
 //        assertEquals("Illegal release format", i.getMessage());
 //    }
 
+    @DisplayName("Should throw null pointer exception when rating is set to null")
+    @Test
+    public void shouldThrowNullPointerExceptionWhenRatingIsSetToNull() {
+        NullPointerException e = assertThrows(NullPointerException.class, ()-> album.setRating(null));
+        assertEquals("Rating value should not be null", e.getMessage() );
+    }
+
+    @DisplayName("Should throw illegal argument exception when rating is set to negative double value")
+    @ParameterizedTest()
+    @ValueSource(doubles = {-2.5, -3.5})
+    public void shouldThrowIllegalArgumentExceptionWhenRatingIsSetToNegative(Double rating) {
+        assertThrows(IllegalArgumentException.class, () -> album.setRating(rating));
+    }
+
+    @DisplayName("Should throw illegal argument exception when rating is set to less than 0.00 or more than 5.00")
+    @ParameterizedTest()
+    @ValueSource(doubles = {-0.1, 5.1})
+    public void shouldThrowIllegalArgumentExceptionWhenRatingValueSetOutOfRange(Double rating) {
+        assertThrows(IllegalArgumentException.class, () -> album.setRating(rating));
+    }
+
+    @DisplayName("Should accept parameter of integers when required")
+    @ParameterizedTest()
+    @ValueSource(ints = {0, 1, 4, 5})
+    public void shouldAcceptIntegerOfWholeNumber (int args) {
+        album.setRating(args);
+        assertTrue(album.getRating() == args);
+    }
+    @DisplayName("Should throw null pointer exception when price is set to null")
+    @Test
+    public void shouldThrowNullPointerExceptionWhenPriceIsSetToNull() {
+        NullPointerException e = assertThrows(NullPointerException.class, ()-> album.setPrice(null));
+        assertEquals("price value should not be null", e.getMessage() );
+    }
+
+    @DisplayName("Should throw illegal argument exception when price is set to negative double value")
+    @ParameterizedTest()
+    @ValueSource(doubles = {-2.5, -3.5})
+    public void shouldThrowIllegalArgumentExceptionWhenPriceIsSetToNegative(Double price) {
+        assertThrows(IllegalArgumentException.class, () -> album.setPrice(price));
+    }
+
+    @DisplayName("Should throw illegal argument exception when price is set to less than 0.00")
+    @ParameterizedTest()
+    @ValueSource(doubles = {-0.1, -100.0})
+    public void shouldThrowIllegalArgumentExceptionWhenPriceIsSetOutOfRange(Double price) {
+        assertThrows(IllegalArgumentException.class, () -> album.setPrice(price));
+    }
+
+    @DisplayName("Should accept parameter of integers when required")
+    @ParameterizedTest()
+    @ValueSource(ints = {0, 11, 412, 500})
+    public void priceShouldAcceptIntegerOfWholeNumber (int args) {
+        album.setPrice(args);
+        assertTrue(album.getPrice() == args);
+    }
     @Test
     @DisplayName("Input should be a number(year)between 1970 and current.")
     public void releaseYearShouldBeBetween1970AndCurrent() {
