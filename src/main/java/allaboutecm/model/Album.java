@@ -56,8 +56,6 @@ public class Album extends Entity {
     private List<String> tracks;
 
 
-
-
     @Property(name="rating")
     private Double rating;
 
@@ -83,6 +81,8 @@ public class Album extends Entity {
         featuredMusicians = Lists.newArrayList();
         instruments = Sets.newHashSet();
         tracks = Lists.newArrayList();
+        price = -1.0;
+        rating = -1.0;
     }
 
     public String getRecordNumber() {

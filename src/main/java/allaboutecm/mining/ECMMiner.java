@@ -223,8 +223,8 @@ public class ECMMiner {
                     for(Musician a : CurrentAlbumMusicians){
 
                         /* inserts other musicians into the list, make sure current musician(for whom we are counting the
-                        *     number of musician they worked with) is not inserted
-                        * */
+                         *     number of musician they worked with) is not inserted
+                         * */
                         if(a != nameMap.get(singleMusicianName)){
                             albumOtherMusicians.add(a);
                         }
@@ -431,62 +431,53 @@ public class ECMMiner {
 
 
 
-//    method for price
-//public List<Integer> busiestYears(int k) {
-//    if (k <= 0){
-//        throw new IllegalArgumentException("Busiest Years You Want should bigger than 0");
-//    }
-//    notNull(k);
-//    //get all albums from database
-//    Collection<Album> albums = dao.loadAll(Album.class);
-//    //Map(year,album)
-//    ListMultimap<Integer, Album> multimap = MultimapBuilder.treeKeys().arrayListValues().build();
-//    //Get each year to reflect each album
-//    for (Album a : albums) {
-//        multimap.put(a.getReleaseYear(), a);
-//    }
-//    //transfer ListMultimap(Year,Album) to Map(Year, List<Album>)
-//    Map<Integer, Collection<Album>> yearAlbum = multimap.asMap();
-//    //build a ListMultimap(Count, Year) which can use as.Map() to transfer to Map(Count,list<Year>)
-//    ListMultimap<Integer, Integer> countMap = MultimapBuilder.treeKeys().arrayListValues().build();
-//    //Use for loop to divide different year and use size() to count how many album in each year
-//    for (Integer year : yearAlbum.keySet()) {
-//        Collection<Album> albums1 = yearAlbum.get(year);
-//        int count = albums1.size();
-//        countMap.put(count, year);
-//    }
-//    //build a empty arrayList to prepare to store result
-//    List<Integer> result = Lists.newArrayList();
-//    //Get all count number from countMap.count and sort them
-//    List<Integer> sortedKeys = Lists.newArrayList(countMap.keySet());
-//    //*****Sort it From big to small
-//    sortedKeys.sort(Ordering.natural().reverse());
-//    // From big count number to small, to add value in result
-//    for (Integer count : sortedKeys) {
-//        //Use current count of albums to get Year
-//        List<Integer> list = countMap.get(count);
-//        //if current number of year already bigger than we need, put Current Year to result and break loop
-//        if (list.size() >= k) {
-//            int newAddition = k - result.size();
-//            for (int i = 0; i < newAddition; i++) {
-//                result.add(list.get(i));
-//            }
-//            break;
-//        }
-//        //if last number of year + current number of Year >= we need, put Current Year into result until it is full
-//        if (result.size() + list.size() >= k) {
-//            int newAddition = k - result.size();
-//            for (int i = 0; i < newAddition; i++) {
-//                result.add(list.get(i));
-//            }
-//        } else {
-//            result.addAll(list);
-//        }
-//    }
-//
-//
-//    return result;
-//}
+    //    method for price
+    public List<Album> mostExpensivePrice(int k) {
+        if (k <= 0){
+            throw new IllegalArgumentException("Expensive Price You Want should bigger than 0");
+        }
+        notNull(k);
+        //get all albums from database
+        Collection<Album> albums = dao.loadAll(Album.class);
+        //Map(price,album)
+        ListMultimap<Double, Album> multimap = MultimapBuilder.treeKeys().arrayListValues().build();
+        //Get each price to reflect each album
+        for (Album a : albums) {
+            if(!(a.getPrice()==-1.0))
+                multimap.put(a.getPrice(), a);
+        }
+
+        //build a empty arrayList to prepare to store result
+        List<Album> result = Lists.newArrayList();
+        //Get all price from multimap.count and sort them
+        List<Double> sortedKeys = Lists.newArrayList(multimap.keySet());
+        //*****Sort it From big to small
+        sortedKeys.sort(Ordering.natural().reverse());
+        // From big price number to small, to add value in result
+        for (Double price : sortedKeys) {
+            //Use current price to get albums
+            List<Album> list = multimap.get(price);
+            //if current price's number of album already bigger than we need, put them to result and break loop
+            if (list.size() >= k) {
+                int newAddition = k - result.size();
+                for (int i = 0; i < newAddition; i++) {
+                    result.add(list.get(i));
+                }
+                break;
+            }
+            //if last price's number of albums + current price albums >= we need, put them into result until it is full
+            if (result.size() + list.size() >= k) {
+                int newAddition = k - result.size();
+                for (int i = 0; i < newAddition; i++) {
+                    result.add(list.get(i));
+                }
+            } else {
+                result.addAll(list);
+            }
+        }
+
+        return result;
+    }
 
 
 }

@@ -95,7 +95,7 @@ class ECMMinerIntegrationTest {
         session.purgeDatabase();
         session.clear();
         sessionFactory.close();
-        }
+    }
 
 
     // 1st Method
@@ -812,6 +812,113 @@ class ECMMinerIntegrationTest {
     public void BusiestYearsYouWantShouldBiggerThan0(int arr) {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.busiestYears(arr));
         assertEquals("Busiest Years You Want should bigger than 0", e.getMessage());
+    }
+
+    /*
+    ---------     Method 6 (mostExpensivePrice)  ----------
+            */
+
+    @ParameterizedTest
+    @ValueSource(ints = {-5, 0})
+    @DisplayName("most Expensive Price You Want should bigger than 0")
+    public void mostExpensivePriceYouWantShouldBiggerThan0(int arr) {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostExpensivePrice(arr));
+        assertEquals("Expensive Price You Want should bigger than 0", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("should Return 0 When No Price Inside Database")
+    public void shouldReturn0WhenNoPriceInsideDatabase() {
+        List<Album> result = ecmMiner.mostExpensivePrice(3);
+        assertEquals(0,result.size());
+    }
+
+    @Test
+    @DisplayName("should Return The Most Expensive Price When There Are Only Two")
+    public void shouldReturnTheMostExpensivePriceWhenThereAreOnlyTwo() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album2 = new Album(1976, "ECM 1064/62", "Bill");
+        Album album3 = new Album(1976, "ECM 1064/63", "White");
+        Album album4 = new Album(1977, "ECM 1064/64", "TED");
+        Album album5 = new Album(1977, "ECM 1064/65", "Broken");
+        Album album6 = new Album(1977, "ECM 1064/66", "House");
+
+        album1.setPrice(999.99);
+        album3.setPrice(100.99);
+
+        dao.createOrUpdate(album1);
+        dao.createOrUpdate(album2);
+        dao.createOrUpdate(album3);
+        dao.createOrUpdate(album4);
+        dao.createOrUpdate(album5);
+        dao.createOrUpdate(album6);
+        List<Album> result = ecmMiner.mostExpensivePrice(5);
+
+        assertEquals(2,result.size());
+        assertTrue(result.contains(album1));
+        assertTrue(result.contains(album3));
+    }
+
+    @Test
+    @DisplayName("should Return The Most Expensive Price Album")
+    public void shouldReturnTheMostExpensivePrice() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album2 = new Album(1976, "ECM 1064/62", "Bill");
+        Album album3 = new Album(1976, "ECM 1064/63", "White");
+        Album album4 = new Album(1977, "ECM 1064/64", "TED");
+        Album album5 = new Album(1977, "ECM 1064/65", "Broken");
+        Album album6 = new Album(1977, "ECM 1064/66", "House");
+
+        album1.setPrice(999.99);
+        album3.setPrice(100.99);
+        album4.setPrice(100.99);
+
+        dao.createOrUpdate(album1);
+        dao.createOrUpdate(album2);
+        dao.createOrUpdate(album3);
+        dao.createOrUpdate(album4);
+        dao.createOrUpdate(album5);
+        dao.createOrUpdate(album6);
+        List<Album> result = ecmMiner.mostExpensivePrice(1);
+
+        assertEquals(1,result.size());
+        assertTrue(result.contains(album1));
+    }
+
+
+    @Test
+    @DisplayName("should Return All Albums InDescending PriceOrder")
+    public void shouldReturnAllAlbumsInDescendingPriceOrder() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album2 = new Album(1976, "ECM 1064/62", "Bill");
+        Album album3 = new Album(1976, "ECM 1064/63", "White");
+        Album album4 = new Album(1977, "ECM 1064/64", "TED");
+        Album album5 = new Album(1977, "ECM 1064/65", "Broken");
+        Album album6 = new Album(1977, "ECM 1064/66", "House");
+
+        album1.setPrice(999.99);
+        album2.setPrice(888.88);
+        album3.setPrice(666.66);
+        album4.setPrice(111.11);
+        album5.setPrice(0.0);
+
+
+        dao.createOrUpdate(album1);
+        dao.createOrUpdate(album2);
+        dao.createOrUpdate(album3);
+        dao.createOrUpdate(album4);
+        dao.createOrUpdate(album5);
+        dao.createOrUpdate(album6);
+        List<Album> result = ecmMiner.mostExpensivePrice(6);
+        List<Album> testResult = Lists.newArrayList();
+        testResult.add(album1);
+        testResult.add(album2);
+        testResult.add(album3);
+        testResult.add(album4);
+        testResult.add(album5);
+        assertEquals(5,result.size());
+        assertEquals(result,testResult);
+
     }
 
 
