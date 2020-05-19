@@ -22,6 +22,8 @@ public class MusicalInstrument extends Entity {
     }
 
     public void setName(String name) {
+
+        // making sure musical instrument name can contain proper name, can should not include improper symbol like "@", "$", "_" and etc.
         if (!name.matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
             throw new IllegalArgumentException("Not a valid album name");
         }

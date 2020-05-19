@@ -4,62 +4,35 @@ import allaboutecm.dataaccess.neo4j.Neo4jDAO;
 import allaboutecm.model.Musician;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.session.SessionFactory;
 
-import java.io.File;
 import java.io.IOException;
 
 //package allaboutecm.dataaccess.neo4j;
 import allaboutecm.dataaccess.DAO;
 import allaboutecm.model.Album;
 import allaboutecm.model.MusicalInstrument;
-import allaboutecm.model.Musician;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.session.Session;
-import org.neo4j.ogm.session.SessionFactory;
-import org.neo4j.ogm.support.FileUtils;
-import scala.collection.immutable.ListSet;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 //package allaboutecm.mining;
 
-import allaboutecm.dataaccess.DAO;
-import allaboutecm.dataaccess.neo4j.Neo4jDAO;
-import allaboutecm.model.Album;
-import allaboutecm.model.MusicalInstrument;
-import allaboutecm.model.Musician;
 import allaboutecm.model.MusicianInstrument;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.mockito.Mockito.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 /**
  * TODO: perform integration testing of both ECMMiner and the DAO classes together.
  */
@@ -81,8 +54,6 @@ class ECMMinerIntegrationTest {
 
         dao = new Neo4jDAO(session);
         ecmMiner = new ECMMiner(dao);
-
-
     }
 
     @AfterEach
@@ -815,21 +786,22 @@ class ECMMinerIntegrationTest {
     }
 
     /*
-    ---------     Method 6 (mostExpensivePrice)  ----------
-            */
+    ---------     Method 6 (mostExpensiveAlbums)  ----------
+    ---------          Extra Credit 1            -----------
+    */
 
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("most Expensive Price You Want should bigger than 0")
     public void mostExpensivePriceYouWantShouldBiggerThan0(int arr) {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostExpensivePrice(arr));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostExpensiveAlbums(arr));
         assertEquals("Expensive Price You Want should bigger than 0", e.getMessage());
     }
 
     @Test
     @DisplayName("should Return 0 When No Price Inside Database")
     public void shouldReturn0WhenNoPriceInsideDatabase() {
-        List<Album> result = ecmMiner.mostExpensivePrice(3);
+        List<Album> result = ecmMiner.mostExpensiveAlbums(3);
         assertEquals(0,result.size());
     }
 
@@ -852,7 +824,7 @@ class ECMMinerIntegrationTest {
         dao.createOrUpdate(album4);
         dao.createOrUpdate(album5);
         dao.createOrUpdate(album6);
-        List<Album> result = ecmMiner.mostExpensivePrice(5);
+        List<Album> result = ecmMiner.mostExpensiveAlbums(5);
 
         assertEquals(2,result.size());
         assertTrue(result.contains(album1));
@@ -879,7 +851,7 @@ class ECMMinerIntegrationTest {
         dao.createOrUpdate(album4);
         dao.createOrUpdate(album5);
         dao.createOrUpdate(album6);
-        List<Album> result = ecmMiner.mostExpensivePrice(1);
+        List<Album> result = ecmMiner.mostExpensiveAlbums(1);
 
         assertEquals(1,result.size());
         assertTrue(result.contains(album1));
@@ -909,7 +881,7 @@ class ECMMinerIntegrationTest {
         dao.createOrUpdate(album4);
         dao.createOrUpdate(album5);
         dao.createOrUpdate(album6);
-        List<Album> result = ecmMiner.mostExpensivePrice(6);
+        List<Album> result = ecmMiner.mostExpensiveAlbums(6);
         List<Album> testResult = Lists.newArrayList();
         testResult.add(album1);
         testResult.add(album2);
@@ -920,6 +892,118 @@ class ECMMinerIntegrationTest {
         assertEquals(result,testResult);
 
     }
+    /*
+               ---------     Method 7 (highestRatedAlbums)  ----------
+               ---------          Extra Credit 2            -----------
+    */
+
+    @ParameterizedTest
+    @ValueSource(ints = {-5, 0})
+    @DisplayName("number of highest rated album you want should bigger than zero")
+    public void numberOfHighestRatedAlbumYouWantShouldBiggerThanZero(int arr) {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.highestRatedAlbums(arr));
+        assertEquals("Number of Highest rated albums you need should be more than zero", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("should return zero when no ratings inside database")
+    public void shouldReturnZeroNumberOfAlbumsWhenNoAlbumRatingsAreThereInDatabase() {
+        List<Album> result = ecmMiner.highestRatedAlbums(3);
+        assertEquals(0,result.size());
+    }
+
+    @Test
+    @DisplayName("Should return the  ratings when there are only two ratings are available")
+    public void shouldReturnTheRatingsWhenOnlyTwoRatingsAreAvailable() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+
+        album1.setRating(4.5);
+        album3.setRating(3.0);
 
 
+        dao.createOrUpdate(album1);
+        dao.createOrUpdate(album2);
+        dao.createOrUpdate(album3);
+        dao.createOrUpdate(album4);
+        dao.createOrUpdate(album5);
+        dao.createOrUpdate(album6);
+
+        List<Album> result = ecmMiner.highestRatedAlbums(5);
+
+        assertEquals(2,result.size());
+        assertTrue(result.contains(album1));
+        assertTrue(result.contains(album3));
+    }
+
+    @Test
+    @DisplayName("Should return the highest rated album")
+    public void shouldReturnTheHighestRatedAlbum() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+
+        album1.setRating(5.0);
+        album3.setRating(4.5);
+        album4.setRating(4);
+
+
+        dao.createOrUpdate(album1);
+        dao.createOrUpdate(album2);
+        dao.createOrUpdate(album3);
+        dao.createOrUpdate(album4);
+        dao.createOrUpdate(album5);
+        dao.createOrUpdate(album6);
+
+        List<Album> result = ecmMiner.highestRatedAlbums(1);
+
+        assertEquals(1,result.size());
+        assertTrue(result.contains(album1));
+    }
+
+
+    @Test
+    @DisplayName("Should return the highest rated albums in ordered manner")
+    public void shouldReturnHighestRatedAlbumsInProperOrder() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+
+
+        album1.setRating(5.0);
+        album2.setRating(4.0);
+        album3.setRating(3.0);
+        album4.setRating(2.0);
+        album5.setRating(1.0);
+
+
+        dao.createOrUpdate(album1);
+        dao.createOrUpdate(album2);
+        dao.createOrUpdate(album3);
+        dao.createOrUpdate(album4);
+        dao.createOrUpdate(album5);
+        dao.createOrUpdate(album6);
+
+
+        List<Album> result = ecmMiner.highestRatedAlbums(6);
+        assertEquals(5,result.size());
+
+
+        assertEquals(result.get(0), album1);
+        assertEquals(result.get(1), album2);
+        assertEquals(result.get(2), album3);
+        assertEquals(result.get(3), album4);
+        assertEquals(result.get(4), album5);
+
+    }
 }

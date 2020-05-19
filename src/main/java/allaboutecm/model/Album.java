@@ -81,8 +81,10 @@ public class Album extends Entity {
         featuredMusicians = Lists.newArrayList();
         instruments = Sets.newHashSet();
         tracks = Lists.newArrayList();
-        price = -1.0;
-        rating = -1.0;
+
+        // initialising with negative because price or rating can hold value of 0.0
+        price = null;
+        rating = null;
     }
 
     public String getRecordNumber() {
@@ -90,18 +92,25 @@ public class Album extends Entity {
     }
 
     public void setRecordNumber(String recordNumber) {
+        // only predefined prefix are accepted
         String[] prefix = {"ECM ","Carmo ", "RJAL ", "YAN ", "Watt ", "XtraWatt "};
         if (null == recordNumber){
             throw new NullPointerException("Record Number can not be null");
         }
+        // loops through the prefixes
         for (int i = 0; i < 6; i++) {
             if (recordNumber.startsWith(prefix[i])){
+                // replacing the recordNumber which can have / like `12/2` to 122
                 String numberValue = recordNumber.substring(prefix[i].length())
                         .replaceAll("/","");
+
+                // making sure that 122 is a digit
                 if (Character.isDigit(Integer.parseInt(numberValue))){
                     throw new IllegalArgumentException("Illegal record number");
                 }
             }
+
+            // checking whether the recordNumber is alphanumeric or not, can include space and/or `/`
             if (!StringUtils.isAlphanumeric(recordNumber
                     .replaceAll("/","")
                     .replaceAll("\\s+",""))){
@@ -153,12 +162,16 @@ public class Album extends Entity {
         HttpURLConnection connection = (HttpURLConnection)albumURL.openConnection();
         connection.setRequestMethod("GET");
         connection.connect();
+
+        // to check whether the url is Unauthorized or not,
         if (connection.getResponseCode() == 401){
             throw new UnknownHostException("album URL is invalid");
         }
         if (!connection.getURL().getHost().contains("ecmrecords")) {
             throw new IllegalArgumentException();
         }
+
+        // sets the album url when the HTTP response is healthy
         if (connection.getResponseCode() == 200) {
             this.albumURL = albumURL;
         }
@@ -173,6 +186,15 @@ public class Album extends Entity {
         if (null == tracks) {
             throw new NullPointerException("Tracks list cannot be null");
         }
+        for (String element : tracks) {
+
+            // making sure track name can contain proper name, can include `'`, `-`,
+            // and should not accept invalid one or multiple letters/numbers
+            if (!element.matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
+                throw new IllegalArgumentException("Not a valid track name");
+            }
+        }
+
         this.tracks = tracks;
     }
 
@@ -196,6 +218,9 @@ public class Album extends Entity {
         if (null == albumName){
             throw new NullPointerException("album name cannot be null or empty");
         }
+
+        // making sure album name can contain proper name, can include `'`, `-`,
+        // and should not accept invalid one or multiple letters/numbers
         if (!albumName.matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
             throw new IllegalArgumentException("Not a valid album name");
         }
@@ -216,14 +241,14 @@ public class Album extends Entity {
             throw new NullPointerException("price value should not be null");
         }
         if (price < 0) {
-            throw new IllegalArgumentException("price should hold valid range");
+            throw new IllegalArgumentException("Price should hold non negative numbers");
         }
         this.price = price;
     }
 
     public void setPrice(int price) {
         if (price < 0) {
-            throw new IllegalArgumentException("price should hold valid range");
+            throw new IllegalArgumentException("Price should hold non negative numbers");
         }
 
         this.price = Double.valueOf((price));

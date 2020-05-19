@@ -425,14 +425,13 @@ public class ECMMiner {
 
     }
 
-//    method for rating
-
-
-
-
-
-    //    method for price
-    public List<Album> mostExpensivePrice(int k) {
+    /**
+     * Extra Credit 1:
+     * Most Expensive Albums
+     *
+     * @Param k the number of Albums to be returned.
+     */
+    public List<Album> mostExpensiveAlbums(int k) {
         if (k <= 0){
             throw new IllegalArgumentException("Expensive Price You Want should bigger than 0");
         }
@@ -443,7 +442,7 @@ public class ECMMiner {
         ListMultimap<Double, Album> multimap = MultimapBuilder.treeKeys().arrayListValues().build();
         //Get each price to reflect each album
         for (Album a : albums) {
-            if(!(a.getPrice()==-1.0))
+            if(!(a.getPrice() == null))
                 multimap.put(a.getPrice(), a);
         }
 
@@ -466,6 +465,70 @@ public class ECMMiner {
                 break;
             }
             //if last price's number of albums + current price albums >= we need, put them into result until it is full
+            if (result.size() + list.size() >= k) {
+                int newAddition = k - result.size();
+                for (int i = 0; i < newAddition; i++) {
+                    result.add(list.get(i));
+                }
+            } else {
+                result.addAll(list);
+            }
+        }
+
+        return result;
+    }
+
+
+
+    /**
+     * Extra Credit 2:
+     * Highest Rated Albums
+     *
+     * @Param k the number of Albums to be returned.
+     */
+    public List<Album> highestRatedAlbums(int k) {
+        if (k <= 0){
+            throw new IllegalArgumentException("Number of Highest rated albums you need should be more than zero");
+        }
+        notNull(k);
+
+        //get all albums from database
+        Collection<Album> albums = dao.loadAll(Album.class);
+
+        //Map(ratings,album)
+        ListMultimap<Double, Album> multimap = MultimapBuilder.treeKeys().arrayListValues().build();
+
+        //Get each ratings to reflect each album
+        for (Album a : albums) {
+            if(!(a.getRating() == null))
+                multimap.put(a.getRating(), a);
+        }
+
+        //build a empty arrayList to prepare to store result
+        List<Album> result = Lists.newArrayList();
+
+        //Get all ratings from multimap.count and sort them
+        List<Double> sortedKeys = Lists.newArrayList(multimap.keySet());
+
+        // sorting from highest rating to the lowest rating
+        sortedKeys.sort(Ordering.natural().reverse());
+
+        // From highest rating to lowest rating, to add value in result
+
+        for (Double ratings : sortedKeys) {
+
+            //Use current ratings to get albums
+            List<Album> list = multimap.get(ratings);
+
+            //if current ratings's number of album already bigger than we need, put them to result and break loop
+            if (list.size() >= k) {
+                int newAddition = k - result.size();
+                for (int i = 0; i < newAddition; i++) {
+                    result.add(list.get(i));
+                }
+                break;
+            }
+            //if last ratings's number of albums + current ratings albums >= we need, put them into result until it is full
             if (result.size() + list.size() >= k) {
                 int newAddition = k - result.size();
                 for (int i = 0; i < newAddition; i++) {

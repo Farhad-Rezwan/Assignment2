@@ -785,22 +785,24 @@ class ECMMinerUnitTest {
         List<Album> result = ecmMiner.mostSimilarAlbums(3, album1);
         assertEquals(0,result.size());
     }
-/*
-               ---------     Method 6 (mostExpensivePrice)  ----------
+
+    /*
+    ---------     Method 6 (mostExpensiveAlbums)  ----------
+    ---------          Extra Credit 1            -----------
     */
 
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("most Expensive Price You Want should bigger than 0")
     public void mostExpensivePriceYouWantShouldBiggerThan0(int arr) {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostExpensivePrice(arr));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostExpensiveAlbums(arr));
         assertEquals("Expensive Price You Want should bigger than 0", e.getMessage());
     }
 
     @Test
     @DisplayName("should Return 0 When No Price Inside Database")
     public void shouldReturn0WhenNoPriceInsideDatabase() {
-        List<Album> result = ecmMiner.mostExpensivePrice(3);
+        List<Album> result = ecmMiner.mostExpensiveAlbums(3);
         assertEquals(0,result.size());
     }
 
@@ -818,7 +820,7 @@ class ECMMinerUnitTest {
         album3.setPrice(100.99);
 
         when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4,album5,album6));
-        List<Album> result = ecmMiner.mostExpensivePrice(5);
+        List<Album> result = ecmMiner.mostExpensiveAlbums(5);
 
         assertEquals(2,result.size());
         assertTrue(result.contains(album1));
@@ -840,7 +842,7 @@ class ECMMinerUnitTest {
         album4.setPrice(100.99);
 
         when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4,album5,album6));
-        List<Album> result = ecmMiner.mostExpensivePrice(1);
+        List<Album> result = ecmMiner.mostExpensiveAlbums(1);
 
         assertEquals(1,result.size());
         assertTrue(result.contains(album1));
@@ -866,7 +868,7 @@ class ECMMinerUnitTest {
 
 
         when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4,album5,album6));
-        List<Album> result = ecmMiner.mostExpensivePrice(6);
+        List<Album> result = ecmMiner.mostExpensiveAlbums(6);
         List<Album> testResult = Lists.newArrayList();
         testResult.add(album1);
         testResult.add(album2);
@@ -877,4 +879,99 @@ class ECMMinerUnitTest {
         assertEquals(result,testResult);
 
     }
+
+    /*
+               ---------     Method 7 (highestRatedAlbums)  ----------
+               ---------          Extra Credit 2            -----------
+    */
+
+    @ParameterizedTest
+    @ValueSource(ints = {-5, 0})
+    @DisplayName("number of highest rated album you want should bigger than zero")
+    public void numberOfHighestRatedAlbumYouWantShouldBiggerThanZero(int arr) {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.highestRatedAlbums(arr));
+        assertEquals("Number of Highest rated albums you need should be more than zero", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("should return zero when no ratings inside database")
+    public void shouldReturnZeroNumberOfAlbumsWhenNoAlbumRatingsAreThereInDatabase() {
+        List<Album> result = ecmMiner.highestRatedAlbums(3);
+        assertEquals(0,result.size());
+    }
+
+    @Test
+    @DisplayName("Should return the  ratings when there are only two ratings are available")
+    public void shouldReturnTheRatingsWhenOnlyTwoRatingsAreAvailable() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+
+        album1.setRating(4.5);
+        album3.setRating(3.0);
+
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4,album5,album6));
+        List<Album> result = ecmMiner.highestRatedAlbums(5);
+
+        assertEquals(2,result.size());
+        assertTrue(result.contains(album1));
+        assertTrue(result.contains(album3));
+    }
+
+    @Test
+    @DisplayName("Should return the highest rated album")
+    public void shouldReturnTheHighestRatedAlbum() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+
+        album1.setRating(5.0);
+        album3.setRating(4.5);
+        album4.setRating(4);
+
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4,album5,album6));
+        List<Album> result = ecmMiner.highestRatedAlbums(1);
+
+        assertEquals(1,result.size());
+        assertTrue(result.contains(album1));
+    }
+
+
+    @Test
+    @DisplayName("Should return the highest rated albums in ordered manner")
+    public void shouldReturnHighestRatedAlbumsInProperOrder() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+
+
+        album1.setRating(5.0);
+        album2.setRating(4.0);
+        album3.setRating(3.0);
+        album4.setRating(2.0);
+        album5.setRating(1.0);
+
+
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4,album5,album6));
+        List<Album> result = ecmMiner.highestRatedAlbums(6);
+        assertEquals(5,result.size());
+
+
+        assertEquals(result.get(0), album1);
+        assertEquals(result.get(1), album2);
+        assertEquals(result.get(2), album3);
+        assertEquals(result.get(3), album4);
+        assertEquals(result.get(4), album5);
+
+    }
+
 }

@@ -58,6 +58,7 @@ public class Musician extends Entity {
         if (name==null) {
             throw new NullPointerException("musician name cannot be null or empty");
         }
+        // Musician name cannot contain space at the beginning
         if (!name.matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
             throw new IllegalArgumentException("Not a valid musician name");
         }

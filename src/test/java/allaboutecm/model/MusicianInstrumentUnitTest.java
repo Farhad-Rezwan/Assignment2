@@ -19,7 +19,7 @@ class MusicianInstrumentUnitTest {
         Musician musician = new Musician("Bill White");
         MusicalInstrument mi = new MusicalInstrument("Piano");
         //new set<MusicalInstrument> MusicalInstrument = new HashSet<>()
-        Set<MusicalInstrument> musicalInstrumentList = new HashSet<MusicalInstrument>();
+        Set<MusicalInstrument> musicalInstrumentList = new HashSet<>();
         musicalInstrumentList.add(mi);
         musicianInstrument = new MusicianInstrument( musician, musicalInstrumentList);
     }
@@ -31,16 +31,6 @@ class MusicianInstrumentUnitTest {
         assertEquals("Musician can not be null", e.getMessage());
         e.getMessage();
     }
-
-//    @Test
-//    @DisplayName("musician cannot be empty")
-//    public void musicianCannotBeEmpty() {
-//        //set a musician as empty name
-//        NullPointerException e = assertThrows(NullPointerException.class, () -> musicianInstrument.setMusician());
-//        assertEquals("The validated object is null", e.getMessage());
-//        e.getMessage();
-//    }
-
 
     @Test
     @DisplayName("musical Instrument cannot be null")

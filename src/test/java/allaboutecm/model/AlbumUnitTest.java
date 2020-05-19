@@ -1,17 +1,19 @@
 package allaboutecm.model;
 
+import com.google.common.collect.Sets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -34,10 +36,11 @@ class AlbumUnitTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "    \t"})
     @DisplayName("Album name cannot be empty or blank")
-    public void albumNameCnnotBeEmptyOrBlank(String arg) {
+    public void albumNameCanNotBeEmptyOrBlank(String arg) {
         assertThrows(IllegalArgumentException.class, () -> album.setAlbumName(arg));
     }
 
+    @DisplayName("Same name and number means same album")
     @Test
     public void sameNameAndNumberMeansSameAlbum() {
         Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
@@ -46,9 +49,9 @@ class AlbumUnitTest {
     }
 
 //    ------------------------------------
-@DisplayName("Record number should return proper value while adding and updating")
-@Test
-public void recordNumberShouldReturnProperValueAddingAndUpdating() {
+    @DisplayName("Record number should return proper value while adding and updating")
+    @Test
+    public void recordNumberShouldReturnProperValueAddingAndUpdating() {
     Album album2 = new Album(2019, "EC2680", "BIG VICIOUS");
     assertTrue("EC2680".equals(album2.getRecordNumber()));
     album2.setRecordNumber("ECM 2680");
@@ -67,6 +70,7 @@ public void recordNumberShouldReturnProperValueAddingAndUpdating() {
     @ValueSource(strings = {"*", "&", "%"})
     public void recordNumberCanOnlyAcceptAlphanumericWithSpaceORWithForwardSlash(String args){
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> album.setRecordNumber(args));
+        assertEquals("Illegal record number", e.getMessage());
     }
 
     @DisplayName("Record number should only accept " +
@@ -76,12 +80,14 @@ public void recordNumberShouldReturnProperValueAddingAndUpdating() {
     @ValueSource(strings = {"ECM1211", "IDONTKNO 1212"})
     public void recordNumberShouldOnlyAcceptPredefinedPrefixWithSpace(String args) {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () ->album.setRecordNumber(args));
+        assertEquals("Illegal record number", e.getMessage());
     }
 
     @DisplayName("RecordNumber prefix is case sensitive")
     @Test
     public void shouldThrowIllegalArgumentExceptionPrefixCaseIsNotFollowed() {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, ()->album.setRecordNumber("ecm 1212"));
+        assertEquals("Illegal record number", e.getMessage());
     }
 
 
@@ -89,7 +95,7 @@ public void recordNumberShouldReturnProperValueAddingAndUpdating() {
     @ParameterizedTest
     @ValueSource(strings = {"XtraWatt 1*12", "ECM XYZA"})
     public void recordNumberShouldOnlyAcceptSuffixOfNumber(String args) {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () ->album.setRecordNumber(args));
+        assertThrows(IllegalArgumentException.class, () ->album.setRecordNumber(args));
     }
 
     @DisplayName("Record Number can only accept suffix of a number which might contain forward-slash like  \"ECM 1064/65\"")
@@ -114,36 +120,32 @@ public void recordNumberShouldReturnProperValueAddingAndUpdating() {
         assertEquals("Featured musician list cannot be null", e.getMessage());
     }
 
-//    @DisplayName("Same name for two musician should refer same Musician object.")
-//    @Test
-//    public void twoMusicianNamesShouldReferSameMusician() {
-//        Musician m = new Musician("Farhad Ullah Rezwan");
-//        Set<Musician> s = new HashSet<Musician>();
-//        s.add(m);
-//        album.setFeaturedMusicians(s);
-//
-//        for (Iterator<Musician> musicians = s.iterator(); musicians.hasNext(); ) {
-//            Musician f = musicians.next();
-//            assertTrue(f.equals(new Musician("Farhad Ullah Rezwan")));
-//        }
-//    }
-//
-//    @DisplayName("Two Musican Instrument should refer to same musician and musician instrument")
-//    @Test
-//    public void twoMusicalInstrumentShouldReferSameMusicianAndSameMusicalInstrumentOfMusicianInstrumentAttribute() {
-//        Musician m = new Musician("Farhad Ullah Rezwan");
-//        MusicalInstrument i = new MusicalInstrument("Violin");
-//        MusicianInstrument mi = new MusicianInstrument(m, i);
-//
-//        Set<MusicianInstrument> s = new HashSet<MusicianInstrument>();
-//        s.add(mi);
-//        album.setInstruments(s);
-//
-//        for (Iterator<MusicianInstrument> musicianInstruments = s.iterator(); musicianInstruments.hasNext();) {
-//            MusicianInstrument f = musicianInstruments.next();
-//            assertTrue(f.equals(new MusicianInstrument(new Musician("Farhad Ullah Rezwan"), new MusicalInstrument("Violin"))));
-//        }
-//    } need to modify.........
+    @DisplayName("Same name for two musician should refer same Musician object.")
+    @Test
+    public void twoMusicianNamesShouldReferSameMusician() {
+        Musician m = new Musician("Farhad Ullah Rezwan");
+        List<Musician> lists = new ArrayList<>();
+        lists.add(m);
+        album.setFeaturedMusicians(lists);
+        assertEquals(album.getFeaturedMusicians(), lists);
+    }
+
+    @DisplayName("Two Musican Instrument should refer to same musician and musician instrument")
+    @Test
+    public void twoMusicalInstrumentShouldReferSameMusicianAndSameMusicalInstrumentOfMusicianInstrumentAttribute() {
+        Musician m = new Musician("Farhad Ullah Rezwan");
+        MusicalInstrument i = new MusicalInstrument("Violin");
+        MusicianInstrument mi = new MusicianInstrument(m, Sets.newHashSet(i));
+
+        Set<MusicianInstrument> s = new HashSet<>();
+        s.add(mi);
+        album.setInstruments(s);
+
+        for (Iterator<MusicianInstrument> musicianInstruments = s.iterator(); musicianInstruments.hasNext();) {
+            MusicianInstrument f = musicianInstruments.next();
+            assertTrue(f.equals(new MusicianInstrument(new Musician("Farhad Ullah Rezwan"), Sets.newHashSet(new MusicalInstrument("Violin")))));
+        }
+    }
 
     @DisplayName("Should throw NullPointerException when instruments is set to null")
     @Test
@@ -189,99 +191,67 @@ public void recordNumberShouldReturnProperValueAddingAndUpdating() {
         assertEquals("Tracks list cannot be null", e.getMessage());
     }
 
-//    @DisplayName("Same track name and length should refer to the same Track object")
-//    @Test
-//    public void twoTracksWithSameNameAndLengthShouldReferSameTrack() {
-//        Track t = new Track("HONEY FOUNTAIN", "4:34");
-//        Set<Track> s = new HashSet<Track>();
-//        s.add(t);
-//        album.setTracks(s);
-//
-//        for (Iterator<Track> tracks = s.iterator(); tracks.hasNext(); ) {
-//            Track obj = tracks.next();
-//            assertTrue(obj.equals(new Track("HONEY FOUNTAIN", "4:34")));
-//        }
-//    }
-//
-//    @DisplayName("Should throw null pointer exception when albumReview is set to null")
-//    @Test
-//    public void shouldThrowNullPointerExceptionWhenAlbumReviewSetNull() {
-//        NullPointerException e = assertThrows(NullPointerException.class, ()-> album.setAlbumReview(null));
-//        assertEquals("Album Review cannot be null", e.getMessage());
-//    }
-//
-//    @DisplayName("Same website URL and rating for the album review should refer same Review object")
-//    @Test
-//    public void twoReviewWithSameReviewWebsiteURLandRatingShouldReturnSameReview() throws IOException {
-//        Review r = new Review(new URL("https://www.allmusic.com/album/big-vicious-mw0003359408"), 4.0 );
-//        Set<Review> s = new HashSet<Review>();
-//        s.add(r);
-//        album.setAlbumReview(s);
-//
-//        for (Iterator<Review> reviews = s.iterator(); reviews.hasNext();) {
-//            Review obj = reviews.next();
-//            assertTrue(obj.equals(new Review(new URL("https://www.allmusic.com/album/big-vicious-mw0003359408"), 4.0 )));
-//        }
-//    }
-//
-//    @DisplayName("Should throw null pointer exception when album genre is set to null")
-//    @Test
-//    public void shouldThrowNullPointerExceptionWhenGenreSetToNull() {
-//        NullPointerException e = assertThrows(NullPointerException.class, ()-> album.setGenre(null));
-//        assertEquals("Genre cannot be null", e.getMessage());
-//    }
-//
-//    @ParameterizedTest
-//    @ValueSource(strings = {"", " ", "    \t"})
-//    @DisplayName("Genre cannot be empty or blank")
-//    public void genreCannotBeEmptyOrBlank(String arg) {
-//        assertThrows(IllegalArgumentException.class, () -> album.setGenre(arg));
-//    }
-//
-//    @DisplayName("Should reject improper Genre")
-//    @ParameterizedTest
-//    @ValueSource(strings = {"1212", "@", "$", "_", "   F", "F   ", "f12"})
-//    public void shouldThrowIllegalArgumentExceptionWhenGenreSetInvalidValues(String args) {
-//        assertThrows(IllegalArgumentException.class, () -> album.setGenre(args));
-//    }
-//
-//    @DisplayName("Should accept proper genre name or styles (can contain &)")
-//    @ParameterizedTest
-//    @ValueSource(strings = {"Electronic Dance Music", "Rock", "Jazz", "Dub-step", "Rhythm & Blues", "Techno"})
-//    public void shouldAcceptProperGenre(String args) {
-//        album.setGenre(args);
-//        assertTrue(args.equals(album.getGenre()));
-//    }
-//
-//    @DisplayName("Should throw null pointer exception when album release format is set to null")
-//    @Test
-//    public void shouldThrowNullPointerExceptionWhenAlbumReleaseFormatSetNull() {
-//        NullPointerException e = assertThrows(NullPointerException.class, ()-> album.setReleaseFormat(null));
-//        assertEquals("Release format cannot be null", e.getMessage());
-//    }
-//
-//    @ParameterizedTest
-//    @ValueSource(strings = {"", " ", "    \t"})
-//    @DisplayName("Album release format cannot be empty or blank")
-//    public void releaseFormatCannotBeEmptyOrBlank(String arg) {
-//        assertThrows(IllegalArgumentException.class, () -> album.setReleaseFormat(arg));
-//    }
-//
-//    @DisplayName("Album Release format should have predefined values")
-//    @ParameterizedTest()
-//    @ValueSource(strings = {"CD", "LP", "DVD", "BLURAY", "BOOK"})
-//    public void shouldAcceptValidReleaseFormats (String format) {
-//        album.setReleaseFormat(format);
-//        assertEquals(format, album.getReleaseFormat());
-//    }
-//
-//    @DisplayName("Album Release format should accept predefined values")
-//    @ParameterizedTest()
-//    @ValueSource(strings = {"CD_", "/lp", "DvD", "BlueRay1", "Text"})
-//    public void shouldRejectInvalidReleaseFormats (String format) {
-//        IllegalArgumentException i = assertThrows(IllegalArgumentException.class, ()-> album.setReleaseFormat(format));
-//        assertEquals("Illegal release format", i.getMessage());
-//    }
+    @DisplayName("Same track name should refer to the same Track object")
+    @Test
+    public void twoTracksWithSameNameAndLengthShouldReferSameTrack() {
+        String t = "HONEY FOUNTAIN";
+        List s = new ArrayList();
+        s.add(t);
+        album.setTracks(s);
+
+        assertEquals(album.getTracks(), s);
+
+    }
+
+    // to provide value for Parameterized Test shouldRejectEmptyOrBlankTrackName
+    static Stream<Arguments> generateData1() {
+        return Stream.of(
+                Arguments.of(Arrays.asList("", " ", "    \t"))
+        );
+    }
+
+    @DisplayName("Should reject empty or blank track names")
+    @ParameterizedTest
+    @MethodSource("generateData1")
+    public void shouldRejectEmptyOrBlankTrackNames(List<String> emptyOrBlank) {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, ()->album.setTracks(emptyOrBlank));
+        assertEquals("Not a valid track name", e.getMessage());
+    }
+
+
+    // to provide value for Parameterized Test shouldRejectImproperAlbumNameWithOneOrMultipleLetters
+    static Stream<Arguments> generateData2() {
+        return Stream.of(
+                Arguments.of(Arrays.asList("@", "$", "_")),
+                Arguments.of(Arrays.asList("   F", "F   ", "f12")),
+                Arguments.of(Arrays.asList("1212", "0000"))
+        );
+    }
+
+    @DisplayName("Should reject improper track name with one or multiple letters")
+    @ParameterizedTest
+    @MethodSource("generateData2")
+    public void shouldRejectImproperAlbumNameWithOneOrMultipleLetters(List<String> oneOrMultipleInvalidLatters) {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, ()->album.setTracks(oneOrMultipleInvalidLatters));
+        assertEquals("Not a valid track name", e.getMessage());
+    }
+
+
+    // to provide value for Parameterized Test shouldAcceptProperTrackNamesLists
+    static Stream<Arguments> generateData3() {
+        return Stream.of(
+                Arguments.of(Arrays.asList("HONEY FOUNTAIN", "HIDDEN CHAMBER", "King Kunter")),
+                Arguments.of(Arrays.asList("El-pardo'n", "Farhad's November Rain"))
+        );
+    }
+
+    @DisplayName("Should accept proper track name's lists")
+    @ParameterizedTest
+    @MethodSource("generateData3")
+    public void shouldAcceptProperTrackNamesLists(List<String> properTrackNames) {
+        album.setTracks(properTrackNames);
+        assertEquals(album.getTracks(), properTrackNames);
+    }
 
     @DisplayName("Should throw null pointer exception when rating is set to null")
     @Test
@@ -301,7 +271,8 @@ public void recordNumberShouldReturnProperValueAddingAndUpdating() {
     @ParameterizedTest()
     @ValueSource(doubles = {-0.1, 5.1})
     public void shouldThrowIllegalArgumentExceptionWhenRatingValueSetOutOfRange(Double rating) {
-        assertThrows(IllegalArgumentException.class, () -> album.setRating(rating));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> album.setRating(rating));
+        assertEquals("Rating should hold valid range", e.getMessage() );
     }
 
     @DisplayName("Should accept parameter of integers when required")
@@ -322,14 +293,16 @@ public void recordNumberShouldReturnProperValueAddingAndUpdating() {
     @ParameterizedTest()
     @ValueSource(doubles = {-2.5, -3.5})
     public void shouldThrowIllegalArgumentExceptionWhenPriceIsSetToNegative(Double price) {
-        assertThrows(IllegalArgumentException.class, () -> album.setPrice(price));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> album.setPrice(price));
+        assertEquals("Price should hold non negative numbers", e.getMessage() );
     }
 
-    @DisplayName("Should throw illegal argument exception when price is set to less than 0.00")
+    @DisplayName("Should throw illegal argument exception when price is set to negative int values")
     @ParameterizedTest()
-    @ValueSource(doubles = {-0.1, -100.0})
-    public void shouldThrowIllegalArgumentExceptionWhenPriceIsSetOutOfRange(Double price) {
-        assertThrows(IllegalArgumentException.class, () -> album.setPrice(price));
+    @ValueSource(ints = {-1, -100})
+    public void shouldThrowIllegalArgumentExceptionWhenPriceIsSetOutOfRange(Integer price) {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> album.setPrice(price));
+        assertEquals("Price should hold non negative numbers", e.getMessage() );
     }
 
     @DisplayName("Should accept parameter of integers when required")
@@ -381,6 +354,4 @@ public void recordNumberShouldReturnProperValueAddingAndUpdating() {
         album.setAlbumName(args);
         assertTrue(args == (album.getAlbumName()));
     }
-
-
 }
