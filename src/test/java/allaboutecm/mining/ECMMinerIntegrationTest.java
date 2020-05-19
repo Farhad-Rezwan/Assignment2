@@ -1006,4 +1006,98 @@ class ECMMinerIntegrationTest {
         assertEquals(result.get(4), album5);
 
     }
+
+    @DisplayName("mostTalentedMusicians method should return one when there is only one musician in data")
+    @Test
+    public void shouldReturnTheMusicianWhenThereIsOnlyOneForTalentInInstrument() {
+        Musician musician1 = new Musician("Keith Jarrett");
+        MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
+        MusicalInstrument mi2 = new MusicalInstrument("Accordion");
+        MusicianInstrument mnI1 = new MusicianInstrument(musician1, Sets.newHashSet(mi1,mi2));
+
+        dao.createOrUpdate(mnI1);
+
+
+        List<Musician> musicians = ecmMiner.mostTalentedMusicians(10);
+
+        assertTrue(musicians.contains(musician1));
+
+        /*
+         checking whether the mostTalentedMusicians method returns array size of 1 or not
+         or,
+         checking whether the mostTalentedMusicians method returning only One musician or not.
+        */
+        assertEquals(1, musicians.size());
+    }
+
+
+
+
+//
+
+
+
+    @ParameterizedTest
+    @ValueSource(ints = {-5, 0})
+    @DisplayName("number to return for most talented musician should be bigger than 0")
+    public void talentedMusicianNumberAsParameterHasToBeMoreThanZero(int arr) {
+        Musician musician1 = new Musician("Keith Jarrett");
+        MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
+        MusicalInstrument mi2 = new MusicalInstrument("Accordion");
+        MusicianInstrument mnI1 = new MusicianInstrument(musician1, Sets.newHashSet(mi1,mi2));
+
+        dao.createOrUpdate(mnI1);
+
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostTalentedMusicians(arr));
+        assertEquals("number of most talented musician to return should be more than 0", e.getMessage());
+    }
+
+
+//
+
+
+
+    @DisplayName("mostProlificMusician method output should return in order form most to least prolific")
+    @Test
+    public void shouldReturnInAnyOrderWhenTwoMusiciansAreSameProlific() {
+        Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
+        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+
+        Musician musician1 = new Musician("Keith Jarrett");
+        Musician musician2 = new Musician("Avishai Cohen");
+
+        // Here all the musician has same number of album involvement
+        musician1.setAlbums(Sets.newHashSet(album1));
+        musician2.setAlbums(Sets.newHashSet(album2));
+
+
+        dao.createOrUpdate(musician1);
+        dao.createOrUpdate(musician2);
+
+        List<Musician> result = ecmMiner.mostProlificMusicians(2, 1971, 2020);
+
+
+
+        // creating testResult array to compare with the result which is returned from mostProlificMusician method
+        List<Musician> sameResult = Lists.newArrayList();
+        sameResult.add(musician2);
+        sameResult.add(musician1);
+
+        // mostProlificMusician method should return array size of two or two musicians.
+        assertEquals(2, result.size());
+
+        // result can come in any order as the musicians are similar prolific in regards to number of album count.
+        assertTrue(sameResult.contains(result.get(0)));
+        assertTrue(sameResult.contains(result.get(1)));
+
+    }
+
+
+
+//
+
+
+
+
+
 }
