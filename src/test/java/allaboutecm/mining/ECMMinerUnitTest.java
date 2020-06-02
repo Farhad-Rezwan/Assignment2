@@ -14,9 +14,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -41,7 +43,7 @@ class ECMMinerUnitTest {
      */
     @DisplayName("Should return the musician when there is only one for the most prolific musician")
     @Test
-    public void shouldReturnTheMusicianWhenThereIsOnlyOne() {
+    public void shouldReturnTheMusicianWhenThereIsOnlyOne()throws IOException {
         Album album = new Album(1975, "ECM 1064/65", "The abcd Concert");
         Musician musician = new Musician("Keith Jarrett");
         musician.setAlbums(Sets.newHashSet(album));
@@ -57,7 +59,7 @@ class ECMMinerUnitTest {
 
     @DisplayName("Should return two for most prolific musicians when parameter is two")
     @Test
-    public void shouldReturnTwoForMostProlificMusicians() {
+    public void shouldReturnTwoForMostProlificMusicians() throws IOException{
         Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(2020, "ECM 1064/2617", "RIVAGES");
         Album album3 = new Album(2019, "ECM 1064/2645", "Characters on a Wall");
@@ -95,7 +97,7 @@ class ECMMinerUnitTest {
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("number to return for most prolific musician should be bigger than 0")
-    public void prolificMusicianNumberAsParameterHasToBeMoreThanZero(int arr) {
+    public void prolificMusicianNumberAsParameterHasToBeMoreThanZero(int arr) throws IOException{
         Album album1 = new Album(1975, "ECM 1064/61", "The abcd Concert");
         Musician musician1 = new Musician("Keith Jarrett");
         musician1.setAlbums(Sets.newHashSet(album1));
@@ -108,7 +110,7 @@ class ECMMinerUnitTest {
 
     @Test
     @DisplayName("Years for most prolific musician to get should be a valid year")
-    public void yearsForMostProlificMusicianToGetShouldBeValidYear() {
+    public void yearsForMostProlificMusicianToGetShouldBeValidYear()throws IOException {
         Album album1 = new Album(1975, "ECM 1064/61", "The abcd Concert");
         Musician musician1 = new Musician("Keith Jarrett");
         musician1.setAlbums(Sets.newHashSet(album1));
@@ -132,7 +134,7 @@ class ECMMinerUnitTest {
 
     @DisplayName("mostProlificMusician method output should return in order form most to least prolific")
     @Test
-    public void shouldReturnMostProlificMusicianInOrderFromMostToLeastProlific() {
+    public void shouldReturnMostProlificMusicianInOrderFromMostToLeastProlific()throws IOException {
         Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(2020, "ECM 1064/2617", "RIVAGES");
         Album album3 = new Album(2019, "ECM 1064/2645", "Characters on a Wall");
@@ -163,7 +165,7 @@ class ECMMinerUnitTest {
 
     @DisplayName("mostProlificMusician method output should return in order form most to least prolific")
     @Test
-    public void shouldReturnInAnyOrderWhenTwoMusiciansAreSameProlific() {
+    public void shouldReturnInAnyOrderWhenTwoMusiciansAreSameProlific() throws IOException{
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
         Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
 
@@ -201,7 +203,7 @@ class ECMMinerUnitTest {
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("number to return for most talented musician should be bigger than 0")
-    public void talentedMusicianNumberAsParameterHasToBeMoreThanZero(int arr) {
+    public void talentedMusicianNumberAsParameterHasToBeMoreThanZero(int arr) throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
         MusicalInstrument mi2 = new MusicalInstrument("Accordion");
@@ -216,7 +218,7 @@ class ECMMinerUnitTest {
 
     @DisplayName("mostTalentedMusicians method should return one when there is only one musician in data")
     @Test
-    public void shouldReturnTheMusicianWhenThereIsOnlyOneForTalentInInstrument() {
+    public void shouldReturnTheMusicianWhenThereIsOnlyOneForTalentInInstrument() throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
         MusicalInstrument mi2 = new MusicalInstrument("Accordion");
@@ -238,7 +240,7 @@ class ECMMinerUnitTest {
 
     @DisplayName("Should return most talented musician if he knows most number of instruments")
     @Test
-    public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill() {
+    public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill() throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Courtois Hugiwin");
@@ -270,7 +272,7 @@ class ECMMinerUnitTest {
 
     @DisplayName("method mostTalentedMusicians should return the number of musician, in respect to the method parameter given k")
     @Test
-    public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill2() {
+    public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill2() throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -318,7 +320,7 @@ class ECMMinerUnitTest {
 
     @DisplayName("method mostTalentedMusicians should return an arrayList of musicians in proper order from the most talented to the least")
     @Test
-    public void shouldReturnMostTalentedMusicianInOrderFromMostTalentedToLeast() {
+    public void shouldReturnMostTalentedMusicianInOrderFromMostTalentedToLeast() throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -356,7 +358,7 @@ class ECMMinerUnitTest {
     @DisplayName("Musician Instrument count has to be based on unique instruments not duplicates even though" +
             "same instrument can appear in different MusicianInstrument object for one musician")
     @Test
-    public void sameMusicalInstrumentInDifferentMusicianInstrumentForSameMusicianShouldNotImpactResult() {
+    public void sameMusicalInstrumentInDifferentMusicianInstrumentForSameMusicianShouldNotImpactResult() throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
 
@@ -387,7 +389,7 @@ class ECMMinerUnitTest {
     @DisplayName("for mostTalentedMusicians method whenever multiple musician has same number of instrument skill " +
             "should return those musician in any order")
     @Test
-    public void shouldReturnMusicianInAnyOrderWhenMusiciansHasSameNumberOfInstrumentSkill() {
+    public void shouldReturnMusicianInAnyOrderWhenMusiciansHasSameNumberOfInstrumentSkill()throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -431,7 +433,7 @@ class ECMMinerUnitTest {
 
     @DisplayName("mostSocialMusicians method should return one when there is only one musician in data")
     @Test
-    public void shouldReturnTheMusicianWhenThereIsOneOnly() {
+    public void shouldReturnTheMusicianWhenThereIsOneOnly()throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
         List<Musician> list1 = Lists.newArrayList(musician1);
 
@@ -448,7 +450,7 @@ class ECMMinerUnitTest {
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("number to return for most talented musician should be bigger than 0")
-    public void socialMusicianNumberToGetAsParameterHasToBeMoreThanZero(int arr) {
+    public void socialMusicianNumberToGetAsParameterHasToBeMoreThanZero(int arr)throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
         List<Musician> list1 = Lists.newArrayList(musician1);
 
@@ -465,7 +467,7 @@ class ECMMinerUnitTest {
 
     @DisplayName("Should return the most social musician in ordered manner in arrayList")
     @Test
-    public void shouldReturnTheMusicianArrangedFromMostToLeastSocial() {
+    public void shouldReturnTheMusicianArrangedFromMostToLeastSocial()throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -545,7 +547,7 @@ class ECMMinerUnitTest {
     @DisplayName("Those musician who have same number of other musicians they worked in albums" +
             "should be returned in any order")
     @Test
-    public void shouldReturnTheMusicianInAnyOrderForThoseWhoHasWorkedInSameNumberOfDifferentMusicians() {
+    public void shouldReturnTheMusicianInAnyOrderForThoseWhoHasWorkedInSameNumberOfDifferentMusicians()throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -731,7 +733,7 @@ class ECMMinerUnitTest {
 
     @Test
     @DisplayName("returns Similar Album According To Musician")
-    public void returnsSimilarAlbumAccordingToMusician() {
+    public void returnsSimilarAlbumAccordingToMusician()throws IOException {
         Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
@@ -761,7 +763,7 @@ class ECMMinerUnitTest {
 
     @Test
     @DisplayName("return 0 If No Album Similar With It")
-    public void return0IfNoAlbumSimilarWithIt() {
+    public void return0IfNoAlbumSimilarWithIt() throws IOException{
         Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
@@ -980,7 +982,7 @@ class ECMMinerUnitTest {
     @DisplayName("Start year must be smaller than end year")
     @ParameterizedTest
     @ValueSource(ints = {2005, 2010})
-    public void prolificMusicianStartYearShouldSmallerThanEndYear(int arr) {
+    public void prolificMusicianStartYearShouldSmallerThanEndYear(int arr)throws IOException {
         Album album1 = new Album(1975, "ECM 1064/61", "The Koln Concert");
         Musician musician1 = new Musician("Keith Jarrett");
         musician1.setAlbums(Sets.newHashSet(album1));
@@ -990,4 +992,399 @@ class ECMMinerUnitTest {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, arr,1999));
         assertEquals("Start year should smaller than end year", e.getMessage());
     }
+
+    @Test
+    @DisplayName("k value must be bigger than 1 otherwise it will not return anything")
+    public void kBiggerThanOne()
+    {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        album1.setSales(100);
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1));
+        List<Album> bestSellerAlbum= ecmMiner.bestSellerAlbum(-1);
+        assertEquals(0,bestSellerAlbum.size());
+    }
+
+
+    //new
+    //test mostProlificMusicians
+    @DisplayName("Start year must be smaller than end year")
+    @ParameterizedTest
+    @ValueSource(ints = {2005, 2010})
+    public void startYearBiggerThanEndYear(int arg) throws MalformedURLException {
+        Album album = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new Musician("Keith Jarrett");
+        musician.setAlbums(Sets.newHashSet(album));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician));
+
+        List<Musician> mostProlific = ecmMiner.mostProlificMusicians(2, 2005, arg);
+        assertEquals(0, mostProlific.size());
+    }
+
+
+    /*
+@ParameterizedTest
+    @ValueSource(ints = {-10,-1,0})
+    public void KValueisInvalid(int arg) throws MalformedURLException {
+        Album album = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new Musician("Keith Jarrett");
+        musician.setAlbums(Sets.newHashSet(album));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician));
+
+        List<Musician> mostProlific = ecmMiner.mostProlificMusicians(arg, 1900, 2019);
+        assertEquals(0, mostProlific.size());
+    }
+     */
+
+    @Test
+    @DisplayName("if not album‘s release year between the input start year and endyear will return empty list")
+    public void shouldReturnEmptyListWhenReleaseYearNotBetweenStartYearAndEndYear() throws MalformedURLException {
+        Album album = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new Musician("Keith Jarrett");
+        Album album1 = new Album(2019, "ECM 12344", "Great");
+        Musician musician1 = new Musician("Mia");
+        Album album2 = new Album(2008, "ECM 13456", "Good");
+        Album album3 = new Album(2006, "ECM 123456", "Duang duang duang");
+        Musician musician2 = new Musician("Bob");
+        Set<Album> albumList1 = Sets.newHashSet(album);
+        Set<Album> albumList2= Sets.newHashSet(album,album2, album1);
+        Set<Album> albumList3= Sets.newHashSet(album1,album2, album3);
+        musician.setAlbums(albumList1);
+        musician1.setAlbums(albumList2);
+        musician2.setAlbums(albumList3);
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician, musician1, musician2));
+        List<Musician> mostProlific = ecmMiner.mostProlificMusicians(1, 1976, 2005);
+        assertEquals(0, mostProlific.size());
+    }
+
+
+
+    @Test
+    public void KValueBiggerThanListSizeForTalentedMusiciansWillReturnAllMusician() throws MalformedURLException {
+        Album album = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new Musician("Keith Jarrett");
+        musician.setAlbums(Sets.newHashSet(album));
+        Musician musician1 = new Musician("Mia");
+        MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
+        MusicalInstrument musicalInstrument1 = new MusicalInstrument("Violin");
+        MusicalInstrument musicalInstrument2 = new MusicalInstrument("Accordion");
+        MusicianInstrument mi = new MusicianInstrument(musician, Sets.newHashSet(musicalInstrument,musicalInstrument1,musicalInstrument2 ));
+        MusicianInstrument mi1 = new MusicianInstrument(musician1, Sets.newHashSet(musicalInstrument,musicalInstrument1));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician));
+        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mi1,mi));
+        List<Musician> mostTalented = ecmMiner.mostTalentedMusicians(5);
+        assertEquals(2, mostTalented.size());
+    }
+
+
+    @Test
+    public void findTalentedMusicians() throws MalformedURLException {
+        Album album = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new Musician("Keith Jarrett");
+        musician.setAlbums(Sets.newHashSet(album));
+        Musician musician1 = new Musician("Mia");
+        Musician musician2 = new Musician("Bob");
+        MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
+        MusicalInstrument musicalInstrument1 = new MusicalInstrument("Violin");
+        MusicalInstrument musicalInstrument2 = new MusicalInstrument("Accordion");
+        MusicianInstrument mi = new MusicianInstrument(musician, Sets.newHashSet(musicalInstrument,musicalInstrument1,musicalInstrument2 ));
+        MusicianInstrument mi1 = new MusicianInstrument(musician1, Sets.newHashSet(musicalInstrument,musicalInstrument1));
+        MusicianInstrument mi2 = new MusicianInstrument(musician2, Sets.newHashSet(musicalInstrument));
+        when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(mi1,mi,mi2));
+        List<Musician> mostTalented = ecmMiner.mostTalentedMusicians(2);
+        assertEquals(2, mostTalented.size());
+        assertTrue(mostTalented.contains(musician) && mostTalented.contains(musician1));
+    }
+
+/*
+//test MostSocialMusician
+    @ParameterizedTest
+    @ValueSource(ints = {-10,-1,0})
+    public void inputNegativeKValueAboutMostSocialMusician(int arg) throws MalformedURLException {
+        Album album = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new Musician("Keith Jarrett");
+        Musician m1 = new Musician("Mia");
+        Musician m2 = new Musician("Ben");
+        List<Musician> musicianList = Lists.newArrayList(musician,m2);
+        album.setFeaturedMusicians(musicianList);
+        musician.setAlbums(Sets.newHashSet(album));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician));
+        List<Musician> musicians = ecmMiner.mostSocialMusicians(arg);
+        assertEquals(0,musicians.size());
+    }
+ */
+/*
+// test busiestYears method
+    @ParameterizedTest
+    @ValueSource(ints = {-10,-1,0})
+    public void inputNegativeKValueForBusiestYear(int arg){
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Album album2 = new Album(2003, "ECM 12344", "Great");
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
+        List<Integer> releasedYear = ecmMiner.busiestYears(arg);
+        assertEquals(0,releasedYear.size());
+    }
+    
+ */
+
+    @Test
+    public void KValueBiggerThanListSizeForBusiesYears(){
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Album album2 = new Album(2003, "ECM 12344", "Great");
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
+        List<Integer> releasedYear = ecmMiner.busiestYears(10);
+        assertEquals(3,releasedYear.size());
+    }
+
+    @Test
+    public void KValueSmallerThanListSizeCanReturnTheBusiesYear(){
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Album album2 = new Album(2017, "ECM 12344", "Great");
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
+        List<Integer> releasedYear = ecmMiner.busiestYears(2);
+        assertEquals(2,releasedYear.size());
+        List<Integer> checkYear = Lists.newArrayList(2017,1975);
+        assertEquals(checkYear,releasedYear);
+    }
+
+    @Test
+    public void sameBusiestYearValueWillReturnOne(){
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Album album2 = new Album(2017, "ECM 12344", "Great");
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        Album album4 = new Album(2017, "ECM 2347432", "The Moon");
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4));
+        List<Integer> releasedYear = ecmMiner.busiestYears(2);
+        assertEquals(2,releasedYear.size());
+        assertTrue(releasedYear.contains(1975)|| releasedYear.contains(2018));
+    }
+
+
+    /*
+    //test mostSimilarAlbums method
+    @ParameterizedTest
+    @ValueSource(ints = {-10,-1,0})
+    public void inputNegativeKValue(int arg) throws MalformedURLException {
+        Musician musician = new  Musician("Keith Jarrett");
+        Musician m1 = new Musician("Mia");
+        Musician m2 = new Musician("Ben");
+        List<Musician> musicians = Lists.newArrayList(musician,m1,m2);
+        List<Musician> musicians1 = Lists.newArrayList(musician,m1,m2);
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        album1.setRating(3);
+        album1.setStyle("Jazz");
+        Album album2 = new Album(2003, "ECM 12344", "Great");
+        album2.setRating(3);
+        album2.setStyle("Jazz");
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        album3.setRating(4);
+        album3.setStyle("Jazz");
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
+        List<Album> albums = ecmMiner.mostSimilarAlbums(arg,album1);
+        assertEquals(0,albums.size());
+    }
+
+     */
+
+    /*
+    @Test
+    public void invalidAlbum() throws MalformedURLException {
+        Album album = null;
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new  Musician("Keith Jarrett");
+        Musician m1 = new Musician("Mia");
+        Musician m2 = new Musician("Ben");
+
+        album1.setRating(3);
+        album1.setStyle("Jazz");
+        Album album2 = new Album(2003, "ECM 12344", "Great");
+        album2.setRating(3);
+        album2.setStyle("Jazz");
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        album3.setRating(4);
+        album3.setStyle("Jazz");
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
+        List<Album> albums = ecmMiner.mostSimilarAlbums(3,album);
+        assertEquals(0,albums.size());
+    }
+
+    @Test
+    public void albumSizeSmallerThanKValueWillReturnAllTheAlbums() throws MalformedURLException {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new  Musician("Keith Jarrett");
+        Musician m1 = new Musician("Mia");
+        Musician m2 = new Musician("Ben");
+        List<Musician> musicians = Lists.newArrayList(musician,m1,m2);
+        List<Musician> musicians1 = Lists.newArrayList(musician,m1,m2);
+        album1.setRating(3);
+        album1.setStyle("Jazz");
+        album1.setFeaturedMusicians(musicians);
+        Album album2 = new Album(2003, "ECM 12344", "Great");
+        album2.setRating(3);
+        album2.setStyle("Jazz");
+        album2.setFeaturedMusicians(musicians);
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        album3.setRating(4);
+        album3.setStyle("Jazz");
+        album3.setFeaturedMusicians(musicians1);
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
+        List<Album> albums = ecmMiner.mostSimilarAlbums(5,album1);
+        assertEquals(3,albums.size());
+    }
+
+     */
+
+//check**************************************
+    @Test
+    public void AlbumSizeBiggerThanKValueWillReturnTheSilimarAlbum() throws MalformedURLException {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new  Musician("Keith Jarrett");
+        Musician m1 = new Musician("Mia");
+        Musician m2 = new Musician("Ben");
+        List<Musician> musicians = Lists.newArrayList(musician,m1,m2);
+        List<Musician> musicians1 = Lists.newArrayList(musician,m1,m2);
+        List<Musician> musicians2 = Lists.newArrayList(musician);
+        album1.setRating(3);
+        album1.setStyle("Jazz");
+        album1.setFeaturedMusicians(musicians);
+        Album album2 = new Album(2003, "ECM 12344", "Great");
+        album2.setRating(3);
+        album2.setStyle("Jazz");
+        album2.setFeaturedMusicians(musicians);
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        album3.setRating(4);
+        album3.setStyle("Jazz");
+        album3.setFeaturedMusicians(musicians1);
+        Album album4 = new Album(2017, "ECM 13456", "Good");
+        album4.setRating(1);
+        album4.setStyle("Rock");
+        album4.setFeaturedMusicians(musicians2);
+        Album album5 = new Album(2000, "ECM 29474", "Book");
+        album5.setRating(1);
+        album5.setStyle("Rock");
+        album5.setFeaturedMusicians(musicians2);
+        Album album6 = new Album(2004, "ECM 123", "JAVA");
+        album6.setRating(1);
+        album6.setStyle("Rock");
+        album6.setFeaturedMusicians(musicians2);
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4,album5,album6));
+        List<Album> albums = ecmMiner.mostSimilarAlbums(5,album1);
+        assertEquals(4,albums.size());
+    }
+
+    /*
+    // test highest rating
+    @ParameterizedTest
+    @ValueSource(ints = {-10,-1,0})
+    public void inputNegativeKValueOfHighestRatingAlbum(int arg) throws MalformedURLException {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        album1.setRating(3);
+        album1.setStyle("Jazz");
+        Album album2 = new Album(2003, "ECM 12344", "Great");
+        album2.setRating(3);
+        album2.setStyle("Jazz");
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        album3.setRating(4);
+        album3.setStyle("Jazz");
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
+        List<Album> albums = ecmMiner.highestRatingAlbum(arg);
+        assertEquals(0,albums.size());
+    }
+
+     */
+
+    @Test
+    public void kValueSmallThanHighestRatingAlbumSize() throws MalformedURLException {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new  Musician("Keith Jarrett");
+        Musician m1 = new Musician("Mia");
+        Musician m2 = new Musician("Ben");
+        List<Musician> musicians = Lists.newArrayList(musician,m1,m2);
+        List<Musician> musicians1 = Lists.newArrayList(musician,m1,m2);
+        album1.setRating(3);
+        album1.setStyle("Jazz");
+        album1.setFeaturedMusicians(musicians);
+        Album album2 = new Album(2003, "ECM 12344", "Great");
+        album2.setRating(3);
+        album2.setStyle("Jazz");
+        album2.setFeaturedMusicians(musicians);
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        album3.setRating(4);
+        album3.setStyle("Jazz");
+        album3.setFeaturedMusicians(musicians1);
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
+        List<Album> albums = ecmMiner.highestRatingAlbum(5);
+        assertEquals(3,albums.size());
+    }
+
+    @Test
+    public void highestRatingAlbumSizeBiggerThanKValue() throws MalformedURLException {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Musician musician = new  Musician("Keith Jarrett");
+        Musician m1 = new Musician("Mia");
+        Musician m2 = new Musician("Ben");
+        List<Musician> musicians = Lists.newArrayList(musician,m1,m2);
+        List<Musician> musicians1 = Lists.newArrayList(musician,m1);
+        List<Musician> musicians2 = Lists.newArrayList(musician);
+        album1.setRating(3);
+        album1.setStyle("Jazz");
+        album1.setFeaturedMusicians(musicians);
+        Album album2 = new Album(2003, "ECM 12344", "Great");
+        album2.setRating(3);
+        album2.setStyle("Jazz");
+        album2.setFeaturedMusicians(musicians);
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        album3.setRating(4);
+        album3.setStyle("Jazz");
+        album3.setFeaturedMusicians(musicians1);
+        Album album4 = new Album(2010, "ECM 526474", "Python");
+        album4.setRating(1);
+        album4.setStyle("Rock");
+        album4.setFeaturedMusicians(musicians2);
+        Album album5 = new Album(2000, "ECM 29474", "Book");
+        album5.setRating(1);
+        album5.setStyle("Rock");
+        album5.setFeaturedMusicians(musicians2);
+        Album album6 = new Album(2004, "ECM 123", "JAVA");
+        album6.setRating(1);
+        album6.setStyle("Rock");
+        album6.setFeaturedMusicians(musicians2);
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3,album4,album5,album6));
+        List<Album> albums = ecmMiner.highestRatingAlbum(3);
+        assertEquals(3,albums.size());
+        System.out.println(albums);
+        assertTrue(albums.contains(album1)&&albums.contains(album2)&&albums.contains(album3));
+    }
+
+    @Test
+    @DisplayName("Will return the correct number of best seller")
+    public void shouldReturnTheCorrectNumberBestSeller()
+    {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Album album2 = new Album(2003, "ECM 12344", "Great");
+        Album album3 = new Album(2017, "ECM 13456", "Good");
+        album1.setSales(100);
+        album2.setSales(10);
+        album3.setSales(1);
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
+        List<Album> bestSellerAlbum= ecmMiner.bestSellerAlbum(2);
+        assertEquals(2,bestSellerAlbum.size());
+    }
+
+    @Test
+    @DisplayName("It should return only one value if there is only one album, even when K > 1 ")
+    public void shouldReturnTheAlbumWhenThereIsOnlyOne()
+    {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        album1.setSales(100);
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1));
+        List<Album> bestSellerAlbum= ecmMiner.bestSellerAlbum(2);
+        assertEquals(1,bestSellerAlbum.size());
+    }
+
+
+
+
 }
