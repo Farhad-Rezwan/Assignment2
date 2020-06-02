@@ -6,6 +6,8 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.Validate.notEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
@@ -77,6 +79,28 @@ public class MusicianInstrument extends Entity {
         notNull(musicalInstruments);
         notEmpty(musicalInstruments);
         this.musicalInstruments = musicalInstruments;
+    }
+
+    //new
+    public boolean inputFormat(String input){
+        String regEx = "[ _`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]|\n|\r|\t";
+        Pattern format = Pattern.compile(regEx);
+        Matcher m = format.matcher(input);
+        return m.find();
+    }
+
+    public boolean nameInput(String name){
+        String[] splitter = null;
+        boolean result = false;
+        splitter = name.trim().split(" ");
+        String regEx = "[a-z,A-Z]*[\\s]{1}[a-z,A-Z].*";
+        Pattern format = Pattern.compile(regEx);
+        if (splitter.length == 2){
+            Matcher m = format.matcher(name);
+            result = m.find();
+        }
+
+        return result;
     }
 
     @Override
