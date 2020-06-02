@@ -23,10 +23,11 @@ class AlbumUnitTest {
 
     @BeforeEach
     public void setUp() {
-        album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        //The Köln Concert
+        album = new Album(1975, "ECM 1064/65", "The abcd Concert");
     }
 
-    
+
     @Test
     @DisplayName("Album name cannot be null")
     public void albumNameCannotBeNull() {
@@ -43,20 +44,20 @@ class AlbumUnitTest {
     @DisplayName("Same name and number means same album")
     @Test
     public void sameNameAndNumberMeansSameAlbum() {
-        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Album album1 = new Album(1975, "ECM 1064/65", "The abcd Concert");
 
         assertEquals(album, album1);
     }
 
-//    ------------------------------------
+    //    ------------------------------------
     @DisplayName("Record number should return proper value while adding and updating")
     @Test
     public void recordNumberShouldReturnProperValueAddingAndUpdating() {
-    Album album2 = new Album(2019, "EC2680", "BIG VICIOUS");
-    assertTrue("EC2680".equals(album2.getRecordNumber()));
-    album2.setRecordNumber("ECM 2680");
-    assertTrue("ECM 2680".equals(album2.getRecordNumber()));
-}
+        Album album2 = new Album(2019, "ECM 1064/2680", "BIG VICIOUS");
+        assertTrue("ECM 1064/2680".equals(album2.getRecordNumber()));
+        album2.setRecordNumber("ECM 2222/2680");
+        assertTrue("ECM 2222/2680".equals(album2.getRecordNumber()));
+    }
 
     @DisplayName("Record number with null argument should throw NullPointerException")
     @Test
@@ -353,5 +354,41 @@ class AlbumUnitTest {
     public void shouldAcceptProperAlbumName(String args) {
         album.setAlbumName(args);
         assertTrue(args == (album.getAlbumName()));
+    }
+
+    //new
+    @DisplayName("When Initialize illegal AlbumName, it should Throw Exception ")
+    @Test
+    public void shouldThrowExceptionWhenInitializeAlbumName() {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> new Album(2020, "ECM 1064/65", "Mal Köln Trio"));
+        assertEquals("Not a valid album name", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Initialize Album name cannot be null")
+    public void InitializeAlbumNameCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> new Album(2020, "ECM 1064/65", null));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "    \t"})
+    @DisplayName("Initialize Album name cannot be empty or blank")
+    public void InitializeAlbumNameCanNotBeEmptyOrBlank(String arg) {
+        assertThrows(IllegalArgumentException.class, () -> new Album(2020, "ECM 1064/65", arg));
+    }
+
+    @DisplayName("Initialize Album Record number with null argument should throw NullPointerException")
+    @Test
+    public void InitializeAlbumshouldThrowExceptionWhenRecordNumberSetToNull() {
+        NullPointerException e = assertThrows(NullPointerException.class, () -> new Album(2020, null, "Mal Koln Trio"));
+        assertEquals("The validated object is null", e.getMessage());
+    }
+
+    @DisplayName("Initialize AlbumRecord Number can only accept Alphanumeric, and should not accept special characters")
+    @ParameterizedTest
+    @ValueSource(strings = {"*", "&", "%"})
+    public void InitializeAlbumRecordNumberCanOnlyAcceptAlphanumericWithSpaceORWithForwardSlash(String args){
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> new Album(2020, args, "Mal Koln Trio"));
+        assertEquals("Illegal record number", e.getMessage());
     }
 }

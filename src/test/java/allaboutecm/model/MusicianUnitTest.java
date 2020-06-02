@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
@@ -55,6 +56,8 @@ public class MusicianUnitTest {
     {
         assertThrows(IllegalArgumentException.class, () -> mus.setName(args));
     }
+
+
 
     @Test
     @DisplayName("should return a musician name")

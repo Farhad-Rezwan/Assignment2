@@ -46,6 +46,10 @@ public class ECMMiner {
                 throw new IllegalArgumentException("Years should be greater than 1970, not future, and valid year");
         }
 
+        if (startYear>endYear){
+            throw new IllegalArgumentException("Start year should smaller than end year");
+        }
+
 
 
         Collection<Musician> musicians = dao.loadAll(Musician.class);

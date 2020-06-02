@@ -71,6 +71,54 @@ public class Album extends Entity {
 
         notBlank(recordNumber);
         notBlank(albumName);
+        //new
+        //record number
+        String[] prefix = {"ECM ","Carmo ", "RJAL ", "YAN ", "Watt ", "XtraWatt "};
+        if (null == recordNumber){
+            throw new NullPointerException("Record Number can not be null");
+        }
+        // loops through the prefixes
+        for (int i = 0; i < 6; i++) {
+            if (recordNumber.startsWith(prefix[i])){
+                // replacing the recordNumber which can have / like `12/2` to 122
+                String numberValue = recordNumber.substring(prefix[i].length())
+                        .replaceAll("/","");
+
+                // making sure that 122 is a digit
+                if (Character.isDigit(Integer.parseInt(numberValue))){
+                    throw new IllegalArgumentException("Illegal record number");
+                }
+            }
+
+            // checking whether the recordNumber is alphanumeric or not, can include space and/or `/`
+            if (!StringUtils.isAlphanumeric(recordNumber
+                    .replaceAll("/","")
+                    .replaceAll("\\s+",""))){
+                throw new IllegalArgumentException("Illegal record number");
+            }
+            if(!StringUtils.startsWithAny(recordNumber, prefix)) {
+                throw new IllegalArgumentException("Illegal record number");
+            }
+        }
+
+        //year
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        if((releaseYear>1970) && releaseYear<= year)
+            this.releaseYear = releaseYear;
+        else
+            throw new IllegalArgumentException("Year should be greater than 1970");
+
+        if (null == albumName){
+            throw new NullPointerException("album name cannot be null or empty");
+        }
+
+        // making sure album name can contain proper name, can include `'`, `-`,
+        // and should not accept invalid one or multiple letters/numbers
+        if (!albumName.matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
+            throw new IllegalArgumentException("Not a valid album name");
+        }
+        //end
+
 
         this.releaseYear = releaseYear;
         this.recordNumber = recordNumber;

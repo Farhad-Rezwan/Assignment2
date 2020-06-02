@@ -102,4 +102,37 @@ public class  Neo4jDAO implements DAO {
             existingEntity = collection.iterator().next();
         }        return (T) existingEntity;
     }
+
+    //new
+    public <T extends Entity> void deleteAlbumInMusician(T entity){
+        Class clazz = entity.getClass();
+        T savedEntity = findExistingEntity(entity,clazz);
+        if(clazz.equals(Musician.class))
+        {
+            Musician deleteMusician = (Musician)savedEntity;
+            Collection<Album> albums =  deleteMusician.getAlbums();
+            for(Album a: albums){
+                session.delete(a);
+            }
+        }
+        session.delete(entity);
+    }
+
+    public  <T extends Entity> void deleteMusicianAndMusicianInstrumentAlsoBeDeleted(T entity) {
+        Class clazz = entity.getClass();
+        T savedEntity = findExistingEntity(entity,clazz);
+        if(clazz.equals(Musician.class))
+        {
+            Musician deleteMusician = (Musician)savedEntity;
+            Collection<MusicianInstrument> musicianInstruments = loadAll(MusicianInstrument.class);
+            for(MusicianInstrument m: musicianInstruments){
+                if(m.getMusician() == deleteMusician){
+                    session.delete(m);
+                }
+            }
+        }
+        session.delete(entity);
+    }
+
+
 }

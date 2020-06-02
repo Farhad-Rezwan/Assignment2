@@ -5,6 +5,7 @@ import allaboutecm.model.Album;
 import allaboutecm.model.MusicalInstrument;
 import allaboutecm.model.Musician;
 import allaboutecm.model.MusicianInstrument;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.*;
 import org.neo4j.ogm.config.Configuration;
@@ -13,6 +14,7 @@ import org.neo4j.ogm.session.SessionFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 
@@ -148,7 +150,7 @@ class Neo4jDAOUnitTest {
     @DisplayName("successful Updation Of Musician  details")
     @Test
     public void successfulUpdationOfMusician() throws Exception{
-
+//url time out
         Musician mus1 = new Musician("Katty Pery");
         mus1.setName("Katty Pery");
         mus1.setMusicianUrl(new URL("https://en.wikipedia.org/wiki/Katy_Perry"));
@@ -174,7 +176,7 @@ class Neo4jDAOUnitTest {
         Musician musician = new Musician("Keith Jarrett");
         musician.setMusicianUrl(new URL("https://www.keithjarrett.org/"));
 
-        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Album album = new Album(1975, "ECM 1064/65", "The k Concert");
         musician.setAlbums(Sets.newHashSet(album));
 
         dao.createOrUpdate(album);
@@ -195,16 +197,16 @@ class Neo4jDAOUnitTest {
 
     @DisplayName("successful Creation And Loading Of MusicalInstrument")
     @Test
-        public void successfulCreationAndLoadingOfMusicalInstrument() throws IOException{
-            MusicalInstrument musIn = new MusicalInstrument("Flute");
-            dao.createOrUpdate(musIn);
-            Collection<MusicalInstrument> musIns = dao.loadAll(MusicalInstrument.class);
-            assertEquals(1, musIns.size());
-            MusicalInstrument loadedMusicalInstrument = musIns.iterator().next();
-            assertEquals(musIn, loadedMusicalInstrument);
-            assertEquals(musIn.getName(), loadedMusicalInstrument.getName());
+    public void successfulCreationAndLoadingOfMusicalInstrument() throws IOException{
+        MusicalInstrument musIn = new MusicalInstrument("Flute");
+        dao.createOrUpdate(musIn);
+        Collection<MusicalInstrument> musIns = dao.loadAll(MusicalInstrument.class);
+        assertEquals(1, musIns.size());
+        MusicalInstrument loadedMusicalInstrument = musIns.iterator().next();
+        assertEquals(musIn, loadedMusicalInstrument);
+        assertEquals(musIn.getName(), loadedMusicalInstrument.getName());
 
-        }
+    }
 
     // successfully delete musical instrument from only musical instrument class
 
@@ -231,9 +233,9 @@ class Neo4jDAOUnitTest {
     //creating and loading Musician Instrument in database
 
 
-        @DisplayName("successful Creation And Loading MusicianInstrument")
-        @Test
-        public void successfulCreationAndLoadingMusicianInstrument() throws Exception{
+    @DisplayName("successful Creation And Loading MusicianInstrument")
+    @Test
+    public void successfulCreationAndLoadingMusicianInstrument() throws Exception{
 
         Musician mus = new Musician("Avishai Cohen");
         mus.setMusicianUrl(new URL("http://www.avishaicohenmusic.com/"));
@@ -248,14 +250,14 @@ class Neo4jDAOUnitTest {
         assertEquals(1,dao.loadAll(MusicalInstrument.class).size());
         assertEquals(musIn1, loadedMusicianInstrument);
 
-        }
+    }
 
     // updating musical Instrument for Musician Instrument ***************
 
 
-        @DisplayName("successful Updation Of Musical Instrument For Musician")
-        @Test
-        public void successfulUpdationOfMusicalInstrumentForMusician() throws Exception{
+    @DisplayName("successful Updation Of Musical Instrument For Musician")
+    @Test
+    public void successfulUpdationOfMusicalInstrumentForMusician() throws Exception{
 
         Musician mus = new Musician("Courtois Hugiwin");
         MusicalInstrument mi = new MusicalInstrument("Piano");
@@ -274,31 +276,31 @@ class Neo4jDAOUnitTest {
         assertEquals(loadedMusicianInstrument.getMusicalInstruments().iterator().next().getName(),mi1.getName());
 
 
-        }
+    }
 
-        // deleting Musician Instrument object
+    // deleting Musician Instrument object
 
-        @DisplayName("successful Deleting Of Musical Instrument For Musician")
-        @Test
-        public void successfulDeletionOfMusicianInstrument() throws Exception{
+    @DisplayName("successful Deleting Of Musical Instrument For Musician")
+    @Test
+    public void successfulDeletionOfMusicianInstrument() throws Exception{
 
-            Musician mus = new Musician("Avishai Cohen");
-            mus.setMusicianUrl(new URL("http://www.avishaicohenmusic.com/"));
+        Musician mus = new Musician("Avishai Cohen");
+        mus.setMusicianUrl(new URL("http://www.avishaicohenmusic.com/"));
 
-            MusicalInstrument musIn = new MusicalInstrument("Trumpet");
+        MusicalInstrument musIn = new MusicalInstrument("Trumpet");
 
-            MusicianInstrument musIn1 = new MusicianInstrument(mus,Sets.newHashSet(musIn));
-            dao.createOrUpdate(musIn1);
+        MusicianInstrument musIn1 = new MusicianInstrument(mus,Sets.newHashSet(musIn));
+        dao.createOrUpdate(musIn1);
 
-            Collection<MusicianInstrument> musIn1s = dao.loadAll(MusicianInstrument.class);
-            MusicianInstrument loadedMusicianInstrument = dao.load(MusicianInstrument.class, musIn1.getId());
-            assertEquals(1,dao.loadAll(MusicalInstrument.class).size());
-            assertEquals(musIn1, loadedMusicianInstrument);
+        Collection<MusicianInstrument> musIn1s = dao.loadAll(MusicianInstrument.class);
+        MusicianInstrument loadedMusicianInstrument = dao.load(MusicianInstrument.class, musIn1.getId());
+        assertEquals(1,dao.loadAll(MusicalInstrument.class).size());
+        assertEquals(musIn1, loadedMusicianInstrument);
 
-            dao.delete(musIn1);
-            assertEquals(0,dao.loadAll(MusicianInstrument.class).size());
+        dao.delete(musIn1);
+        assertEquals(0,dao.loadAll(MusicianInstrument.class).size());
 
-        }
+    }
 
 
     //CRUD operation testing for Album Class
@@ -365,6 +367,69 @@ class Neo4jDAOUnitTest {
         assertEquals(loadedMusician.getName(),"Katy Perry");
         assertEquals(loadedMusician.getMusicianUrl(),mus1.getMusicianUrl());
 
+    }
+
+    //new
+    @Test
+    public void deleteMusicianButAlbumCannotBeExisted() {
+        Musician m1 = new Musician("Mia");
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        dao.createOrUpdate(m1);
+        dao.createOrUpdate(album1);
+        m1.setAlbums(Sets.newHashSet(album1));
+        dao.deleteAlbumInMusician(m1);
+        Collection<Musician> musicians = dao.loadAll(Musician.class);
+        assertEquals(0,musicians.size());
+        Collection<Album> albums = dao.loadAll(Album.class);
+        assertEquals(0,albums.size());
+    }
+
+    @Test
+    public void deleteMusicianCanOnlyDeleteHisOwnAlbumSet(){
+        Musician m1 = new Musician("Mia");
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        Album album2 = new Album(2008, "ECM 1998/72", "Beauty");
+        dao.createOrUpdate(m1);
+        dao.createOrUpdate(album1);
+        dao.createOrUpdate(album2);
+        m1.setAlbums(Sets.newHashSet(album1));
+        dao.deleteAlbumInMusician(m1);
+        Collection<Musician> musicians = dao.loadAll(Musician.class);
+        assertEquals(0,musicians.size());
+        Collection<Album> albums = dao.loadAll(Album.class);
+        assertEquals(1,albums.size());
+    }
+
+    @Test
+    public void deleteAlbumButFeaturedMusiciansStillExisting() {
+        Musician m1 = new Musician("Mia");
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        album1.setFeaturedMusicians(Lists.newArrayList(m1));
+        dao.createOrUpdate(m1);
+        dao.createOrUpdate(album1);
+        dao.delete(album1);
+        Collection<Album> albums = dao.loadAll(Album.class);
+        assertEquals(0,albums.size());
+        Collection<Musician> musicians = dao.loadAll(Musician.class);
+        assertEquals(1,musicians.size());
+    }
+
+    @Test
+    public void deleteMusicianAndMusicianInstrumentCanBeDelete() {
+        Musician m1 = new Musician("Mia");
+        Musician m2 = new Musician("Ben");
+        MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
+        MusicianInstrument musicianInstrument = new MusicianInstrument(m1,Sets.newHashSet(musicalInstrument));
+        MusicianInstrument musicianInstrument2 = new MusicianInstrument(m2,Sets.newHashSet(musicalInstrument));
+        dao.createOrUpdate(m1);
+        dao.createOrUpdate(m2);
+        dao.createOrUpdate(musicianInstrument);
+        dao.createOrUpdate(musicianInstrument2);
+        dao.deleteMusicianAndMusicianInstrumentAlsoBeDeleted(m1);
+        Collection<Musician> musicians = dao.loadAll(Musician.class);
+        assertEquals(1,musicians.size());
+        Collection<MusicianInstrument> musicianInstruments = dao.loadAll(MusicianInstrument.class);
+        assertEquals(1,musicianInstruments.size());
     }
 
 }

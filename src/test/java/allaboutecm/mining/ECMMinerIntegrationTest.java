@@ -21,6 +21,7 @@ import org.neo4j.ogm.session.Session;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 //package allaboutecm.mining;
 
@@ -73,7 +74,7 @@ class ECMMinerIntegrationTest {
     @DisplayName("Should return the musician when there is only one")
     @Test
     public void shouldReturnTheMusicianWhenThereIsOnlyOne() {
-        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Album album = new Album(1975, "ECM 1064/65", "The abcd Concert");
         Musician musician = new Musician("Keith Jarrett");
         musician.setAlbums(Sets.newHashSet(album));
 
@@ -90,12 +91,12 @@ class ECMMinerIntegrationTest {
     @Test
     public void shouldReturnTwoForMostProlificMusicians() {
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
-        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
-        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
-        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
-        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
-        Album album6 = new Album(2020, "ECM 2659", "Promontire");
-        Album album7 = new Album(2017, "ECM 2504", "Asian Field Variations");
+        Album album2 = new Album(2020, "ECM 1064/2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 1064/2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE PASOLINI");
+        Album album5 = new Album(2020, "ECM 1064/2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 1064/2659", "Promontire");
+        Album album7 = new Album(2017, "ECM 1064/2504", "Asian Field Variations");
         Album album8 = new Album(2017, "RJAL 397030", "Bands Originals");
 
         Musician musician1 = new Musician("Keith Jarrett");
@@ -128,7 +129,7 @@ class ECMMinerIntegrationTest {
     @ValueSource(ints = {-5, 0})
     @DisplayName("number to return for most prolific musician should be bigger than 0")
     public void prolificMusicianNumberAsParameterHasToBeMoreThanZero(int arr) {
-        Album album1 = new Album(1975, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1975, "ECM 1064/61", "The abcd Concert");
         Musician musician1 = new Musician("Keith Jarrett");
         musician1.setAlbums(Sets.newHashSet(album1));
 
@@ -142,7 +143,7 @@ class ECMMinerIntegrationTest {
     @Test
     @DisplayName("Years for most prolific musician to get should be a valid year")
     public void yearsForMostProlificMusicianToGetShouldBeValidYear() {
-        Album album1 = new Album(1975, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1975, "ECM 1064/61", "The abcd Concert");
         Musician musician1 = new Musician("Keith Jarrett");
         musician1.setAlbums(Sets.newHashSet(album1));
         dao.createOrUpdate(musician1);
@@ -164,12 +165,12 @@ class ECMMinerIntegrationTest {
     @Test
     public void shouldReturnMostProlificMusicianInOrderFromMostToLeastProlific() {
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
-        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
-        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
-        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
-        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
-        Album album6 = new Album(2020, "ECM 2659", "Promontire");
-        Album album7 = new Album(2017, "ECM 2504", "Asian Field Variations");
+        Album album2 = new Album(2020, "ECM 1064/2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 1064/2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE PASOLINI");
+        Album album5 = new Album(2020, "ECM 1064/2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 1064/2659", "Promontire");
+        Album album7 = new Album(2017, "ECM 1064/2504", "Asian Field Variations");
         Album album8 = new Album(2017, "RJAL 397030", "Bands Originals");
 
         Musician musician1 = new Musician("Keith Jarrett");
@@ -390,7 +391,7 @@ class ECMMinerIntegrationTest {
         Musician musician1 = new Musician("Keith Jarrett");
         List<Musician> list1 = Lists.newArrayList(musician1);
 
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         album1.setFeaturedMusicians(list1);
 
         dao.createOrUpdate(album1);
@@ -407,7 +408,7 @@ class ECMMinerIntegrationTest {
         Musician musician1 = new Musician("Keith Jarrett");
         List<Musician> list1 = Lists.newArrayList(musician1);
 
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         album1.setFeaturedMusicians(list1);
 
         dao.createOrUpdate(album1);
@@ -451,27 +452,27 @@ class ECMMinerIntegrationTest {
         //  The above lists are assigned to different albums
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
         album1.setFeaturedMusicians(list1);
-        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        Album album2 = new Album(2020, "ECM 1064/2617", "RIVAGES");
         album2.setFeaturedMusicians(list2);
-        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        Album album3 = new Album(2019, "ECM 1064/2645", "Characters on a Wall");
         album3.setFeaturedMusicians(list3);
-        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE PASOLINI");
         album4.setFeaturedMusicians(list4);
-        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        Album album5 = new Album(2020, "ECM 1064/2680", "Big Vicious");
         album5.setFeaturedMusicians(list5);
-        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+        Album album6 = new Album(2020, "ECM 1064/2659", "Promontire");
         album6.setFeaturedMusicians(list6);
-        Album album7 = new Album(2017, "ECM 2504", "Asian Field Variations");
+        Album album7 = new Album(2017, "ECM 1064/2504", "Asian Field Variations");
         album7.setFeaturedMusicians(list7);
-        Album album8 = new Album(2017, "RJAL 397030", "Bands Originals");
+        Album album8 = new Album(2017, "ECM 1064/397030", "Bands Originals");
         album8.setFeaturedMusicians(list8);
-        Album album9 = new Album(1999, "ECM 1706-10", "Jean-Luc Godard");
+        Album album9 = new Album(1999, "ECM 1064/10", "JeanLuc Godard");
         album9.setFeaturedMusicians(list9);
-        Album album10 = new Album(1999, "ECM 1668", "JOHANN HEINRICH SCHMELZER: UNARUM FIDIUM");
+        Album album10 = new Album(1999, "ECM 1064/1668", "JOHANN HEINRICH SCHMELZER UNARUM FIDIUM");
         album10.setFeaturedMusicians(list10);
-        Album album11 = new Album(1999, "ECM 1667", "FRANZ SCHUBERT: KLAVIERSTUCKE");
+        Album album11 = new Album(1999, "ECM 1064/1667", "FRANZ SCHUBERT KLAVIERSTUCKE");
         album11.setFeaturedMusicians(list11);
-        Album album12 = new Album(1999, "ECM 1591", "ARVO PART: ALINA");
+        Album album12 = new Album(1999, "ECM 1064/1591", "ARVO PART ALINA");
         album12.setFeaturedMusicians(list12);
 
 
@@ -539,27 +540,27 @@ class ECMMinerIntegrationTest {
         //  The above lists are assigned to different albums
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
         album1.setFeaturedMusicians(list1);
-        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
+        Album album2 = new Album(2020, "ECM 1998/2617", "RIVAGES");
         album2.setFeaturedMusicians(list2);
-        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
+        Album album3 = new Album(2019, "ECM 1998/2645", "Characters on a Wall");
         album3.setFeaturedMusicians(list3);
-        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE PASOLINI");
         album4.setFeaturedMusicians(list4);
-        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
+        Album album5 = new Album(2020, "ECM 1998/2680", "Big Vicious");
         album5.setFeaturedMusicians(list5);
-        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+        Album album6 = new Album(2020, "ECM 1064/2659", "Promontire");
         album6.setFeaturedMusicians(list6);
-        Album album7 = new Album(2017, "ECM 2504", "Asian Field Variations");
+        Album album7 = new Album(2017, "ECM 1064/2504", "Asian Field Variations");
         album7.setFeaturedMusicians(list7);
-        Album album8 = new Album(2017, "RJAL 397030", "Bands Originals");
+        Album album8 = new Album(2017, "RJAL 1064/397030", "Bands Originals");
         album8.setFeaturedMusicians(list8);
-        Album album9 = new Album(1999, "ECM 1706-10", "Jean-Luc Godard");
+        Album album9 = new Album(1999, "ECM 1064/10", "JeanLuc Godard");
         album9.setFeaturedMusicians(list9);
-        Album album10 = new Album(1999, "ECM 1668", "JOHANN HEINRICH SCHMELZER: UNARUM FIDIUM");
+        Album album10 = new Album(1999, "ECM 1064/1668", "JOHANN HEINRICH SCHMELZER UNARUM FIDIUM");
         album10.setFeaturedMusicians(list10);
-        Album album11 = new Album(1999, "ECM 1667", "FRANZ SCHUBERT: KLAVIERSTUCKE");
+        Album album11 = new Album(1999, "ECM 1064/1667", "FRANZ SCHUBERT KLAVIERSTUCKE");
         album11.setFeaturedMusicians(list11);
-        Album album12 = new Album(1999, "ECM 1591", "ARVO PART: ALINA");
+        Album album12 = new Album(1999, "ECM 1591", "ARVO PART ALINA");
         album12.setFeaturedMusicians(list12);
 
         dao.createOrUpdate(album1);
@@ -603,7 +604,7 @@ class ECMMinerIntegrationTest {
     @DisplayName("should Return The Business Year When There Are Only Two")
     @Test
     public void shouldReturnTheBusinessYearWhenThereAreOnlyTwo() {
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
         Album album4 = new Album(1977, "ECM 1064/64", "TED");
@@ -628,7 +629,7 @@ class ECMMinerIntegrationTest {
     @DisplayName("should Return The Busiest Year")
     @Test
     public void shouldReturnTheBusiestYear() {
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
         Album album4 = new Album(1977, "ECM 1064/64", "TED");
@@ -656,7 +657,7 @@ class ECMMinerIntegrationTest {
     @DisplayName("should Return All Values In Descending Order of Busy years")
     @Test
     public void shouldReturnAllValuesInDescendingBusyOrder() {
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
         Album album4 = new Album(1977, "ECM 1064/64", "TED");
@@ -690,7 +691,7 @@ class ECMMinerIntegrationTest {
     @DisplayName("returns Similar Album According To Musician")
     @Test
     public void returnsSimilarAlbumAccordingToMusician() {
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
         Album album4 = new Album(1977, "ECM 1064/64", "TED");
@@ -730,7 +731,7 @@ class ECMMinerIntegrationTest {
     @DisplayName("return0 If No Album Similar With It")
     @Test
     public void return0IfNoAlbumSimilarWithIt() {
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
         Album album4 = new Album(1977, "ECM 1064/64", "TED");
@@ -765,7 +766,7 @@ class ECMMinerIntegrationTest {
     @ValueSource(ints = {-5, 0})
     @DisplayName("Similar Albums Number You Want should bigger than 0")
     public void AlbumsNumberOfSimilarAlbumYouWantShouldBiggerThan0(int arr) {
-        Album album1 = new Album(1975, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1975, "ECM 1064/61", "The abcd Concert");
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSimilarAlbums(arr,album1));
         assertEquals("Similar Albums Number You Want should bigger than 0", e.getMessage());
     }
@@ -808,7 +809,7 @@ class ECMMinerIntegrationTest {
     @Test
     @DisplayName("should Return The Most Expensive Price When There Are Only Two")
     public void shouldReturnTheMostExpensivePriceWhenThereAreOnlyTwo() {
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
         Album album4 = new Album(1977, "ECM 1064/64", "TED");
@@ -834,7 +835,7 @@ class ECMMinerIntegrationTest {
     @Test
     @DisplayName("should Return The Most Expensive Price Album")
     public void shouldReturnTheMostExpensivePrice() {
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
         Album album4 = new Album(1977, "ECM 1064/64", "TED");
@@ -861,7 +862,7 @@ class ECMMinerIntegrationTest {
     @Test
     @DisplayName("should Return All Albums InDescending PriceOrder")
     public void shouldReturnAllAlbumsInDescendingPriceOrder() {
-        Album album1 = new Album(1976, "ECM 1064/61", "The Köln Concert");
+        Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
         Album album4 = new Album(1977, "ECM 1064/64", "TED");
@@ -916,11 +917,11 @@ class ECMMinerIntegrationTest {
     @DisplayName("Should return the  ratings when there are only two ratings are available")
     public void shouldReturnTheRatingsWhenOnlyTwoRatingsAreAvailable() {
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
-        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
-        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
-        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
-        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
-        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+        Album album2 = new Album(2020, "ECM 1064/2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 1064/2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE PASOLINI");
+        Album album5 = new Album(2020, "ECM 1064/2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 1064/2659", "Promontire");
 
         album1.setRating(4.5);
         album3.setRating(3.0);
@@ -944,11 +945,11 @@ class ECMMinerIntegrationTest {
     @DisplayName("Should return the highest rated album")
     public void shouldReturnTheHighestRatedAlbum() {
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
-        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
-        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
-        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
-        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
-        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+        Album album2 = new Album(2020, "ECM 1064/2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 1064/2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE PASOLINI");
+        Album album5 = new Album(2020, "ECM 1064/2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 1064/2659", "Promontire");
 
         album1.setRating(5.0);
         album3.setRating(4.5);
@@ -973,11 +974,11 @@ class ECMMinerIntegrationTest {
     @DisplayName("Should return the highest rated albums in ordered manner")
     public void shouldReturnHighestRatedAlbumsInProperOrder() {
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
-        Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
-        Album album3 = new Album(2019, "ECM 2645", "Characters on a Wall");
-        Album album4 = new Album(2007, "ECM 1998/99", "RE: PASOLINI");
-        Album album5 = new Album(2020, "ECM 2680", "Big Vicious");
-        Album album6 = new Album(2020, "ECM 2659", "Promontire");
+        Album album2 = new Album(2020, "ECM 1064/2617", "RIVAGES");
+        Album album3 = new Album(2019, "ECM 1064/2645", "Characters on a Wall");
+        Album album4 = new Album(2007, "ECM 1998/99", "RE PASOLINI");
+        Album album5 = new Album(2020, "ECM 1064/2680", "Big Vicious");
+        Album album6 = new Album(2020, "ECM 1064/2659", "Promontire");
 
 
         album1.setRating(5.0);
@@ -1053,7 +1054,7 @@ class ECMMinerIntegrationTest {
     }
 
 
-//
+
 
 
 
@@ -1094,9 +1095,20 @@ class ECMMinerIntegrationTest {
 
 
 
-//
+    //new
+    @DisplayName("Start year must be smaller than end year")
+    @ParameterizedTest
+    @ValueSource(ints = {2005, 2010})
+    public void prolificMusicianStartYearShouldSmallerThanEndYear(int arr) {
+        Album album1 = new Album(1975, "ECM 1064/61", "The Koln Concert");
+        Musician musician1 = new Musician("Keith Jarrett");
+        musician1.setAlbums(Sets.newHashSet(album1));
 
+        dao.createOrUpdate(musician1);
 
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(1, arr,1999));
+        assertEquals("Start year should smaller than end year", e.getMessage());
+    }
 
 
 

@@ -2,6 +2,7 @@ package allaboutecm.model;
 
 import allaboutecm.dataaccess.neo4j.URLConverter;
 import com.google.common.collect.Sets;
+import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
@@ -9,6 +10,7 @@ import org.neo4j.ogm.annotation.typeconversion.Convert;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Objects;
@@ -30,21 +32,46 @@ public class Musician extends Entity {
     @Convert(URLConverter.class)
     @Property(name="musicianURL")
     private URL musicianUrl;
+    //new
+    private URL wikiUrl;
+    //end
 
     @Relationship(type="albums")
     private Set<Album> albums;
+
+    //new
+    private String briefBiography;
+    //Mengqian Wei Extra 3
+    private URL personalWebsite;
+    private URL fansWebsite;
+    //end
 
     public Musician() {
     }
 
     public Musician(String name) {
 
+        if (name==null) {
+            throw new NullPointerException("musician name cannot be null or empty");
+        }
+        // Musician name cannot contain space at the beginning
+        if (!name.matches("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$")) {
+            throw new IllegalArgumentException("Not a valid musician name");
+        }
         notBlank(name);
         notNull(name);
 
         this.name = name;
         this.musicianUrl = null;
 
+        //new
+//        String url= "https://en.wikipedia.org/wiki/" + name.replace(" ","_");
+//        try{
+//            wikiUrl = new URL(url);
+//        }catch (MalformedURLException e){
+//            throw new IllegalArgumentException("Not a valid url");
+//        }
+        //end
         albums = Sets.newHashSet();
     }
 
@@ -84,8 +111,8 @@ public class Musician extends Entity {
     }
 
     public URL getMusicianUrl() {
-    return musicianUrl;
-}
+        return musicianUrl;
+    }
 
     public void setMusicianUrl(URL musicianUrl) throws IOException {
         HttpURLConnection connection = (HttpURLConnection)musicianUrl.openConnection();

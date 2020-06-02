@@ -14,5 +14,9 @@ public interface DAO {
 
     <T extends Entity> void delete(T entity);
 
+    <T extends Entity> void deleteAlbumInMusician(T entity);
+
+    <T extends Entity> void deleteMusicianAndMusicianInstrumentAlsoBeDeleted(T entity);
+
     Musician findMusicianByName(String name);
 }
