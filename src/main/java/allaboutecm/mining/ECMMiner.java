@@ -35,12 +35,12 @@ public class ECMMiner {
      * When startYear/endYear is negative, that means startYear/endYear is ignored.
      */
     public List<Musician> mostProlificMusicians(int k, int startYear, int endYear) {
-        if (k <= 0){
-            throw new IllegalArgumentException("number of most prolific musician to return should be more than 0");
-        }
+       if (k <= 0){
+        throw new IllegalArgumentException("number of most prolific musician to return should be more than 0");
+       }
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
-        // if start year is negetive then it is ignored
+        // if start year is negative then it is ignored
         if (!(startYear < 0 || endYear < 0)){
             if(!((startYear>1970) && startYear<= year) || !((endYear>1970) && endYear<= year))
                 throw new IllegalArgumentException("Years should be greater than 1970, not future, and valid year");
@@ -545,6 +545,75 @@ public class ECMMiner {
 
         return result;
     }
+
+    /**
+     * Finding best sellers
+     * Extra part
+     * @Param k the number of albums to be returned.
+     */
+    public List<Album> bestSellerAlbum(int k) {
+        if (k <=0) {
+            return Lists.newArrayList();
+        }
+        Collection<Album> albums = dao.loadAll(Album.class);
+        ListMultimap<Integer,Album> albumSales = MultimapBuilder.treeKeys().arrayListValues().build();
+        for(Album a: albums){
+            albumSales.put(a.getSales(),a);
+        }
+
+        List<Album> result = Lists.newArrayList();
+        List<Integer> sortedKeys = Lists.newArrayList(albumSales.keySet());
+        sortedKeys.sort(Ordering.natural().reverse());
+
+        for(Integer count : sortedKeys){
+            List<Album> list = albumSales.get(count);
+            if (list.size() >= k) {
+                break;
+            }
+            if(result.size() + list.size() >= k){
+                int addition = k - result.size();
+                for(int i=0; i < addition; i++){
+                    result.add(list.get(i));
+                }
+            } else{
+                result.addAll(list);
+            }
+        }
+        return result;
+    }
+
+    public List<Album> highestRatingAlbum(int k){
+        if (k <=0) {
+            return Lists.newArrayList();
+        }
+        Collection<Album> albums = dao.loadAll(Album.class);
+        ListMultimap<Double,Album> albumRating = MultimapBuilder.treeKeys().arrayListValues().build();
+        for(Album a: albums){
+            albumRating.put(a.getRating(),a);
+        }
+
+        List<Album> result = Lists.newArrayList();
+        List<Double> sortedKeys = Lists.newArrayList(albumRating.keySet());
+        sortedKeys.sort(Ordering.natural().reverse());
+
+        for(Double count : sortedKeys){
+            List<Album> list = albumRating.get(count);
+            if (list.size() >= k) {
+                break;
+            }
+            if(result.size() + list.size() >= k){
+                int addition = k - result.size();
+                for(int i=0; i < addition; i++){
+                    result.add(list.get(i));
+                }
+            } else{
+                result.addAll(list);
+            }
+        }
+        return result;
+    }
+
+
 
 
 }

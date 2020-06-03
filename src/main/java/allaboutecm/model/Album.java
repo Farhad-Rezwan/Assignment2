@@ -17,9 +17,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.Validate.notBlank;
-import static org.apache.commons.lang3.Validate.notNull;
+import static org.apache.commons.lang3.Validate.*;
 
 /**
  * Represents an album released by ECM records.
@@ -61,6 +61,14 @@ public class Album extends Entity {
 
     @Property(name="price")
     private Double price;
+
+    private int sales;
+    private int timeLength;
+    private String genre;
+    private String style;
+    private String releaseFormat;
+    private String reviews;
+    private List<Musician> musicianGroup;
 
     public Album() {
     }
@@ -329,7 +337,13 @@ public class Album extends Entity {
         this.rating = Double.valueOf((rating));
     }
 
+    public void setSales(int sales)
+    {this.sales= sales;
+    }
 
+    public int getSales()
+    {return sales;
+    }
 
 
 
@@ -341,6 +355,84 @@ public class Album extends Entity {
         return releaseYear == album.releaseYear &&
                 recordNumber.equals(album.recordNumber) &&
                 albumName.equals(album.albumName);
+    }
+
+    //new
+    public List<Musician> getMusicianGroup() {
+        return musicianGroup;
+    }
+
+    public void setMusicianGroup(List<Musician> musicianGroup) {
+        notNull(musicianGroup);
+        notEmpty(musicianGroup);
+        for(Musician m : musicianGroup){
+            if (StringUtils.isBlank(m.getName())){
+                throw new IllegalArgumentException("Featured musicians cannot be null or blank");
+            }
+        }
+        if (musicianGroup.size() <= 0)
+        {
+            throw new NullPointerException("Featured musicians should be set");
+        }
+        this.musicianGroup = musicianGroup;
+    }
+
+    //new
+    public boolean releaseYearCompare(int yearRelease){
+        Calendar date = Calendar.getInstance();
+        int year = date.get(Calendar.YEAR);
+        if (yearRelease <= year && yearRelease >= 1950){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    //new
+
+    public  boolean checkRecordNumber(String record){
+        if (Pattern.matches("^ECM .*", record)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public int getTimeLength() {
+        return timeLength;
+    }
+    public void setTimeLength(int timeLength) {
+        this.timeLength = timeLength;
+    }
+    public String getGenre() {
+        return genre;
+    }
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+    public String getStyle() {
+        return style;
+    }
+    public void setStyle(String style) {
+        this.style = style;
+    }
+    public String getReleaseFormat() {
+        return releaseFormat;
+    }
+    public void setReleaseFormat(String releaseFormat) {
+        this.releaseFormat = releaseFormat;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getReviews() {
+        return reviews;
+    }
+    public void setReviews(String reviews) {
+        this.reviews = reviews;
     }
 
     @Override

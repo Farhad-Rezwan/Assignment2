@@ -41,15 +41,14 @@ public class Musician extends Entity {
 
     //new
     private String briefBiography;
-    //Mengqian Wei Extra 3
-    private URL personalWebsite;
     private URL fansWebsite;
+
     //end
 
     public Musician() {
     }
 
-    public Musician(String name) {
+    public Musician(String name) throws MalformedURLException {
 
         if (name==null) {
             throw new NullPointerException("musician name cannot be null or empty");
@@ -63,6 +62,10 @@ public class Musician extends Entity {
 
         this.name = name;
         this.musicianUrl = null;
+        this.briefBiography = briefBiography;
+        String url= "https://en.wikipedia.org/wiki/" + name.replace(" ","_");
+        wikiUrl = new URL (url);
+
 
         //new
 //        String url= "https://en.wikipedia.org/wiki/" + name.replace(" ","_");
@@ -125,6 +128,30 @@ public class Musician extends Entity {
         this.musicianUrl = musicianUrl;
     }
 
+    //new
+    public URL getFansWebsite() {
+        return fansWebsite;
+    }
+    public void setFansWebsite(URL fansWebsite) {
+        this.fansWebsite = fansWebsite;
+    }
+    public String getBriefBiography()  {
+        return briefBiography;
+    }
+
+    public void setBriefBiography(String briefBiography)  {
+        this.briefBiography = briefBiography;
+    }
+
+    public URL getWikiUrl()  {
+        return wikiUrl;
+    }
+
+    public void setWikiUrl(URL musicianUrl)  {
+        this.wikiUrl = wikiUrl;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -132,6 +159,7 @@ public class Musician extends Entity {
         Musician that = (Musician) o;
         return Objects.equals(name, that.name);
     }
+
 
     @Override
     public int hashCode() {
