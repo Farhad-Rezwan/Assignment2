@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -16,7 +17,7 @@ public class MusicianUnitTest {
     private Musician mus;
 
     @BeforeEach
-    public void setUp1() {
+    public void setUp() throws MalformedURLException {
         mus = new Musician("Lucy Railton");
     }
 
@@ -61,7 +62,7 @@ public class MusicianUnitTest {
 
     @Test
     @DisplayName("should return a musician name")
-    public void shouldGetMusicianName() {
+    public void shouldGetMusicianName() throws IOException {
         Musician mus2 = new Musician("Lucy Railton");
         assertTrue(mus.getName().equals(mus2.getName()),"getName method for Musician class executed successfully");
     }
@@ -76,6 +77,39 @@ public class MusicianUnitTest {
     {
         assertThrows(UnknownHostException.class, () -> mus
                 .setMusicianUrl(new URL("https://www.goasdfasdfasdfaogle.com")));
+    }
+
+    @Test
+    @DisplayName("the wiki website of a musician must have this musician name")
+    public void wikiWebsiteContainsMusicianName()  {
+        String wikiName = "";
+        String wiki = mus.getWikiUrl().toString();
+        String[] name1 = mus.getName().split(" ");
+        for(int i=0; i < name1.length; i++)
+        {
+            wikiName += name1[i];
+            if( i < name1.length-1)
+            {
+                wikiName += "_";
+            }
+        }
+        assertNotEquals(-1, wiki.indexOf(wikiName));
+    }
+
+
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"https://www.google.com/"})
+    public void shouldReturnRightFansWebsite(String arg) {
+        URL url = null;
+        try {
+            url = new URL(arg);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        mus.setFansWebsite(url);
+        assertEquals(url, mus.getFansWebsite());
     }
 }
 

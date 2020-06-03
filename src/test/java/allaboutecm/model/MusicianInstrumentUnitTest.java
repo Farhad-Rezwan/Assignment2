@@ -1,9 +1,14 @@
 package allaboutecm.model;
 
+import com.google.common.collect.Sets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +20,7 @@ class MusicianInstrumentUnitTest {
 
     @BeforeEach
     //initialize
-    public void setUp() {
+    public void setUp() throws IOException {
         Musician musician = new Musician("Bill White");
         MusicalInstrument mi = new MusicalInstrument("Piano");
         //new set<MusicalInstrument> MusicalInstrument = new HashSet<>()
@@ -41,7 +46,7 @@ class MusicianInstrumentUnitTest {
 
     @Test
     @DisplayName("Same Musician And Musical Instrument Means Same Musician Instrument")
-    public void sameMusicianAndMusicalInstrumentMeansSameMusicianInstrument() {
+    public void sameMusicianAndMusicalInstrumentMeansSameMusicianInstrument() throws IOException{
         Musician musician1 = new Musician("Bill White");
         MusicalInstrument mi1 = new MusicalInstrument("Piano");
         Set<MusicalInstrument> musicalInstrumentList1 = new HashSet<MusicalInstrument>();
@@ -52,7 +57,7 @@ class MusicianInstrumentUnitTest {
 
     @Test
     @DisplayName("should return a musician as an object")
-    public void shouldGetMusician() {
+    public void shouldGetMusician() throws IOException{
         Musician musician1 = new Musician("Bill White");
         assertTrue(musicianInstrument.getMusician().equals(musician1),"getMusician method execute successfully");
     }
@@ -65,6 +70,35 @@ class MusicianInstrumentUnitTest {
         musicalInstrumentList1.add(mi1);
         assertTrue(musicianInstrument.getMusicalInstruments().equals(musicalInstrumentList1),"getMusicalInstruments method execute successfully");
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"wdz ghm","    abc defg    "})
+    public void inputNameFormatWithNoSpecialCharOfMusician(String arg){
+        boolean input = musicianInstrument.nameInput(arg);
+        assertTrue(input, "The input musician name has illegal character. ");
+    }
+
+/*
+    @ParameterizedTest
+    @ValueSource(strings = {"#$%%#", "abc      def"})
+    @DisplayName("Test the musician' name contains special characters")
+    public void inputNameFormatWithSpecialCharOfMusician(String arg) throws MalformedURLException {
+        Musician musician1 = new Musician(arg);
+        assertThrows(IllegalArgumentException.class, () -> musicianInstrument.setMusician(musician1));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {" ", "    \t","#$%%#"})
+    @DisplayName("Test the musical instrument contains special characters")
+    public void inputNameFormatWithSpecialCharOfMusicalInstrument(String arg){
+        MusicalInstrument test = new MusicalInstrument(arg);
+        Set<MusicalInstrument> musicalInstrument1 = Sets.newHashSet();
+        musicalInstrument1.add(test);
+        assertThrows(IllegalArgumentException.class, () -> musicianInstrument.setMusicalInstruments(musicalInstrument1));
+
+    }
+
+ */
 
 
 }

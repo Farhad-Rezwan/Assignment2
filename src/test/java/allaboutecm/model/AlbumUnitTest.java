@@ -1,5 +1,6 @@
 package allaboutecm.model;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -123,7 +125,7 @@ class AlbumUnitTest {
 
     @DisplayName("Same name for two musician should refer same Musician object.")
     @Test
-    public void twoMusicianNamesShouldReferSameMusician() {
+    public void twoMusicianNamesShouldReferSameMusician()throws IOException {
         Musician m = new Musician("Farhad Ullah Rezwan");
         List<Musician> lists = new ArrayList<>();
         lists.add(m);
@@ -133,7 +135,7 @@ class AlbumUnitTest {
 
     @DisplayName("Two Musican Instrument should refer to same musician and musician instrument")
     @Test
-    public void twoMusicalInstrumentShouldReferSameMusicianAndSameMusicalInstrumentOfMusicianInstrumentAttribute() {
+    public void twoMusicalInstrumentShouldReferSameMusicianAndSameMusicalInstrumentOfMusicianInstrumentAttribute()throws IOException {
         Musician m = new Musician("Farhad Ullah Rezwan");
         MusicalInstrument i = new MusicalInstrument("Violin");
         MusicianInstrument mi = new MusicianInstrument(m, Sets.newHashSet(i));
@@ -391,4 +393,115 @@ class AlbumUnitTest {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> new Album(2020, args, "Mal Koln Trio"));
         assertEquals("Illegal record number", e.getMessage());
     }
+
+    @Test
+    public void lengthOfAlbumNameLessThan20(){
+        assertThrows(IllegalArgumentException.class, () -> album.setAlbumName("asdfghjkjhgfdsaw34rtyuijnbvcxz"));
+        assertThrows(IllegalArgumentException.class, () -> new Album(2018,"ECM 1064/65", "asdfghjkjhgfdsaw34rtyuijnbvcxz"));
+    }
+
+    @Test
+    public void releaseYearSmallerThanNow(){
+        assertTrue(album.releaseYearCompare(album.getReleaseYear()), "the release year smaller than this year");
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1838,2100})
+    public void releaseYearBiggerThanThisYear(int year){
+        assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(year));
+        assertThrows(IllegalArgumentException.class, () -> new Album(year,"ECM 1064/65", "The Köln Concert" ));
+    }
+
+    @Test
+    public void recordNumberFollowFormat(){
+        assertTrue(album.checkRecordNumber(album.getRecordNumber()),"The record number should follow the format");
+        assertThrows(IllegalArgumentException.class,()->new Album(2018,"12345","The Koln Concert"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1064/65", "abc"})
+    public void recordNumberNotFollowFormat(String arg){
+        assertThrows(IllegalArgumentException.class, () -> album.setRecordNumber(arg));
+    }
+    @Test
+    public void AlbumUrlNull() throws MalformedURLException {
+        assertThrows(NullPointerException.class, () -> album.setAlbumURL(null));
+    }
+
+    @Test
+    public void AlbumFormat() throws MalformedURLException {
+        URL urlAlbumFormat = new URL("https://www.google.com");
+        assertThrows(IllegalArgumentException.class, () ->  album.setAlbumURL(urlAlbumFormat));
+    }
+
+    @Test
+    public void lengthSizeCannotBeNullOfMusicianGroups(){
+        List<Musician> Group = Lists.newArrayList();
+        assertThrows(IllegalArgumentException.class, () -> album.setMusicianGroup(Group));
+    }
+
+    /*
+    @Test
+    @DisplayName("time length of a album should be bigger than 0")
+    public void timeLengthShouldBiggerThanZero(){
+        assertTrue(album.getTimeLength()>0);
+    }
+
+    @Test
+    @DisplayName("rating of a album should be bigger or equal to 0 and less or equal to 10")
+    public void ratingShouldBiggerThanZeroLessThanTen(){
+        assertTrue(album.getRating()>=0&&album.getRating()<=10);
+    }
+
+     */
+
+
+    @ParameterizedTest
+    @ValueSource(ints = 100)
+    public void shouldReturnRightTimeLength(int arg) {
+        album.setTimeLength(arg);
+        assertEquals(arg, album.getTimeLength());
+    }
+
+    // Mengqian Wei Extra 2
+    @ParameterizedTest
+    @ValueSource(strings = {"Jazz"})
+    public void shouldReturnRightGenre(String arg) {
+        album.setGenre(arg);
+        assertEquals(arg, album.getGenre());
+    }
+
+    // Mengqian Wei Extra 2
+    @ParameterizedTest
+    @ValueSource(strings = {"contemporary Jazz"})
+    public void shouldReturnRightStyle(String arg) {
+        album.setStyle(arg);
+        assertEquals(arg, album.getStyle());
+    }
+
+    // Mengqian Wei Extra 2
+    @ParameterizedTest
+    @ValueSource(strings = {"CD", "LP"})
+    public void shouldReturnRightReleaseFormat(String arg) {
+        album.setReleaseFormat(arg);
+        assertEquals(arg, album.getReleaseFormat());
+    }
+
+    // Mengqian Wei Extra 2
+    @ParameterizedTest
+    @ValueSource(doubles = {3.8d, 4.2d})
+    public void shouldReturnRightRating(double arg) {
+        album.setRating(arg);
+        assertEquals(arg, album.getRating());
+    }
+
+    // Mengqian Wei Extra 2
+    @ParameterizedTest
+    @ValueSource(strings = {"good album", "bad album"})
+    public void shouldReturnRightReviews(String arg) {
+        album.setReviews(arg);
+        assertEquals(arg, album.getReviews());
+    }
+
+
 }

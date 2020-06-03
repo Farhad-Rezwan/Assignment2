@@ -75,7 +75,7 @@ class ECMMinerIntegrationTest {
     // 1st Method
     @DisplayName("Should return the musician when there is only one")
     @Test
-    public void shouldReturnTheMusicianWhenThereIsOnlyOne() {
+    public void shouldReturnTheMusicianWhenThereIsOnlyOne() throws IOException{
         Album album = new Album(1975, "ECM 1064/65", "The abcd Concert");
         Musician musician = new Musician("Keith Jarrett");
         musician.setAlbums(Sets.newHashSet(album));
@@ -91,7 +91,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("Should return two for most prolific musicians when parameter is two")
     @Test
-    public void shouldReturnTwoForMostProlificMusicians() {
+    public void shouldReturnTwoForMostProlificMusicians() throws IOException{
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
         Album album2 = new Album(2020, "ECM 1064/2617", "RIVAGES");
         Album album3 = new Album(2019, "ECM 1064/2645", "Characters on a Wall");
@@ -144,7 +144,7 @@ class ECMMinerIntegrationTest {
 
     @Test
     @DisplayName("Years for most prolific musician to get should be a valid year")
-    public void yearsForMostProlificMusicianToGetShouldBeValidYear() {
+    public void yearsForMostProlificMusicianToGetShouldBeValidYear() throws IOException{
         Album album1 = new Album(1975, "ECM 1064/61", "The abcd Concert");
         Musician musician1 = new Musician("Keith Jarrett");
         musician1.setAlbums(Sets.newHashSet(album1));
@@ -165,7 +165,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("mostProlificMusician method output should return in order form most to least prolific")
     @Test
-    public void shouldReturnMostProlificMusicianInOrderFromMostToLeastProlific() {
+    public void shouldReturnMostProlificMusicianInOrderFromMostToLeastProlific()throws IOException {
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
         Album album2 = new Album(2020, "ECM 1064/2617", "RIVAGES");
         Album album3 = new Album(2019, "ECM 1064/2645", "Characters on a Wall");
@@ -198,7 +198,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("should Return Most Talented Musician If He Can play most number of Instruments")
     @Test
-    public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill() {
+    public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill()throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Courtois Hugiwin");
@@ -230,7 +230,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("should Return Most Talented Musician If He Has Most Instrument Skill2")
     @Test
-    public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill2() {
+    public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill2()throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -272,7 +272,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("method mostTalentedMusicians should return an arrayList of musicians in proper order from the most talented to the least")
     @Test
-    public void shouldReturnMostTalentedMusicianInOrderFromMostTalentedToLeast() {
+    public void shouldReturnMostTalentedMusicianInOrderFromMostTalentedToLeast() throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -313,7 +313,7 @@ class ECMMinerIntegrationTest {
     @DisplayName("Musician Instrument count has to be based on unique instruments not duplicates even though" +
             "same instrument can appear in different MusicianInstrument object for one musician")
     @Test
-    public void sameMusicalInstrumentInDifferentMusicianInstrumentForSameMusicianShouldNotImpactResult() {
+    public void sameMusicalInstrumentInDifferentMusicianInstrumentForSameMusicianShouldNotImpactResult() throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
 
@@ -347,7 +347,7 @@ class ECMMinerIntegrationTest {
     @DisplayName("for mostTalentedMusicians method whenever multiple musician has same number of instrument skill " +
             "should return those musician in any order")
     @Test
-    public void shouldReturnMusicianInAnyOrderWhenMusiciansHasSameNumberOfInstrumentSkill() {
+    public void shouldReturnMusicianInAnyOrderWhenMusiciansHasSameNumberOfInstrumentSkill() throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -389,7 +389,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("should Return The Musician When There Is One Only")
     @Test
-    public void shouldReturnTheMusicianWhenThereIsOneOnly() {
+    public void shouldReturnTheMusicianWhenThereIsOneOnly() throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         List<Musician> list1 = Lists.newArrayList(musician1);
 
@@ -406,7 +406,7 @@ class ECMMinerIntegrationTest {
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("number to return for most talented musician should be bigger than 0")
-    public void socialMusicianNumberToGetAsParameterHasToBeMoreThanZero(int arr) {
+    public void socialMusicianNumberToGetAsParameterHasToBeMoreThanZero(int arr)throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
         List<Musician> list1 = Lists.newArrayList(musician1);
 
@@ -421,7 +421,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("Should return the most social musician in ordered manner in arrayList")
     @Test
-    public void shouldReturnTheMusicianArrangedFromMostToLeastSocial() {
+    public void shouldReturnTheMusicianArrangedFromMostToLeastSocial() throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -511,7 +511,7 @@ class ECMMinerIntegrationTest {
     @DisplayName("Those musician who have same number of other musicians they worked in albums" +
             "should be returned in any order")
     @Test
-    public void shouldReturnTheMusicianInAnyOrderForThoseWhoHasWorkedInSameNumberOfDifferentMusicians() {
+    public void shouldReturnTheMusicianInAnyOrderForThoseWhoHasWorkedInSameNumberOfDifferentMusicians()throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
         Musician musician2 = new Musician("Avishai Cohen");
         Musician musician3 = new Musician("Vincent Courtois");
@@ -692,7 +692,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("returns Similar Album According To Musician")
     @Test
-    public void returnsSimilarAlbumAccordingToMusician() {
+    public void returnsSimilarAlbumAccordingToMusician() throws IOException{
         Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
@@ -732,7 +732,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("return0 If No Album Similar With It")
     @Test
-    public void return0IfNoAlbumSimilarWithIt() {
+    public void return0IfNoAlbumSimilarWithIt() throws IOException{
         Album album1 = new Album(1976, "ECM 1064/61", "The abcd Concert");
         Album album2 = new Album(1976, "ECM 1064/62", "Bill");
         Album album3 = new Album(1976, "ECM 1064/63", "White");
@@ -1020,7 +1020,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("mostTalentedMusicians method should return one when there is only one musician in data")
     @Test
-    public void shouldReturnTheMusicianWhenThereIsOnlyOneForTalentInInstrument() {
+    public void shouldReturnTheMusicianWhenThereIsOnlyOneForTalentInInstrument()throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
         MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
         MusicalInstrument mi2 = new MusicalInstrument("Accordion");
@@ -1051,7 +1051,7 @@ class ECMMinerIntegrationTest {
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("number to return for most talented musician should be bigger than 0")
-    public void talentedMusicianNumberAsParameterHasToBeMoreThanZero(int arr) {
+    public void talentedMusicianNumberAsParameterHasToBeMoreThanZero(int arr) throws IOException{
         Musician musician1 = new Musician("Keith Jarrett");
         MusicalInstrument mi1 = new MusicalInstrument("Trumpet");
         MusicalInstrument mi2 = new MusicalInstrument("Accordion");
@@ -1070,7 +1070,7 @@ class ECMMinerIntegrationTest {
 
     @DisplayName("mostProlificMusician method output should return in order form most to least prolific")
     @Test
-    public void shouldReturnInAnyOrderWhenTwoMusiciansAreSameProlific() {
+    public void shouldReturnInAnyOrderWhenTwoMusiciansAreSameProlific() throws IOException{
         Album album1 = new Album(1976, "ECM 1064/61", "The Koln Concert");
         Album album2 = new Album(2020, "ECM 2617", "RIVAGES");
 
@@ -1109,7 +1109,7 @@ class ECMMinerIntegrationTest {
     @DisplayName("Start year must be smaller than end year")
     @ParameterizedTest
     @ValueSource(ints = {2005, 2010})
-    public void prolificMusicianStartYearShouldSmallerThanEndYear(int arr) {
+    public void prolificMusicianStartYearShouldSmallerThanEndYear(int arr)throws IOException {
         Album album1 = new Album(1975, "ECM 1064/61", "The Koln Concert");
         Musician musician1 = new Musician("Keith Jarrett");
         musician1.setAlbums(Sets.newHashSet(album1));

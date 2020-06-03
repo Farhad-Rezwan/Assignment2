@@ -371,7 +371,7 @@ class Neo4jDAOUnitTest {
 
     //new
     @Test
-    public void deleteMusicianButAlbumCannotBeExisted() {
+    public void deleteMusicianButAlbumCannotBeExisted()throws IOException {
         Musician m1 = new Musician("Mia");
         Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
         dao.createOrUpdate(m1);
@@ -385,7 +385,7 @@ class Neo4jDAOUnitTest {
     }
 
     @Test
-    public void deleteMusicianCanOnlyDeleteHisOwnAlbumSet(){
+    public void deleteMusicianCanOnlyDeleteHisOwnAlbumSet()throws IOException{
         Musician m1 = new Musician("Mia");
         Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
         Album album2 = new Album(2008, "ECM 1998/72", "Beauty");
@@ -401,7 +401,7 @@ class Neo4jDAOUnitTest {
     }
 
     @Test
-    public void deleteAlbumButFeaturedMusiciansStillExisting() {
+    public void deleteAlbumButFeaturedMusiciansStillExisting()throws IOException {
         Musician m1 = new Musician("Mia");
         Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
         album1.setFeaturedMusicians(Lists.newArrayList(m1));
@@ -415,7 +415,7 @@ class Neo4jDAOUnitTest {
     }
 
     @Test
-    public void deleteMusicianAndMusicianInstrumentCanBeDelete() {
+    public void deleteMusicianAndMusicianInstrumentCanBeDelete() throws IOException{
         Musician m1 = new Musician("Mia");
         Musician m2 = new Musician("Ben");
         MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
@@ -431,6 +431,82 @@ class Neo4jDAOUnitTest {
         Collection<MusicianInstrument> musicianInstruments = dao.loadAll(MusicianInstrument.class);
         assertEquals(1,musicianInstruments.size());
     }
+
+
+    //new--some errors as the site used an example did not confirm that if its valid
+    @Test
+    public void cannotSaveTheSameMusicianTwice() throws IOException {
+        Musician musician1 = new Musician("Katy Perry");
+        musician1.setMusicianUrl(new URL("https://en.wikipedia.org/wiki/Katy_Perry"));
+        dao.createOrUpdate(musician1);
+
+        Musician musician2 = new Musician("Katy Perry");
+        musician2.setMusicianUrl(new URL("https://en.wikipedia.org/wiki/Katy_Perry"));
+        dao.createOrUpdate(musician2);
+        Collection<Musician> musicians = dao.loadAll(Musician.class);
+        assertEquals(1, musicians.size());
+    }
+
+
+    //new
+    @Test
+    public void sameAlbumNameAndRecordNumberAndAlbumNameCannotBeSavedAsTwice(){
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        dao.createOrUpdate(album1);
+        Album album2 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        dao.createOrUpdate(album2);
+        Collection<Album> albums = dao.loadAll(Album.class);
+        assertEquals(1, albums.size());
+    }
+
+    @Test
+    public void sameAlbumNameAndSameRecordNumberWithDifferentReleaseYearCanBeSavedAsTwoNode(){
+        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
+        dao.createOrUpdate(album1);
+        Album album2 = new Album(2008, "ECM 1064/65", "The Koln Concert");
+        dao.createOrUpdate(album2);
+        Collection<Album> albums = dao.loadAll(Album.class);
+        assertEquals(2, albums.size());
+    }
+
+    @Test
+    public void sameMusicianInstrumentCannotBeSavedTwice() throws IOException {
+        Musician musician1 = new Musician("Katy Perry");
+        musician1.setMusicianUrl(new URL("https://en.wikipedia.org/wiki/Katy_Perry"));
+        dao.createOrUpdate(musician1);
+        MusicalInstrument mi1 = new MusicalInstrument("Piano");
+        dao.createOrUpdate(mi1);
+        MusicianInstrument musicianInstrument1 = new MusicianInstrument(musician1,Sets.newHashSet(mi1));
+        dao.createOrUpdate(musicianInstrument1);
+
+        Musician musician2 = new Musician("Katy Perry");
+        musician2.setMusicianUrl(new URL("https://en.wikipedia.org/wiki/Katy_Perry"));
+        dao.createOrUpdate(musician2);
+        MusicalInstrument mi2 = new MusicalInstrument("Piano");
+        dao.createOrUpdate(mi2);
+        MusicianInstrument musicianInstrument2 = new MusicianInstrument(musician2,Sets.newHashSet(mi2));
+        Collection< MusicianInstrument>  musicianInstruments = dao.loadAll(MusicianInstrument.class);
+        dao.createOrUpdate(musicianInstrument2);
+        assertEquals(1, musicianInstruments .size());
+        assertEquals(musicianInstrument1.getMusician(),musicianInstruments.iterator().next().getMusician());
+        assertEquals(musicianInstrument1.getMusicalInstruments(),musicianInstruments.iterator().next().getMusicalInstruments());
+    }
+
+    //new
+    @Test
+    public void afterSaveMusicianInstrumentMusicianCanBeUpdate() throws MalformedURLException {
+        Musician m1 = new Musician("Mia");
+        MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
+        MusicianInstrument musicianInstrument = new MusicianInstrument(m1,Sets.newHashSet(musicalInstrument));
+        dao.createOrUpdate(m1);
+        dao.createOrUpdate(musicianInstrument);
+        dao.createOrUpdate(musicalInstrument);
+        m1.setName("Mia Li");
+        MusicianInstrument loadedMusicianInstrument = dao.load(MusicianInstrument.class, musicianInstrument.getId());
+        assertEquals(m1.getName(),loadedMusicianInstrument.getMusician().getName());
+    }
+
+
 
 }
 
