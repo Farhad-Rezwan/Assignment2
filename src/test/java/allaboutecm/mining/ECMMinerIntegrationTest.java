@@ -228,7 +228,7 @@ class ECMMinerIntegrationTest {
 
     }
 
-    @DisplayName("should Return Most Talented Musician If He Has Most Instrument Skill2")
+    @DisplayName("should Return Most Talented Musician If He Has Most Instrument Skill2 here")
     @Test
     public void shouldReturnMostTalentedMusicianIfHeHasMostInstrumentSkill2()throws IOException {
         Musician musician1 = new Musician("Keith Jarrett");
