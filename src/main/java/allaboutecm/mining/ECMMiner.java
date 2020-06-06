@@ -15,11 +15,11 @@ import java.util.*;
 import static org.apache.commons.lang3.Validate.notNull;
 
 /**
- * TODO: implement and test the methods in this class.
+ * Implement and test the methods in this class.
  * Note that you can extend the Neo4jDAO class to make implementing this class easier.
  */
 public class ECMMiner {
-    private static Logger logger = LoggerFactory.getLogger(ECMMiner.class);
+//    private static Logger logger = LoggerFactory.getLogger(ECMMiner.class);
 
     private final DAO dao;
 
