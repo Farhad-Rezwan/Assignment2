@@ -82,9 +82,6 @@ public class Album extends Entity {
         //new
         //record number
         String[] prefix = {"ECM ","Carmo ", "RJAL ", "YAN ", "Watt ", "XtraWatt "};
-        if (null == recordNumber){
-            throw new NullPointerException("Record Number can not be null");
-        }
         // loops through the prefixes
         for (int i = 0; i < 6; i++) {
             if (recordNumber.startsWith(prefix[i])){
@@ -115,10 +112,6 @@ public class Album extends Entity {
             this.releaseYear = releaseYear;
         else
             throw new IllegalArgumentException("Year should be greater than 1970");
-
-        if (null == albumName){
-            throw new NullPointerException("album name cannot be null or empty");
-        }
 
         // making sure album name can contain proper name, can include `'`, `-`,
         // and should not accept invalid one or multiple letters/numbers
