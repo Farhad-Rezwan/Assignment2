@@ -126,21 +126,6 @@ class ECMMinerIntegrationTest {
         // comparing whether it is returning the valid result
         assertEquals(result,testResult);
     }
-    /*
-    @ParameterizedTest
-    @ValueSource(ints = {-5, 0})
-    @DisplayName("number to return for most prolific musician should be bigger than 0")
-    public void prolificMusicianNumberAsParameterHasToBeMoreThanZero(int arr) {
-        Album album1 = new Album(1975, "ECM 1064/61", "The abcd Concert");
-        Musician musician1 = new Musician("Keith Jarrett");
-        musician1.setAlbums(Sets.newHashSet(album1));
-
-        dao.createOrUpdate(musician1);
-
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostProlificMusicians(arr, 1999,2020));
-        assertEquals("number of most prolific musician to return should be more than 0", e.getMessage());
-    }
-    */
 
     @Test
     @DisplayName("Years for most prolific musician to get should be a valid year")
@@ -764,15 +749,7 @@ class ECMMinerIntegrationTest {
         assertEquals(0,result.size());
     }
 
-    /*
-    @ParameterizedTest
-    @ValueSource(ints = {-5, 0})
-    @DisplayName("Similar Albums Number You Want should bigger than 0")
-    public void AlbumsNumberOfSimilarAlbumYouWantShouldBiggerThan0(int arr) {
-        Album album1 = new Album(1975, "ECM 1064/61", "The abcd Concert");
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSimilarAlbums(arr,album1));
-        assertEquals("Similar Albums Number You Want should bigger than 0", e.getMessage());
-    }*/
+
 
     @Test
     @DisplayName("Album cannot be null")
@@ -781,15 +758,6 @@ class ECMMinerIntegrationTest {
         assertEquals("Album can not be null", e.getMessage());
     }
 
-    /*
-    @ParameterizedTest
-    @ValueSource(ints = {-5, 0})
-    @DisplayName("Busiest Years You Want should bigger than 0")
-    public void BusiestYearsYouWantShouldBiggerThan0(int arr) {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.busiestYears(arr));
-        assertEquals("Busiest Years You Want should bigger than 0", e.getMessage());
-    }
-    */
 
 
     /*
@@ -797,14 +765,6 @@ class ECMMinerIntegrationTest {
     ---------          Extra Credit 1            -----------
     */
 
-    /*@ParameterizedTest
-    @ValueSource(ints = {-5, 0})
-    @DisplayName("most Expensive Price You Want should bigger than 0")
-    public void mostExpensivePriceYouWantShouldBiggerThan0(int arr) {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostExpensiveAlbums(arr));
-        assertEquals("Expensive Price You Want should bigger than 0", e.getMessage());
-    }
-    */
 
 
     @Test
@@ -904,17 +864,7 @@ class ECMMinerIntegrationTest {
     /*
                ---------     Method 7 (highestRatedAlbums)  ----------
                ---------          Extra Credit 2            -----------
-    */
-
-    /*@ParameterizedTest
-    @ValueSource(ints = {-5, 0})
-    @DisplayName("number of highest rated album you want should bigger than zero")
-    public void numberOfHighestRatedAlbumYouWantShouldBiggerThanZero(int arr) {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> ecmMiner.highestRatedAlbums(arr));
-        assertEquals("Number of Highest rated albums you need should be more than zero", e.getMessage());
-    }
-
-     */
+*/
 
     @Test
     @DisplayName("should return zero when no ratings inside database")
@@ -1043,11 +993,6 @@ class ECMMinerIntegrationTest {
 
 
 
-
-//
-
-
-
     @ParameterizedTest
     @ValueSource(ints = {-5, 0})
     @DisplayName("number to return for most talented musician should be bigger than 0")
@@ -1137,19 +1082,7 @@ class ECMMinerIntegrationTest {
     //new-- changed k value which can be negative in ECM class and start year for this code had to be changed to 1970
     //as our code made sure that a year which is entered is greater than 1970
 
-    /*@ParameterizedTest
-    @ValueSource(ints = {-10,-1,0})
-    public void KValueIsInvalidWithCreateDaoMethod(int arg) throws MalformedURLException {
-        Album album = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        Musician musician = new Musician("Keith Jarrett");
-        musician.setAlbums(Sets.newHashSet(album));
-        dao.createOrUpdate(musician);
 
-        List<Musician> mostProlific = ecmMiner.mostProlificMusicians(arg, 1971, 2019);
-        assertEquals(0, mostProlific.size());
-    }
-
-     */
 
     @Test
     @DisplayName("if not album‘s release year between the input start year and endyear will return empty list")
@@ -1174,27 +1107,6 @@ class ECMMinerIntegrationTest {
         assertEquals(0, mostProlific.size());
     }
 
-    /*
-    //test  mostTalentedMusicians
-    @ParameterizedTest
-    @ValueSource(ints = {-10,-1,0})
-    public void invalidKValueForMostTalentedMusiciansWithCreateDaoMethod(int arg) throws MalformedURLException {
-        Album album = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        Musician musician = new Musician("Keith Jarrett");
-        musician.setAlbums(Sets.newHashSet(album));
-        Musician musician1 = new Musician("Mia");
-        MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
-        MusicalInstrument musicalInstrumen1 = new MusicalInstrument("Violin");
-        MusicalInstrument musicalInstrumen2 = new MusicalInstrument("Accordion");
-        MusicianInstrument mi = new MusicianInstrument(musician, Sets.newHashSet(musicalInstrument,musicalInstrumen1,musicalInstrumen2 ));
-        MusicianInstrument mi1 = new MusicianInstrument(musician1, Sets.newHashSet(musicalInstrument,musicalInstrumen1));
-        dao.createOrUpdate(mi1);
-        dao.createOrUpdate(mi);
-        List<Musician> mostTalented = ecmMiner.mostTalentedMusicians(arg);
-        assertEquals(0, mostTalented.size());
-    }
-
-     */
 
     @Test
     public void KValueBiggerThanListSizeForTalentedMusiciansWithCreateDaoMethod() throws MalformedURLException {
@@ -1233,23 +1145,6 @@ class ECMMinerIntegrationTest {
         assertEquals(2, mostTalented.size());
         assertTrue(mostTalented.contains(musician) && mostTalented.contains(musician1));
     }
-
-    /*
-    // test busiestYears method
-    @ParameterizedTest
-    @ValueSource(ints = {-10,-1,0})
-    public void inputNegativeKValueWithDao(int arg){
-        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        Album album2 = new Album(2003, "ECM 12344", "Great");
-        Album album3 = new Album(2017, "ECM 13456", "Good");
-        dao.createOrUpdate(album1);
-        dao.createOrUpdate(album2);
-        dao.createOrUpdate(album3);
-        List<Integer> releasedYear = ecmMiner.busiestYears(arg);
-        assertEquals(0,releasedYear.size());
-    }
-
-     */
 
     @Test
     public void KValueBiggerThanListSizeWithCreateDaoMethod(){

@@ -366,33 +366,7 @@ class AlbumUnitTest {
         assertEquals("Not a valid album name", e.getMessage());
     }
 
-    @Test
-    @DisplayName("Initialize Album name cannot be null")
-    public void InitializeAlbumNameCannotBeNull() {
-        assertThrows(NullPointerException.class, () -> new Album(2020, "ECM 1064/65", null));
-    }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"", " ", "    \t"})
-    @DisplayName("Initialize Album name cannot be empty or blank")
-    public void InitializeAlbumNameCanNotBeEmptyOrBlank(String arg) {
-        assertThrows(IllegalArgumentException.class, () -> new Album(2020, "ECM 1064/65", arg));
-    }
-
-    @DisplayName("Initialize Album Record number with null argument should throw NullPointerException")
-    @Test
-    public void InitializeAlbumshouldThrowExceptionWhenRecordNumberSetToNull() {
-        NullPointerException e = assertThrows(NullPointerException.class, () -> new Album(2020, null, "Mal Koln Trio"));
-        assertEquals("The validated object is null", e.getMessage());
-    }
-
-    @DisplayName("Initialize AlbumRecord Number can only accept Alphanumeric, and should not accept special characters")
-    @ParameterizedTest
-    @ValueSource(strings = {"*", "&", "%"})
-    public void InitializeAlbumRecordNumberCanOnlyAcceptAlphanumericWithSpaceORWithForwardSlash(String args){
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> new Album(2020, args, "Mal Koln Trio"));
-        assertEquals("Illegal record number", e.getMessage());
-    }
 
     @Test
     public void lengthOfAlbumNameLessThan20(){
@@ -412,21 +386,6 @@ class AlbumUnitTest {
         assertThrows(IllegalArgumentException.class, () -> new Album(year,"ECM 1064/65", "The Köln Concert" ));
     }
 
-    @Test
-    public void recordNumberFollowFormat(){
-        assertTrue(album.checkRecordNumber(album.getRecordNumber()),"The record number should follow the format");
-        assertThrows(IllegalArgumentException.class,()->new Album(2018,"12345","The Koln Concert"));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"1064/65", "abc"})
-    public void recordNumberNotFollowFormat(String arg){
-        assertThrows(IllegalArgumentException.class, () -> album.setRecordNumber(arg));
-    }
-    @Test
-    public void AlbumUrlNull() throws MalformedURLException {
-        assertThrows(NullPointerException.class, () -> album.setAlbumURL(null));
-    }
 
     @Test
     public void AlbumFormat() throws MalformedURLException {
@@ -440,20 +399,6 @@ class AlbumUnitTest {
         assertThrows(IllegalArgumentException.class, () -> album.setMusicianGroup(Group));
     }
 
-    /*
-    @Test
-    @DisplayName("time length of a album should be bigger than 0")
-    public void timeLengthShouldBiggerThanZero(){
-        assertTrue(album.getTimeLength()>0);
-    }
-
-    @Test
-    @DisplayName("rating of a album should be bigger or equal to 0 and less or equal to 10")
-    public void ratingShouldBiggerThanZeroLessThanTen(){
-        assertTrue(album.getRating()>=0&&album.getRating()<=10);
-    }
-
-     */
 
 
     @ParameterizedTest
@@ -463,7 +408,7 @@ class AlbumUnitTest {
         assertEquals(arg, album.getTimeLength());
     }
 
-    // Mengqian Wei Extra 2
+
     @ParameterizedTest
     @ValueSource(strings = {"Jazz"})
     public void shouldReturnRightGenre(String arg) {
@@ -471,7 +416,7 @@ class AlbumUnitTest {
         assertEquals(arg, album.getGenre());
     }
 
-    // Mengqian Wei Extra 2
+
     @ParameterizedTest
     @ValueSource(strings = {"contemporary Jazz"})
     public void shouldReturnRightStyle(String arg) {
@@ -479,7 +424,7 @@ class AlbumUnitTest {
         assertEquals(arg, album.getStyle());
     }
 
-    // Mengqian Wei Extra 2
+
     @ParameterizedTest
     @ValueSource(strings = {"CD", "LP"})
     public void shouldReturnRightReleaseFormat(String arg) {
@@ -487,7 +432,7 @@ class AlbumUnitTest {
         assertEquals(arg, album.getReleaseFormat());
     }
 
-    // Mengqian Wei Extra 2
+
     @ParameterizedTest
     @ValueSource(doubles = {3.8d, 4.2d})
     public void shouldReturnRightRating(double arg) {

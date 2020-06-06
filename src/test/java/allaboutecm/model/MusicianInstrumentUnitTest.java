@@ -78,27 +78,5 @@ class MusicianInstrumentUnitTest {
         assertTrue(input, "The input musician name has illegal character. ");
     }
 
-/*
-    @ParameterizedTest
-    @ValueSource(strings = {"#$%%#", "abc      def"})
-    @DisplayName("Test the musician' name contains special characters")
-    public void inputNameFormatWithSpecialCharOfMusician(String arg) throws MalformedURLException {
-        Musician musician1 = new Musician(arg);
-        assertThrows(IllegalArgumentException.class, () -> musicianInstrument.setMusician(musician1));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {" ", "    \t","#$%%#"})
-    @DisplayName("Test the musical instrument contains special characters")
-    public void inputNameFormatWithSpecialCharOfMusicalInstrument(String arg){
-        MusicalInstrument test = new MusicalInstrument(arg);
-        Set<MusicalInstrument> musicalInstrument1 = Sets.newHashSet();
-        musicalInstrument1.add(test);
-        assertThrows(IllegalArgumentException.class, () -> musicianInstrument.setMusicalInstruments(musicalInstrument1));
-
-    }
-
- */
-
 
 }

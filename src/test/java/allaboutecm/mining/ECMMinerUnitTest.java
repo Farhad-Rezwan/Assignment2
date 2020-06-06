@@ -1104,55 +1104,8 @@ class ECMMinerUnitTest {
         assertTrue(releasedYear.contains(1975)|| releasedYear.contains(2018));
     }
 
-    /*
-    @Test
-    public void invalidAlbum() throws MalformedURLException {
-        Album album = null;
-        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        Musician musician = new  Musician("Keith Jarrett");
-        Musician m1 = new Musician("Mia");
-        Musician m2 = new Musician("Ben");
 
-        album1.setRating(3);
-        album1.setStyle("Jazz");
-        Album album2 = new Album(2003, "ECM 12344", "Great");
-        album2.setRating(3);
-        album2.setStyle("Jazz");
-        Album album3 = new Album(2017, "ECM 13456", "Good");
-        album3.setRating(4);
-        album3.setStyle("Jazz");
-        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
-        List<Album> albums = ecmMiner.mostSimilarAlbums(3,album);
-        assertEquals(0,albums.size());
-    }
 
-    @Test
-    public void albumSizeSmallerThanKValueWillReturnAllTheAlbums() throws MalformedURLException {
-        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        Musician musician = new  Musician("Keith Jarrett");
-        Musician m1 = new Musician("Mia");
-        Musician m2 = new Musician("Ben");
-        List<Musician> musicians = Lists.newArrayList(musician,m1,m2);
-        List<Musician> musicians1 = Lists.newArrayList(musician,m1,m2);
-        album1.setRating(3);
-        album1.setStyle("Jazz");
-        album1.setFeaturedMusicians(musicians);
-        Album album2 = new Album(2003, "ECM 12344", "Great");
-        album2.setRating(3);
-        album2.setStyle("Jazz");
-        album2.setFeaturedMusicians(musicians);
-        Album album3 = new Album(2017, "ECM 13456", "Good");
-        album3.setRating(4);
-        album3.setStyle("Jazz");
-        album3.setFeaturedMusicians(musicians1);
-        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
-        List<Album> albums = ecmMiner.mostSimilarAlbums(5,album1);
-        assertEquals(3,albums.size());
-    }
-
-     */
-
-//check**************************************
     @Test
     public void AlbumSizeBiggerThanKValueWillReturnTheSilimarAlbum() throws MalformedURLException {
         Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
