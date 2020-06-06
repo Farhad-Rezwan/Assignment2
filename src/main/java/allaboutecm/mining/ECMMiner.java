@@ -446,8 +446,9 @@ public class ECMMiner {
         ListMultimap<Double, Album> multimap = MultimapBuilder.treeKeys().arrayListValues().build();
         //Get each price to reflect each album
         for (Album a : albums) {
-            if(!(a.getPrice() == null))
+            if(a.getPrice() != null) {
                 multimap.put(a.getPrice(), a);
+            }
         }
 
         //build a empty arrayList to prepare to store result
