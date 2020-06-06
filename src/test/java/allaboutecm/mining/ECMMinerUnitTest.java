@@ -993,16 +993,6 @@ class ECMMinerUnitTest {
         assertEquals("Start year should smaller than end year", e.getMessage());
     }
 
-    @Test
-    @DisplayName("k value must be bigger than 1 otherwise it will not return anything")
-    public void kBiggerThanOne()
-    {
-        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        album1.setSales(100);
-        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1));
-        List<Album> bestSellerAlbum= ecmMiner.bestSellerAlbum(-1);
-        assertEquals(0,bestSellerAlbum.size());
-    }
 
 
     //new
@@ -1019,21 +1009,6 @@ class ECMMinerUnitTest {
         List<Musician> mostProlific = ecmMiner.mostProlificMusicians(2, 2005, arg);
         assertEquals(0, mostProlific.size());
     }
-
-
-    /*
-@ParameterizedTest
-    @ValueSource(ints = {-10,-1,0})
-    public void KValueisInvalid(int arg) throws MalformedURLException {
-        Album album = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        Musician musician = new Musician("Keith Jarrett");
-        musician.setAlbums(Sets.newHashSet(album));
-        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician));
-
-        List<Musician> mostProlific = ecmMiner.mostProlificMusicians(arg, 1900, 2019);
-        assertEquals(0, mostProlific.size());
-    }
-     */
 
     @Test
     @DisplayName("if not album‘s release year between the input start year and endyear will return empty list")
@@ -1095,38 +1070,6 @@ class ECMMinerUnitTest {
         assertTrue(mostTalented.contains(musician) && mostTalented.contains(musician1));
     }
 
-/*
-//test MostSocialMusician
-    @ParameterizedTest
-    @ValueSource(ints = {-10,-1,0})
-    public void inputNegativeKValueAboutMostSocialMusician(int arg) throws MalformedURLException {
-        Album album = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        Musician musician = new Musician("Keith Jarrett");
-        Musician m1 = new Musician("Mia");
-        Musician m2 = new Musician("Ben");
-        List<Musician> musicianList = Lists.newArrayList(musician,m2);
-        album.setFeaturedMusicians(musicianList);
-        musician.setAlbums(Sets.newHashSet(album));
-        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician));
-        List<Musician> musicians = ecmMiner.mostSocialMusicians(arg);
-        assertEquals(0,musicians.size());
-    }
- */
-/*
-// test busiestYears method
-    @ParameterizedTest
-    @ValueSource(ints = {-10,-1,0})
-    public void inputNegativeKValueForBusiestYear(int arg){
-        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        Album album2 = new Album(2003, "ECM 12344", "Great");
-        Album album3 = new Album(2017, "ECM 13456", "Good");
-        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
-        List<Integer> releasedYear = ecmMiner.busiestYears(arg);
-        assertEquals(0,releasedYear.size());
-    }
-    
- */
-
     @Test
     public void KValueBiggerThanListSizeForBusiesYears(){
         Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
@@ -1160,33 +1103,6 @@ class ECMMinerUnitTest {
         assertEquals(2,releasedYear.size());
         assertTrue(releasedYear.contains(1975)|| releasedYear.contains(2018));
     }
-
-
-    /*
-    //test mostSimilarAlbums method
-    @ParameterizedTest
-    @ValueSource(ints = {-10,-1,0})
-    public void inputNegativeKValue(int arg) throws MalformedURLException {
-        Musician musician = new  Musician("Keith Jarrett");
-        Musician m1 = new Musician("Mia");
-        Musician m2 = new Musician("Ben");
-        List<Musician> musicians = Lists.newArrayList(musician,m1,m2);
-        List<Musician> musicians1 = Lists.newArrayList(musician,m1,m2);
-        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        album1.setRating(3);
-        album1.setStyle("Jazz");
-        Album album2 = new Album(2003, "ECM 12344", "Great");
-        album2.setRating(3);
-        album2.setStyle("Jazz");
-        Album album3 = new Album(2017, "ECM 13456", "Good");
-        album3.setRating(4);
-        album3.setStyle("Jazz");
-        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
-        List<Album> albums = ecmMiner.mostSimilarAlbums(arg,album1);
-        assertEquals(0,albums.size());
-    }
-
-     */
 
     /*
     @Test
@@ -1274,26 +1190,6 @@ class ECMMinerUnitTest {
         assertEquals(4,albums.size());
     }
 
-    /*
-    // test highest rating
-    @ParameterizedTest
-    @ValueSource(ints = {-10,-1,0})
-    public void inputNegativeKValueOfHighestRatingAlbum(int arg) throws MalformedURLException {
-        Album album1 = new Album(1975, "ECM 1064/65", "The Koln Concert");
-        album1.setRating(3);
-        album1.setStyle("Jazz");
-        Album album2 = new Album(2003, "ECM 12344", "Great");
-        album2.setRating(3);
-        album2.setStyle("Jazz");
-        Album album3 = new Album(2017, "ECM 13456", "Good");
-        album3.setRating(4);
-        album3.setStyle("Jazz");
-        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(album1,album2,album3));
-        List<Album> albums = ecmMiner.highestRatingAlbum(arg);
-        assertEquals(0,albums.size());
-    }
-
-     */
 
     @Test
     public void kValueSmallThanHighestRatingAlbumSize() throws MalformedURLException {
