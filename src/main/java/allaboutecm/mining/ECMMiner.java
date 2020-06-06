@@ -19,7 +19,6 @@ import static org.apache.commons.lang3.Validate.notNull;
  * Note that you can extend the Neo4jDAO class to make implementing this class easier.
  */
 public class ECMMiner {
-//    private static Logger logger = LoggerFactory.getLogger(ECMMiner.class);
 
     private final DAO dao;
 
@@ -140,10 +139,7 @@ public class ECMMiner {
             }
         }
 
-        /*
-        converts multimap to map nameMusicalInstrument, keeping the musicianName and collection of single instruments
-        like this {musicianName, collection(singleInstrument1, singleInstrument2}
-         */
+        //converts multimap to map nameMusicalInstrument, keeping the musicianName and collection of single instruments
         Map<String, Collection<MusicalInstrument>> nameMusicalInstrument = nameMusical.asMap();
 
 
@@ -381,7 +377,6 @@ public class ECMMiner {
                 List<String> musicianNames = Lists.newArrayList();
                 for (Musician am : allMusicians) {
                     if (am == targetMusician) {
-                        //List<String> musicianNames = Lists.newArrayList();
                         musicianNames.add(targetMusician.getName());
                         AlbumMusician.put(a, musicianNames);
                     }
