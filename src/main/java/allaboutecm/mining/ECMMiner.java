@@ -41,14 +41,15 @@ public class ECMMiner {
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
         // if start year is negative then it is ignored
-        if (!(startYear < 0 || endYear < 0)){
+        if ((startYear > 0 || endYear > 0)){
             if(!((startYear>1970) && startYear<= year) || !((endYear>1970) && endYear<= year))
                 throw new IllegalArgumentException("Years should be greater than 1970, not future, and valid year");
+            if (startYear>endYear){
+                throw new IllegalArgumentException("Start year should smaller than end year");
+            }
         }
 
-        if (startYear>endYear){
-            throw new IllegalArgumentException("Start year should smaller than end year");
-        }
+
 
 
 
@@ -505,7 +506,7 @@ public class ECMMiner {
 
         //Get each ratings to reflect each album
         for (Album a : albums) {
-            if(!(a.getRating() == null))
+            if(a.getRating() != null)
                 multimap.put(a.getRating(), a);
         }
 
