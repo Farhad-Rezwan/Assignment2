@@ -6,9 +6,6 @@ import allaboutecm.model.MusicalInstrument;
 import allaboutecm.model.Musician;
 import allaboutecm.model.MusicianInstrument;
 import com.google.common.collect.*;
-import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Str;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 

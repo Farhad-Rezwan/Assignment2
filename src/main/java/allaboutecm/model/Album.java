@@ -363,7 +363,7 @@ public class Album extends Entity {
                 throw new IllegalArgumentException("Featured musicians cannot be null or blank");
             }
         }
-        if (musicianGroup.size() <= 0)
+        if (musicianGroup.isEmpty())
         {
             throw new NullPointerException("Featured musicians should be set");
         }

@@ -118,10 +118,10 @@ public class  Neo4jDAO implements DAO {
 
             }
         }
-        if (null != entity) {
+
             session.delete(entity);
 
-        }
+
     }
 
     public  <T extends Entity> void deleteMusicianAndMusicianInstrumentAlsoBeDeleted(T entity) {
